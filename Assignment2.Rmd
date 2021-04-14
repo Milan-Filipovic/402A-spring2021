@@ -1,0 +1,122 @@
+---
+title: "Assignment 2"
+author: "Milan Filipovic"
+date: "April 13, 2021"
+output: html_document
+---
+
+
+
+```{r}
+library(haven)
+library(tidyverse)
+library(data.table)
+library(gtsummary)
+library(ggplot2)
+```
+
+First we read in the data set. 
+
+```{r}
+getwd()
+BPD = read_dta("bpd.dta")
+BPD_tble <- as_tibble(BPD) %>% print()
+```
+
+Using glimpse, we see that all variable types are numerical
+```{r}
+glimpse(BPD_tble)
+print(BPD_tble, width = Inf)
+
+#create a categorical variable for gender
+BPD_tble %>% mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female")) 
+```
+
+
+*3a* Create a demographic table describing the study population. (Who was studied? 
+How many were studied? To whom could you generalize results?) Include 
+the following descriptions: % female; median and range of year of birth; % 
+APGAR scores; median and IQR gestational age; median and IQR 
+birthweight; median and IQR age at onset of respiratory symptoms; and 
+median and IQR age at onset of ventilatory assistance. 
+
+```{r}
+#
+demographic_table <- BPD_tble %>% 
+  mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female")) %>%  
+  select(gender, bxy, agar, gage, bwt, rage, vage) %>% 
+  tbl_summary(
+    statistic = c("agar","gage","bwt", "rage", "vage") ~ "{median} ({p25},{p75})")
+  
+range(BPD_tble$bxy)
+#range of birth year included in table attribute
+demographic_table
+
+```
+
+
+*3b*
+. Plots (histograms or box plots) and summary statistics for the distributions of: 
+i. hours of exposure to low concentrations of elevated oxygen 
+ii. hours of exposure to medium concentrations of elevated oxygen 
+iii. hours of exposure to high concentrations of elevated oxygen 
+iv. hours of duration of endotracheal intubation 
+v. hours of duration of assisted ventilation 
+
+```{r}
+BPD_tble %>% ggplot(mapping = aes(x = lo2)) +
+  geom_histogram(binwidth = 200, fill="blue")+
+  ggtitle("Hours of Exposure to Low Concentration (23-39%) of Elevated Oxygen") +
+  labs(x = "Time (hours)") +
+  theme_bw()
+print(sort(BPD_tble$lo2))
+```
+We see that the distribution is right skewed, with outliers at high extreme.
+ 
+```{r}
+BPD_tble %>% ggplot(mapping = aes(x = mo2)) +
+  geom_histogram(fill="blue")+
+  labs(x = "Time (hours)") +
+  ggtitle("Hours of Exposure to Mid Concentration (40-79%) of Elevated Oxygen") +
+  theme_bw()
+print(sort(BPD_tble$mo2))
+```
+
+```{r}
+BPD_tble %>% ggplot(mapping = aes(x = ho2)) +
+  geom_histogram(fill="blue") +
+  labs(x = "Time (hours)") +
+  ggtitle("Hours of Exposure to High Concentration (80-100%) of Elevated Oxygen") +
+  theme_bw()
+print(sort(BPD_tble$ho2))
+```
+This distribution is also right skewed. The scale of time is much lower then mid and low oxygen exposure.
+
+
+Next we examine the distribution of the duration of endotrachael intubation `idur`.
+```{r}
+BPD_tble %>% ggplot(mapping = aes(x = idur)) +
+  geom_histogram(fill = "blue") + 
+  labs(x = "Time (hours)") +
+  ggtitle("Duration of Endotracheal Intubation") +
+  theme_classic()
+
+```
+The distribution appears heavily right skewed, with many potential outliers.
+
+Next we examine the distribution of the duration of assisted ventilation intubation `vdur`.
+```{r}
+BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
+  geom_histogram(fill = "blue") + 
+  labs(x = "Time (hours)") +
+  ggtitle("Duration of Ventillatory Assistance") +
+  theme_classic()
+```
+
+c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many 
+infants were classified as having RDS, very severe RDS, and BPD? 
+
+d. Missing data and outliers. Identify variables with large numbers of missing 
+data values (say, >20% missing). List variables with extreme outliers. 
+
+
