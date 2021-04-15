@@ -123,10 +123,42 @@ BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
 c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many 
 infants were classified as having RDS, very severe RDS, and BPD? 
 ```{r}
+# rds
+BPD_tble %>% 
+  mutate(rds = as.factor(rds)) %>% 
+  ggplot(mapping = aes(rds)) +
+  geom_bar(aes(fill = rds), colour = "black") +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(x = "RDS Score (0-5)", y = "Count",
+       title = "Counts of RDS Severity Scores") +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3)
+
+# bpd
+BPD_tble %>% 
+  mutate(bpd = as.factor(bpd)) %>% 
+  ggplot(mapping = aes(bpd)) +
+  geom_bar(aes(fill = bpd), colour = "black") +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(x = "Max Radiographic BPD Scores x 10", y = "Count",
+       title = "Counts of Radiographic BPD Scores") +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3)
 
 ```
 
 d. Missing data and outliers. Identify variables with large numbers of missing 
 data values (say, >20% missing). List variables with extreme outliers. 
 
+Identifying variables with > 20% missing for a dataset containing 299 observations is equivalent to identifying variables with > 60 missing values.
+We see that in the bpd data set, 7 variables (`brmu`, `puin`, `hyme`. `alin`, `emph`, `lbpd`, `hema`) have more than 60 missing values.
+
+```{r 3d}
+
+missing <- BPD_tble %>%
+  select(everything()) %>% 
+  summarise_all(funs(sum(is.na(.)))) %>% 
+  print(width = Inf)
+
+
+
+```
 
