@@ -30,6 +30,8 @@ The four statistical questions listed on Page 105 are as follows:
 4. How serious is BPD to an infant's life?
 
 
+Brief statistical procedures that may help answer the four main statistical questions include t-test, chi-square tests, and multiple regression techniques. Initial descriptive statistics must be conducted to examine the data and analyze the appropriate sample.
+
 First we read in the data set. 
 
 ```{r}
