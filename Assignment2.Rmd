@@ -16,7 +16,13 @@ library(tidyverse)
 library(data.table)
 library(gtsummary)
 library(ggplot2)
+library(faraway)
 ```
+
+*1.* Feel free to ask investigators about variables you're not sure of - example, one minute APGAR score
+Draw a timeline - which one are repeated measurements, longitudinal fashion, etc
+Shoudl everything be complete in the dataset?
+Pathological indices only for patients that died.
 
 *2.* Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe's casebook study.
 
@@ -65,7 +71,8 @@ BPD_tble %>% mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female"))
 #
 demographic_table <- BPD_tble %>% 
   mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female"),
-         bpdyesno = ifelse(bpd >= 30, "w/ BPD", "w/o BPD")) %>%  
+         bpdyesno = ifelse(bpd >= 30, "w/ BPD", "w/o BPD"),
+         ) %>%  
   select(gender, bxy, agar, gage, bwt, rage, vage, bpdyesno) %>% 
   tbl_summary(
     by = bpdyesno,
@@ -73,11 +80,12 @@ demographic_table <- BPD_tble %>%
     digits = all_continuous() ~ 1) %>% 
   add_overall() %>% 
   add_p(pvalue_fun = ~style_pvalue(.x, digits = 2)) %>% 
-  add_n()
+  bold_p() 
   
 range(BPD_tble$bxy)
 #range of birth year included in table attribute
 demographic_table
+
 ```
 
 
@@ -197,6 +205,45 @@ ggplot(df, aes(x = value)) +
   facet_wrap(~variable, scales = "free_x") +
   geom_histogram() +
   theme_bw()
+
+```
+
+
+```{r}
+par(mfrow = c(2,2))
+halfnorm(BPD_tble$bxy, ylab = "Sorted Leverages")
+title(main = "bxy")
+halfnorm(BPD_tble$agar, ylab = "Sorted Leverages")
+title(main = "agar")
+halfnorm(BPD_tble$gage, ylab = "Sorted Leverages")
+title(main = "gage")
+halfnorm(BPD_tble$bwt, ylab = "Sorted Leverages")
+title(main = "bwt")
+
+halfnorm(BPD_tble$rage, ylab = "Sorted Leverages")
+title(main = "rage")
+halfnorm(BPD_tble$vage, ylab = "Sorted Leverages")
+title(main = "vage")
+halfnorm(BPD_tble$idur, ylab = "Sorted Leverages")
+title(main = "idur")
+halfnorm(BPD_tble$vdur, ylab = "Sorted Leverages")
+title(main = "vdur")
+
+halfnorm(BPD_tble$lo2, ylab = "Sorted Leverages")
+title(main = "lo2")
+halfnorm(BPD_tble$mo2, ylab = "Sorted Leverages")
+title(main = "mo2")
+halfnorm(BPD_tble$ho2, ylab = "Sorted Leverages")
+title(main = "ho2")
+halfnorm(BPD_tble$surv, ylab = "Sorted Leverages")
+title(main = "surv")
+
+
+```
+```{r}
+BPD_tble %>% 
+  slice(c(36, 110, 48, 253, 173, 260, 212, 168, 20, 209, 20, 5, 1, 20))
+
 
 ```
 
