@@ -16,8 +16,19 @@ library(tidyverse)
 library(data.table)
 library(gtsummary)
 library(ggplot2)
-library(Hmisc)
 ```
+
+*2a.* Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe's casebook study.
+
+**Solution**:
+
+The four statistical questions listed on Page 105 are as follows:
+
+1. Do oxygen or intubation therapy cause BPD?
+2. How are the pathological indices related to BPD?
+3. Which background or health variables indicates high risk for contracting BPD?
+4. How serious is BPD to an infant's life?
+
 
 First we read in the data set. 
 
@@ -124,8 +135,13 @@ BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
   theme_classic()
 ```
 
-c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many 
-infants were classified as having RDS, very severe RDS, and BPD? 
+c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many infants were classified as having RDS, very severe RDS, and BPD? 
+
+Looking at the counts for RDS in our study population, we see that 296 (99.0%) infants were classified as having RDS (score of 1 or higher), of which 40 (13.4%) infants were classified as having very severe RDS (score of 5). 1 (0.0%) infant did not have any data on RDS classification. 
+
+Looking at the counts for BPD in our study population, 71 (23.7%) infants were classified as having BPD (having reached stage III or stage IV). For the purposes of overall descriptive analysis here, the counts here did not filter for only infants that survived 3 days or more.
+
+
 ```{r}
 # rds
 BPD_tble %>% 
@@ -134,7 +150,7 @@ BPD_tble %>%
   geom_bar(aes(fill = rds), colour = "black") +
   scale_fill_brewer(palette = "Pastel1") +
   labs(x = "RDS Score (0-5)", y = "Count",
-       title = "Counts of RDS Severity Scores") +
+       title = "RDS Severity Scores for Study Population (N = 299)") +
   geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
   theme_bw()
 
@@ -144,8 +160,8 @@ BPD_tble %>%
   ggplot(mapping = aes(bpd)) +
   geom_bar(aes(fill = bpd), colour = "black") +
   scale_fill_brewer(palette = "Pastel1") +
-  labs(x = "Max Radiographic BPD Scores x 10", y = "Count",
-       title = "Counts of Radiographic BPD Scores") +
+  labs(x = "Stage of BPD (max radiological score x 10)", y = "Count",
+       title = "Stages of BPD Present in Study Population (N = 299)") +
   geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
   theme_bw()
 
