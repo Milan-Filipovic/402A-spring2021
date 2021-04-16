@@ -67,6 +67,8 @@ BPD_tble %>% mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female"))
 * median and IQR age at onset of respiratory symptoms; `rage`
 * median and IQR age at onset of ventilatory assistance; `vage`
 
+Demographic table had the study population split into with and without BPD, where with BPD included infants that reached at least stage III and without BPD included infants that did not reach stage III of disease progression.
+
 ```{r}
 #
 demographic_table <- BPD_tble %>% 
@@ -147,7 +149,7 @@ BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
   geom_histogram(fill = "blue") + 
   labs(x = "Time (hours)") +
   ggtitle("Duration of Ventillatory Assistance") +
-  theme_classic()
+  theme_bw()
 ```
 
 c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many infants were classified as having RDS, very severe RDS, and BPD? 
