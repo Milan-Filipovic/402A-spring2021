@@ -18,7 +18,7 @@ library(gtsummary)
 library(ggplot2)
 ```
 
-*2a.* Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe's casebook study.
+*2.* Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe's casebook study.
 
 **Solution**:
 
@@ -171,7 +171,7 @@ d. Missing data and outliers. Identify variables with large numbers of missing
 data values (say, >20% missing). List variables with extreme outliers. 
 
 Identifying variables with > 20% missing for a dataset containing 299 observations is equivalent to identifying variables with > 60 missing values.
-We see that in the bpd data set, 7 variables (`brmu`, `puin`, `hyme`. `alin`, `emph`, `lbpd`, `hema`) have more than 60 missing values.
+We see that in the bpd data set, 8 variables (`agar`, `brmu`, `puin`, `hyme`. `alin`, `emph`, `lbpd`, `hema`) have more than 60 missing values.
 
 ```{r 3d, fig.height = 10, fig.width = 12}
 
