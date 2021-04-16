@@ -173,7 +173,7 @@ pre code {
 
 
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE, cache = TRUE, fig.align = &#39;center&#39;)</code></pre>
-<p><em>2a.</em> Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe’s casebook study.</p>
+<p><em>2.</em> Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe’s casebook study.</p>
 <p><strong>Solution</strong>:</p>
 <p>The four statistical questions listed on Page 105 are as follows:</p>
 <ol style="list-style-type: decimal">
@@ -182,6 +182,7 @@ pre code {
 <li>Which background or health variables indicates high risk for contracting BPD?</li>
 <li>How serious is BPD to an infant’s life?</li>
 </ol>
+<p>Brief statistical procedures that may help answer the four main statistical questions include t-test, chi-square tests, and multiple regression techniques. Initial descriptive statistics must be conducted to examine the data and analyze the appropriate sample.</p>
 <p>First we read in the data set.</p>
 <pre class="r"><code>getwd()</code></pre>
 <pre><code>## [1] &quot;D:/402A-spring2021&quot;</code></pre>
@@ -288,11 +289,16 @@ BPD_tble %&gt;% mutate(gender = ifelse(BPD_tble$sex == 1, &quot;male&quot;, &quo
 </ul>
 <pre class="r"><code>#
 demographic_table &lt;- BPD_tble %&gt;% 
-  mutate(gender = ifelse(BPD_tble$sex == 1, &quot;male&quot;, &quot;female&quot;)) %&gt;%  
-  select(gender, bxy, agar, gage, bwt, rage, vage) %&gt;% 
+  mutate(gender = ifelse(BPD_tble$sex == 1, &quot;male&quot;, &quot;female&quot;),
+         bpdyesno = ifelse(bpd &gt;= 30, &quot;w/ BPD&quot;, &quot;w/o BPD&quot;)) %&gt;%  
+  select(gender, bxy, agar, gage, bwt, rage, vage, bpdyesno) %&gt;% 
   tbl_summary(
+    by = bpdyesno,
     statistic = c(&quot;agar&quot;,&quot;gage&quot;,&quot;bwt&quot;, &quot;rage&quot;, &quot;vage&quot;) ~ &quot;{median} ({p25}, {p75})&quot;,
-    digits = all_continuous() ~ 1)
+    digits = all_continuous() ~ 1) %&gt;% 
+  add_overall() %&gt;% 
+  add_p(pvalue_fun = ~style_pvalue(.x, digits = 2)) %&gt;% 
+  add_n()
   
 range(BPD_tble$bxy)</code></pre>
 <pre><code>## [1] 62 73</code></pre>
@@ -303,7 +309,7 @@ demographic_table</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#feawclenfz .gt_table {
+#awclenfzzv .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -328,7 +334,7 @@ demographic_table</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#feawclenfz .gt_heading {
+#awclenfzzv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -340,7 +346,7 @@ demographic_table</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#feawclenfz .gt_title {
+#awclenfzzv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -350,7 +356,7 @@ demographic_table</code></pre>
   border-bottom-width: 0;
 }
 
-#feawclenfz .gt_subtitle {
+#awclenfzzv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -360,13 +366,13 @@ demographic_table</code></pre>
   border-top-width: 0;
 }
 
-#feawclenfz .gt_bottom_border {
+#awclenfzzv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#feawclenfz .gt_col_headings {
+#awclenfzzv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -381,7 +387,7 @@ demographic_table</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#feawclenfz .gt_col_heading {
+#awclenfzzv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -401,7 +407,7 @@ demographic_table</code></pre>
   overflow-x: hidden;
 }
 
-#feawclenfz .gt_column_spanner_outer {
+#awclenfzzv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -413,15 +419,15 @@ demographic_table</code></pre>
   padding-right: 4px;
 }
 
-#feawclenfz .gt_column_spanner_outer:first-child {
+#awclenfzzv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#feawclenfz .gt_column_spanner_outer:last-child {
+#awclenfzzv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#feawclenfz .gt_column_spanner {
+#awclenfzzv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -433,7 +439,7 @@ demographic_table</code></pre>
   width: 100%;
 }
 
-#feawclenfz .gt_group_heading {
+#awclenfzzv .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -455,7 +461,7 @@ demographic_table</code></pre>
   vertical-align: middle;
 }
 
-#feawclenfz .gt_empty_group_heading {
+#awclenfzzv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -470,15 +476,15 @@ demographic_table</code></pre>
   vertical-align: middle;
 }
 
-#feawclenfz .gt_from_md > :first-child {
+#awclenfzzv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#feawclenfz .gt_from_md > :last-child {
+#awclenfzzv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#feawclenfz .gt_row {
+#awclenfzzv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -497,7 +503,7 @@ demographic_table</code></pre>
   overflow-x: hidden;
 }
 
-#feawclenfz .gt_stub {
+#awclenfzzv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -509,7 +515,7 @@ demographic_table</code></pre>
   padding-left: 12px;
 }
 
-#feawclenfz .gt_summary_row {
+#awclenfzzv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -519,7 +525,7 @@ demographic_table</code></pre>
   padding-right: 5px;
 }
 
-#feawclenfz .gt_first_summary_row {
+#awclenfzzv .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -529,7 +535,7 @@ demographic_table</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#feawclenfz .gt_grand_summary_row {
+#awclenfzzv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -539,7 +545,7 @@ demographic_table</code></pre>
   padding-right: 5px;
 }
 
-#feawclenfz .gt_first_grand_summary_row {
+#awclenfzzv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -549,11 +555,11 @@ demographic_table</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#feawclenfz .gt_striped {
+#awclenfzzv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#feawclenfz .gt_table_body {
+#awclenfzzv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -562,7 +568,7 @@ demographic_table</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#feawclenfz .gt_footnotes {
+#awclenfzzv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -576,13 +582,13 @@ demographic_table</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#feawclenfz .gt_footnote {
+#awclenfzzv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#feawclenfz .gt_sourcenotes {
+#awclenfzzv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -596,113 +602,173 @@ demographic_table</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#feawclenfz .gt_sourcenote {
+#awclenfzzv .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#feawclenfz .gt_left {
+#awclenfzzv .gt_left {
   text-align: left;
 }
 
-#feawclenfz .gt_center {
+#awclenfzzv .gt_center {
   text-align: center;
 }
 
-#feawclenfz .gt_right {
+#awclenfzzv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#feawclenfz .gt_font_normal {
+#awclenfzzv .gt_font_normal {
   font-weight: normal;
 }
 
-#feawclenfz .gt_font_bold {
+#awclenfzzv .gt_font_bold {
   font-weight: bold;
 }
 
-#feawclenfz .gt_font_italic {
+#awclenfzzv .gt_font_italic {
   font-style: italic;
 }
 
-#feawclenfz .gt_super {
+#awclenfzzv .gt_super {
   font-size: 65%;
 }
 
-#feawclenfz .gt_footnote_marks {
+#awclenfzzv .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="feawclenfz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="awclenfzzv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N = 299</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 299<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>w/ BPD</strong>, N = 74<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>w/o BPD</strong>, N = 225<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong><sup class="gt_footnote_marks">2</sup></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
     <tr>
       <td class="gt_row gt_left">gender</td>
+      <td class="gt_row gt_center">299</td>
       <td class="gt_row gt_center"></td>
+      <td class="gt_row gt_center"></td>
+      <td class="gt_row gt_center"></td>
+      <td class="gt_row gt_center">0.71</td>
     </tr>
     <tr>
       <td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">female</td>
+      <td class="gt_row gt_center"></td>
       <td class="gt_row gt_center">90 (30%)</td>
+      <td class="gt_row gt_center">21 (28%)</td>
+      <td class="gt_row gt_center">69 (31%)</td>
+      <td class="gt_row gt_center"></td>
     </tr>
     <tr>
       <td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">male</td>
+      <td class="gt_row gt_center"></td>
       <td class="gt_row gt_center">209 (70%)</td>
+      <td class="gt_row gt_center">53 (72%)</td>
+      <td class="gt_row gt_center">156 (69%)</td>
+      <td class="gt_row gt_center"></td>
     </tr>
     <tr>
       <td class="gt_row gt_left">year of birth,62 to 73</td>
+      <td class="gt_row gt_center">299</td>
       <td class="gt_row gt_center">71.0 (67.0, 72.0)</td>
+      <td class="gt_row gt_center">69.0 (67.0, 72.0)</td>
+      <td class="gt_row gt_center">71.0 (68.0, 73.0)</td>
+      <td class="gt_row gt_center">0.012</td>
     </tr>
     <tr>
       <td class="gt_row gt_left">1-min APGAR, 0bad to 10</td>
+      <td class="gt_row gt_center">238</td>
       <td class="gt_row gt_center">6.0 (4.0, 8.0)</td>
+      <td class="gt_row gt_center">6.0 (4.0, 8.0)</td>
+      <td class="gt_row gt_center">6.0 (3.0, 8.0)</td>
+      <td class="gt_row gt_center">0.75</td>
     </tr>
     <tr>
       <td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+      <td class="gt_row gt_center"></td>
       <td class="gt_row gt_center">61</td>
+      <td class="gt_row gt_center">22</td>
+      <td class="gt_row gt_center">39</td>
+      <td class="gt_row gt_center"></td>
     </tr>
     <tr>
       <td class="gt_row gt_left">gestational age, weeksX10</td>
+      <td class="gt_row gt_center">297</td>
       <td class="gt_row gt_center">325.0 (300.0, 355.0)</td>
+      <td class="gt_row gt_center">325.0 (310.0, 350.0)</td>
+      <td class="gt_row gt_center">325.0 (300.0, 355.0)</td>
+      <td class="gt_row gt_center">0.86</td>
     </tr>
     <tr>
       <td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+      <td class="gt_row gt_center"></td>
       <td class="gt_row gt_center">2</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_center">2</td>
+      <td class="gt_row gt_center"></td>
     </tr>
     <tr>
       <td class="gt_row gt_left">birth weight, gms</td>
+      <td class="gt_row gt_center">299</td>
       <td class="gt_row gt_center">1,701.0 (1,288.0, 2,264.0)</td>
+      <td class="gt_row gt_center">1,778.0 (1,360.0, 2,232.8)</td>
+      <td class="gt_row gt_center">1,673.0 (1,250.0, 2,268.0)</td>
+      <td class="gt_row gt_center">0.71</td>
     </tr>
     <tr>
       <td class="gt_row gt_left">age @ respiratory, hrsX10</td>
+      <td class="gt_row gt_center">296</td>
       <td class="gt_row gt_center">0.0 (0.0, 5.0)</td>
+      <td class="gt_row gt_center">0.0 (0.0, 3.0)</td>
+      <td class="gt_row gt_center">0.0 (0.0, 5.0)</td>
+      <td class="gt_row gt_center">0.29</td>
     </tr>
     <tr>
       <td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+      <td class="gt_row gt_center"></td>
       <td class="gt_row gt_center">3</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_center">3</td>
+      <td class="gt_row gt_center"></td>
     </tr>
     <tr>
       <td class="gt_row gt_left">age @ vent assist, hrs</td>
+      <td class="gt_row gt_center">299</td>
       <td class="gt_row gt_center">20.0 (8.0, 36.0)</td>
+      <td class="gt_row gt_center">26.5 (13.2, 43.0)</td>
+      <td class="gt_row gt_center">19.0 (8.0, 34.0)</td>
+      <td class="gt_row gt_center">0.010</td>
     </tr>
   </tbody>
   
   <tfoot>
     <tr class="gt_footnotes">
-      <td colspan="2">
+      <td colspan="6">
         <p class="gt_footnote">
           <sup class="gt_footnote_marks">
             <em>1</em>
           </sup>
            
           n (%); Median (IQR)
+          <br />
+        </p>
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>2</em>
+          </sup>
+           
+          Pearson&#39;s Chi-squared test; Wilcoxon rank sum test
           <br />
         </p>
       </td>
@@ -854,7 +920,7 @@ BPD_tble %&gt;%
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Missing data and outliers. Identify variables with large numbers of missing data values (say, &gt;20% missing). List variables with extreme outliers.</li>
 </ol>
-<p>Identifying variables with &gt; 20% missing for a dataset containing 299 observations is equivalent to identifying variables with &gt; 60 missing values. We see that in the bpd data set, 7 variables (<code>brmu</code>, <code>puin</code>, <code>hyme</code>. <code>alin</code>, <code>emph</code>, <code>lbpd</code>, <code>hema</code>) have more than 60 missing values.</p>
+<p>Identifying variables with &gt; 20% missing for a dataset containing 299 observations is equivalent to identifying variables with &gt; 60 missing values. We see that in the bpd data set, 8 variables (<code>agar</code>, <code>brmu</code>, <code>puin</code>, <code>hyme</code>. <code>alin</code>, <code>emph</code>, <code>lbpd</code>, <code>hema</code>) have more than 60 missing values.</p>
 <pre class="r"><code># NA counts for each variable
 missing &lt;- BPD_tble %&gt;%
   select(everything()) %&gt;% 
