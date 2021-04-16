@@ -6,13 +6,17 @@ output: html_document
 ---
 
 
-
 ```{r}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, fig.align = 'center')
+```
+
+```{r, include = F, eval = T}
 library(haven)
 library(tidyverse)
 library(data.table)
 library(gtsummary)
 library(ggplot2)
+library(Hmisc)
 ```
 
 First we read in the data set. 
@@ -33,12 +37,16 @@ BPD_tble %>% mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female"))
 ```
 
 
-*3a* Create a demographic table describing the study population. (Who was studied? 
-How many were studied? To whom could you generalize results?) Include 
-the following descriptions: % female; median and range of year of birth; % 
-APGAR scores; median and IQR gestational age; median and IQR 
-birthweight; median and IQR age at onset of respiratory symptoms; and 
-median and IQR age at onset of ventilatory assistance. 
+*3a.* Create a demographic table describing the study population. (Who was studied? How many were studied? To whom could you generalize results?) Include the following descriptions: 
+
+
+* % female; `gender`
+* median and range of year of birth; `bxy`
+* % APGAR scores; `agar`
+* median and IQR gestational age; `gage`
+* median and IQR birthweight; `bwt`
+* median and IQR age at onset of respiratory symptoms; `rage`
+* median and IQR age at onset of ventilatory assistance; `vage`
 
 ```{r}
 #
@@ -46,24 +54,26 @@ demographic_table <- BPD_tble %>%
   mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female")) %>%  
   select(gender, bxy, agar, gage, bwt, rage, vage) %>% 
   tbl_summary(
-    statistic = c("agar","gage","bwt", "rage", "vage") ~ "{median} ({p25},{p75})")
+    statistic = c("agar","gage","bwt", "rage", "vage") ~ "{median} ({p25}, {p75})",
+    digits = all_continuous() ~ 1)
   
 range(BPD_tble$bxy)
 #range of birth year included in table attribute
 demographic_table
-
 ```
 
 
-*3b*
-. Plots (histograms or box plots) and summary statistics for the distributions of: 
+
+*3b.* Plots (histograms or box plots) and summary statistics for the distributions of: 
+
 i. hours of exposure to low concentrations of elevated oxygen 
 ii. hours of exposure to medium concentrations of elevated oxygen 
 iii. hours of exposure to high concentrations of elevated oxygen 
 iv. hours of duration of endotracheal intubation 
 v. hours of duration of assisted ventilation 
 
-```{r}
+
+```{r 3b i}
 BPD_tble %>% ggplot(mapping = aes(x = lo2)) +
   geom_histogram(binwidth = 200, fill="blue")+
   ggtitle("Hours of Exposure to Low Concentration (23-39%) of Elevated Oxygen") +
@@ -71,9 +81,9 @@ BPD_tble %>% ggplot(mapping = aes(x = lo2)) +
   theme_bw()
 print(sort(BPD_tble$lo2))
 ```
-We see that the distribution is right skewed, with outliers at high extreme.
+We see that the distribution is right skewed, with outliers at the high extreme.
  
-```{r}
+```{r 3b ii}
 BPD_tble %>% ggplot(mapping = aes(x = mo2)) +
   geom_histogram(fill="blue")+
   labs(x = "Time (hours)") +
@@ -82,7 +92,8 @@ BPD_tble %>% ggplot(mapping = aes(x = mo2)) +
 print(sort(BPD_tble$mo2))
 ```
 
-```{r}
+
+```{r 3b iii}
 BPD_tble %>% ggplot(mapping = aes(x = ho2)) +
   geom_histogram(fill="blue") +
   labs(x = "Time (hours)") +
@@ -94,18 +105,18 @@ This distribution is also right skewed. The scale of time is much lower then mid
 
 
 Next we examine the distribution of the duration of endotrachael intubation `idur`.
-```{r}
+```{r 3b iv}
 BPD_tble %>% ggplot(mapping = aes(x = idur)) +
   geom_histogram(fill = "blue") + 
   labs(x = "Time (hours)") +
   ggtitle("Duration of Endotracheal Intubation") +
-  theme_classic()
+  theme_bw()
 
 ```
 The distribution appears heavily right skewed, with many potential outliers.
 
 Next we examine the distribution of the duration of assisted ventilation intubation `vdur`.
-```{r}
+```{r 3b v}
 BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
   geom_histogram(fill = "blue") + 
   labs(x = "Time (hours)") +
@@ -115,8 +126,54 @@ BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
 
 c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many 
 infants were classified as having RDS, very severe RDS, and BPD? 
+```{r}
+# rds
+BPD_tble %>% 
+  mutate(rds = as.factor(rds)) %>% 
+  ggplot(mapping = aes(rds)) +
+  geom_bar(aes(fill = rds), colour = "black") +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(x = "RDS Score (0-5)", y = "Count",
+       title = "Counts of RDS Severity Scores") +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
+  theme_bw()
+
+# bpd
+BPD_tble %>% 
+  mutate(bpd = as.factor(bpd)) %>% 
+  ggplot(mapping = aes(bpd)) +
+  geom_bar(aes(fill = bpd), colour = "black") +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(x = "Max Radiographic BPD Scores x 10", y = "Count",
+       title = "Counts of Radiographic BPD Scores") +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
+  theme_bw()
+
+```
 
 d. Missing data and outliers. Identify variables with large numbers of missing 
 data values (say, >20% missing). List variables with extreme outliers. 
 
+Identifying variables with > 20% missing for a dataset containing 299 observations is equivalent to identifying variables with > 60 missing values.
+We see that in the bpd data set, 7 variables (`brmu`, `puin`, `hyme`. `alin`, `emph`, `lbpd`, `hema`) have more than 60 missing values.
+
+```{r 3d, fig.height = 10, fig.width = 12}
+
+# NA counts for each variable
+missing <- BPD_tble %>%
+  select(everything()) %>% 
+  summarise_all(funs(sum(is.na(.)))) %>% 
+  print(width = Inf)
+
+# extreme outlier identification 
+# excluded pid since pid is unique
+# variables with 5 unique values or less were excluded 
+
+df <- reshape2::melt(BPD_tble[,-c(1,2, 14, 18:24)])
+ggplot(df, aes(x = value)) +
+  facet_wrap(~variable, scales = "free_x") +
+  geom_histogram() +
+  theme_bw()
+
+```
 
