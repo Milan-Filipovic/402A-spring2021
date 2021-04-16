@@ -19,10 +19,91 @@ library(ggplot2)
 library(faraway)
 ```
 
-*1.* Feel free to ask investigators about variables you're not sure of - example, one minute APGAR score
-Draw a timeline - which one are repeated measurements, longitudinal fashion, etc
-Shoudl everything be complete in the dataset?
-Pathological indices only for patients that died.
+*1.* Based on the introduction and variable list, complete the following sections of a Biostatistics Consulting Worksheet:
+
+a. Date & Client Information
+b. Purpose
+c. Background & references
+d. Descriptions
+
+**Date**: 04/16/2021
+
+**Client Information**:
+
+* Name: William Northway, David Edwards, Thomas Colby, and Wayne Dyer
+*	Department: Stanford Medical Center
+*	Phone: 650-723-5721
+*	Name of principal investigator: William Northway, David Edwards, Thomas Colby, and Wayne Dyer, Stanford University
+
+**Purpose**
+
+* Statement of research hypothesis(es):
+    + Factors associated with bronchopulmonary dysplasia (BPD) in newborn infants:
+        1. Oxygen or intubation therapy cause BPD
+        2. Pathological indices relate to BPD
+        3. Background and health variables indicate high risk for contracting BPD
+        4. BPD is serious to an infant’s life
+
+*	Statement of statistical hypothesis(es):
+	  1. Oxygen or intubation therapy cause BPD
+        - Null hypothesis: Duration of oxygen or intubation therapy has no significant association with BPD
+        - T-tests on log-transformed data for time length of oxygen or intubation therapy or logistic regression techniques can be used to assess association level with BPD. 
+    2. Pathological indices relate to BPD
+        - Null hypothesis: Bronchiola mucosa, pulmonary interstitium, hyalin membranes, alveolar infiltrate, inflation pattern, BPD stage based on lung tissue, hematoidin have no significant association with BPD
+        - Chi-square tests can be used to understand the associations between each pathological index with BPD, since these are discrete ordinal variables.
+    3. Background and health variables indicate high risk for contracting BPD
+        - Null hypothesis: Age, sex, year of birth, one-minute APGAR score, estimated gestational age, birthweight, and age at onset of respiratory symptoms have no significant association with BPD
+        -	Multiple logistic regression, t-tests or chi-square tests
+    4. BPD is serious to an infant’s life
+        - Null hypothesis: BPD is not significantly associated with survival or survival time
+        - 2 proportion t-test given that we keep in mind differential follow-up times that might occur in this study sample.
+
+**Background & references**:
+
+* BPD is a respiratory problem that affects some newborn infants who have had respiratory distress syndrome (RDS) and subsequent oxygen therapy for it
+* Oxygen or intubation therapy also suspected to cause BPD
+* Severity of lung tissue deterioration measured on a scale of I to IV
+* Stages I and II classified as not having BPD, stages III and IV classified as having BPD
+* (Wolfe, “A Retrospective Study of Possible Causality Factors”)
+
+
+**Descriptions**:
+
+* Study design: Retrospective study
+
+* Population(s): Newborn infants who have had RDS and subsequent oxygen therapy for it
+
+* Sample(s): 299 infants treated at Stanford Medical center from 1962 – 1973 who had clinical and x-ray symptoms of RDS and received ventilatory assistance by intubation for over 24 hours
+
+* Dependent variable(s):	
+    + Radiographic BPD score
+    + Survival
+    + Survival time
+
+* Independent variable(s):
+    * Background/Health variables
+        + Age
+        + Sex
+        + Year of birth
+        + One-minute APGAR score
+        + Estimated gestational age
+        + Birthweight
+        + Age at onset of respiratory symptoms
+        + RDS severity score
+    * Measures of the therapy
+        + Exposure to low concentrations of elevated oxygen
+        + Exposure to medium concentrations of elevated oxygen
+        + Exposure to high concentrations of elevated oxygen
+        + Duration of endotracheal intubation
+        + Duration of assisted ventilation
+    * Pathological indices (only available for infants that died)
+        + Bronchiola mucosa
+        + Pulmonary interstitium
+        + Hyalin membranes
+        + Alveolar infiltrate
+        + Inflation pattern
+        + BPD stage based on lung tissue
+        + Hematoidin
 
 *2.* Briefly outline statistical procedures that may help answer the four main statistical questions listed on Page 105 of Wolfe's casebook study.
 
@@ -31,10 +112,18 @@ Pathological indices only for patients that died.
 The four statistical questions listed on Page 105 are as follows:
 
 1. Do oxygen or intubation therapy cause BPD?
+    - Need to address that we cannot assess causation from a retrospective study and clarify that with the researchers. Analyses should include only infants that lived long enough to contract BPD (the 248 infants who survived 3+ days).
+    - T-tests on log-transformed data for time length of oxygen or intubation therapy or logistic regression techniques can be used to assess association level with BPD. 
+    
 2. How are the pathological indices related to BPD?
-3. Which background or health variables indicates high risk for contracting BPD?
-4. How serious is BPD to an infant's life?
+    - Chi-square tests can be used to understand the associations between each pathological index with BPD, since these are discrete ordinal variables.
 
+3. Which background or health variables indicates high risk for contracting BPD?
+    -	Multiple logistic regression can be used to assess the associations between all continuous and discrete ordinal variables and outcome of contracting BPD. Additionally, we can use t-tests and chi-square tests for continuous and discrete ordinal/categorical variables, respectively.
+
+4. How serious is BPD to an infant's life?
+    - 2 proportion t-test given that we keep in mind differential follow-up times that might occur in this study sample.
+    - Simple chi-square tests comparing BPD stage to survival (dead or alive).
 
 Brief statistical procedures that may help answer the four main statistical questions include t-test, chi-square tests, and multiple regression techniques. Initial descriptive statistics must be conducted to examine the data and analyze the appropriate sample.
 
@@ -242,9 +331,51 @@ title(main = "surv")
 
 
 ```
-```{r}
+```{r, echo = F}
+print("Influential Observations in agar")
 BPD_tble %>% 
-  slice(c(36, 110, 48, 253, 173, 260, 212, 168, 20, 209, 20, 5, 1, 20))
+  select(-c(2, 14)) %>% 
+  slice(c(36, 110))
+
+print("Influential Observations in bwt")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(48, 253)) 
+
+print("Influential Observations in rage")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(34, 225)) 
+
+print("Influential Observations in vage")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(98, 186)) 
+
+print("Influential Observations in idur and vdur")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(173, 260)) 
+
+print("Influential Observations in lo2")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(168, 212)) 
+
+print("Influential Observations in mo2")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(20, 209)) 
+
+print("Influential Observations in ho2")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(20, 63)) 
+
+print("Influential Observations in surv")
+BPD_tble %>% 
+  select(-c(2, 14)) %>% 
+  slice(c(5, 1)) 
 
 
 ```
