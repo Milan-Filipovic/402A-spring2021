@@ -156,11 +156,11 @@ BPD_tble %>%
 
 # bpd
 BPD_tble %>% 
-  mutate(lbpd = as.factor(lbpd)) %>% 
-  ggplot(mapping = aes(lbpd)) +
-  geom_bar(aes(fill = lbpd), colour = "black") +
+  mutate(bpd = as.factor(bpd)) %>% 
+  ggplot(mapping = aes(bpd)) +
+  geom_bar(aes(fill = bpd), colour = "black") +
   scale_fill_brewer(palette = "Pastel1") +
-  labs(x = "Stage of BPD Diagnosed from Lung Tissue", y = "Count",
+  labs(x = "Stage of BPD (max radiological score x 10)", y = "Count",
        title = "Stages of BPD Present in Study Population (N = 299)") +
   geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
   theme_bw()
