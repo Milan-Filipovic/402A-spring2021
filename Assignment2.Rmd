@@ -212,12 +212,16 @@ BPD_tble %>% ggplot(mapping = aes(x = lo2)) +
   labs(x = "Time (hours)") +
   theme_bw()
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 
 print(sort(BPD_tble$lo2))
 
 >>>>>>> 6f8e57c8ff9ec2d07cd683f16d2763d9ce1f73b8
+=======
+  
+>>>>>>> Stashed changes
 =======
   
 >>>>>>> Stashed changes
@@ -274,6 +278,7 @@ BPD_tble %>% ggplot(mapping = aes(x = idur)) +
   labs(x = "Time (hours)") +
   ggtitle("Duration of Endotracheal Intubation") +
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   theme_bw()
 <<<<<<< HEAD
 =======
@@ -281,6 +286,9 @@ BPD_tble %>% ggplot(mapping = aes(x = idur)) +
 print(sort(BPD_tble$idur))
 
 >>>>>>> 6f8e57c8ff9ec2d07cd683f16d2763d9ce1f73b8
+=======
+  theme_bw() 
+>>>>>>> Stashed changes
 =======
   theme_bw() 
 >>>>>>> Stashed changes
