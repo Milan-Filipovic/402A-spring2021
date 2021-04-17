@@ -171,30 +171,17 @@ Demographic table had the study population split into with and without BPD, wher
 ```{r}
 #
 demographic_table <- BPD_tble %>% 
-<<<<<<< Updated upstream
-  mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female"),
-         bpdyesno = ifelse(bpd >= 30, "w/ BPD", "w/o BPD"),
-         ) %>%  
-  select(gender, bxy, agar, gage, bwt, rage, vage, bpdyesno) %>% 
-  tbl_summary(
-    by = bpdyesno,
-    statistic = c("agar","gage","bwt", "rage", "vage") ~ "{median} ({p25}, {p75})",
-    digits = all_continuous() ~ 1) %>% 
-  add_overall() %>% 
-  add_p(pvalue_fun = ~style_pvalue(.x, digits = 2)) %>% 
-  bold_p() 
-=======
   mutate(gender = ifelse(BPD_tble$sex == 1, "male", "female")) %>%  
   select(gender, bxy, agar, gage, bwt, rage, vage, cens) %>% 
-  tbl_summary( by = cens,
-    statistic = c("agar","gage","bwt", "rage", "vage") ~ "{median} ({p25}, {p75})",
-    digits = all_continuous() ~ 1,
-    label = list(bxy ~ "Birth Year (Range:62 to 73)", agar ~ "1-minute APGAR SCore", rage ~ "Age Onset of Respiratory Symptoms (Hoursx10)",
-                 vage ~ "Age onset of Ventilatory Assistance (Hours)")) %>% 
-  add_overall() %>% 
-  bold_labels()
->>>>>>> Stashed changes
-  
+  tbl_summary(statistic = c("agar","gage","bwt", "rage", "vage") ~
+                "{median} ({p25}, {p75})",
+    digits = all_continuous() ~ 2,
+    label = list(bxy ~ "Birth Year (Range:62 to 73)", agar ~ "1-minute APGAR Score",
+                 rage ~ "Age Onset of Respiratory Symptoms (Hoursx10)",
+                 vage ~ "Age onset of Ventilatory Assistance (Hours)",
+                 cens ~ "Survived as of May 1 1975")) %>% 
+  bold_labels() %>% 
+  modify_header(label ~ "**Table 1. Demographic Characteristics**" )
 range(BPD_tble$bxy)
 #range of birth year included in table attribute
 demographic_table
@@ -224,12 +211,16 @@ BPD_tble %>% ggplot(mapping = aes(x = lo2)) +
   ggtitle("Hours of Exposure to Low Concentration (23-39%) of Elevated Oxygen") +
   labs(x = "Time (hours)") +
   theme_bw()
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 
 print(sort(BPD_tble$lo2))
 
 >>>>>>> 6f8e57c8ff9ec2d07cd683f16d2763d9ce1f73b8
+=======
+  
+>>>>>>> Stashed changes
 ```
 We see that the distribution is right skewed, with outliers at the high extreme.
 
@@ -282,6 +273,7 @@ BPD_tble %>% ggplot(mapping = aes(x = idur)) +
   geom_histogram(fill = "blue") + 
   labs(x = "Time (hours)") +
   ggtitle("Duration of Endotracheal Intubation") +
+<<<<<<< Updated upstream
   theme_bw()
 <<<<<<< HEAD
 =======
@@ -289,7 +281,11 @@ BPD_tble %>% ggplot(mapping = aes(x = idur)) +
 print(sort(BPD_tble$idur))
 
 >>>>>>> 6f8e57c8ff9ec2d07cd683f16d2763d9ce1f73b8
+=======
+  theme_bw() 
+>>>>>>> Stashed changes
 ```
+
 The distribution appears heavily right skewed, with many potential outliers.
 
 **v.** Hours of duration of assisted ventilation 
