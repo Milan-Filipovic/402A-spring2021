@@ -276,7 +276,7 @@ BPD_tble %>% ggplot(mapping = aes(x = vdur)) +
 BPD_tble %>% select(lo2, mo2, ho2, idur, vdur) %>% 
   summary()
 ```
-We see that for all variables the mean is larger than the median, indicating right skew. Note  also in lo2 the first quartile is 0, indicating many values of zero. 
+We see that for all variables the mean is larger than the median, indicating right skew. Note also in lo2 the first quartile is 0, indicating many values of zero. 
 
 c. Counts (or bar graphs) of RDS and radiographic BPD scores. How many infants were classified as having RDS, very severe RDS, and BPD? 
 
@@ -368,6 +368,7 @@ title(main = "surv")
 
 
 ```
+
 ```{r, echo = F}
 print("Influential Observations in agar")
 BPD_tble %>% 
