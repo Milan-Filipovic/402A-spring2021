@@ -79,3 +79,11 @@ should include:
 * Analysis of data set. (You will need to retrieve from our website one of two data 
   files: “cac.dta” and “cac.txt”.) 
 *Interpretation of results in terms of original research hypothesis so that a nonstatistician would be able to explain results to colleagues.
+
+
+
+```{r read in dataset, echo = F}
+setwd("C:/Graduate School/Coursework/Spring 2021/402A/R projects/402A-spring2021/Assignment 3")
+cac = read_dta("cac.dta")
+cac_tble <- as_tibble(BPD) %>% print()
+```
