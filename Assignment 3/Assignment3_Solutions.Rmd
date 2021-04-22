@@ -15,7 +15,7 @@ library(tidyverse)
 library(data.table)
 library(gtsummary)
 library(ggplot2)
-library(faraway)
+library(purrr)
 ```
 
 
@@ -62,7 +62,9 @@ as in those with increased cardiovascular risk (1-3).
 
 * Population(s): 
 
-* Sample(s): 
+* Sample(s): 217 Asymptomatic Subjects who underwent at least two electron-beam computed tomography (EBCT) for detection of CAC as a part of a clinical screening program. 
+    +Asymptomatic defined as no history of ischemic heart disease 
+    +No abnormal electrocardiogram, stress test, coronary angiogram, and no prior myocardial infarction or coronary bypass surgery
 
 * Dependent variable(s):	
     + 
@@ -82,8 +84,57 @@ should include:
 
 
 
-```{r read in dataset, echo = F}
-setwd("C:/Graduate School/Coursework/Spring 2021/402A/R projects/402A-spring2021/Assignment 3")
+```{r read/save dataset, eval = F, echo = F}
 cac = read_dta("cac.dta")
-cac_tble <- as_tibble(BPD) %>% print()
+cac_tble <- as_tibble(cac)
+fwrite(cac_tble, file = "CAC_data")
 ```
+
+
+```{r loading tibble, echo = FALSE}
+cac_tble <- fread("CAC_data") %>% print()
+```
+
+
+Checking Data for cleanliness 
+
+Variable Descriptions
+```{r variable info}
+#Haven stores the stata labels in as variable attributes. We can access them using map_chr from the purrr package
+cac %>% map_chr(~attributes(.)$label)
+```
+
+```{r}
+cac_tble %>% mutate(gender = ifelse(cac_tble$sex == 1, "men","women"), vol_change = vol2-vol1) %>%
+  select(-sex, -nid) %>%
+  tbl_summary(by = gender, missing_text = "Missing",
+              label = list(age ~ "Age First Scanned",
+                           vol1 ~ "CVS at First Visit",
+                           vol2 ~ "CVS at Second Visit",
+                           days ~ "Days Between Visits",
+                           vol_change ~ "Change in CVS")) %>% 
+  bold_labels() %>% 
+  add_overall() %>% 
+  modify_header(label ~ "**Participant Characteristics**")
+```
+
+Next Visualize key predictors 
+```{r}
+cac_tble <- cac_tble %>%
+  mutate(gender = ifelse(cac_tble$sex == 1, "men","women"), vol_change = vol2-vol1)
+
+summary(cac_tble)
+
+cac_tble %>% ggplot(mapping = aes(x = age)) +
+  geom_histogram(fill="lightblue") +
+  labs(title = "Age when first scanned")
+
+cac_tble %>% ggplot(mapping = aes(x = vol_change)) + geom_histogram()
+```
+
+
+Age appears to be normally distributed, wheareas volume change appears to be right skewed. Some transformation should be applied to normalize the data, and outliers should  be examined for validity. 
+
+
+
+
