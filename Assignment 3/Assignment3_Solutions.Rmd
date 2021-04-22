@@ -113,6 +113,7 @@ cac_tble %>% mutate(gender = ifelse(cac_tble$sex == 1, "men","women"), vol_chang
                            vol2 ~ "CVS at Second Visit",
                            days ~ "Days Between Visits",
                            vol_change ~ "Change in CVS")) %>% 
+  add_p() %>% 
   bold_labels() %>% 
   add_overall() %>% 
   modify_header(label ~ "**Participant Characteristics**")
