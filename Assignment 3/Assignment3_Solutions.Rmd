@@ -1,0 +1,81 @@
+---
+title: 'Assignment 2: Progression of Coronary Artery Calcification in Normal Subjects'
+author: "Milan Filipovic"
+date: "April 21, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = F, eval = T}
+library(haven)
+library(tidyverse)
+library(data.table)
+library(gtsummary)
+library(ggplot2)
+library(faraway)
+```
+
+
+## Question 1
+
+*1.* Based on the introduction and variable list, complete the following sections of a Biostatistics Consulting Worksheet:
+
+a. Date & Client Information
+b. Purpose
+c. Background & references
+d. Descriptions
+
+**Date**: 04/16/2021
+
+**Client Information**:
+
+* Name: 
+*	Department: 
+*	Phone: 
+*	Name of principal investigator: 
+
+**Purpose**
+
+* Statement of research hypothesis(es):
+    + To test the hypothesis that the rate of CAC progression is gender specific being greater in men then women.
+
+*	Statement of statistical hypothesis(es):
+
+
+**Background & references**:
+
+* Recent reports indicate that electron-beam computed tomography (EBCT) can document 
+the presence and monitor the progression of atherosclerotic CAC in the general adult population as well 
+as in those with increased cardiovascular risk (1-3). 
+* EBCT can measure changes in the extent of CAC in adults treated with lipid-lowering agents.
+*Interpretation of the clinical significance of different coronary artery calcium scores in the same patient is dependent on several factors:
+    + Measurement variation
+    + Expected rate of progression of coronary calcium
+
+
+**Descriptions**:
+
+* Study design: 
+
+* Population(s): 
+
+* Sample(s): 
+
+* Dependent variable(s):	
+    + 
+
+* Independent variable(s):
+    +
+
+**Exercise**
+
+Complete a Biostatistics Consulting Worksheet for the following study. Your worksheet 
+should include: 
+* Statement of statistical hypothesis(es) 
+*  Assessment of assumptions used in any statistical inference 
+* Analysis of data set. (You will need to retrieve from our website one of two data 
+  files: “cac.dta” and “cac.txt”.) 
+*Interpretation of results in terms of original research hypothesis so that a nonstatistician would be able to explain results to colleagues.
