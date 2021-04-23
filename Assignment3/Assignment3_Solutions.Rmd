@@ -247,6 +247,7 @@ exp(median(cac_women$logratechange))
 
 The Mann-Whitney U test showed that there was a significant difference (W = 7092, p = .007) in the rate of volume change between men and women enrolled in the study. The median rate of volume change for men was 0.020 mm^3^/day, and the median rate of volume change for women was 0 mm^3^/day.
 
+However, this test includes the 24 individuals that had a negative rate (decrease in CVS score), which means this test may not adequately answer the researchers' questions since the researchers are asking about the increase in rate of change, and researchers may choose to exclude individuals that did not experience an increase.
 
 # Concluding Remarks
 
