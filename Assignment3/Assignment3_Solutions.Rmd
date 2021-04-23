@@ -2,7 +2,9 @@
 title: 'Assignment 3: Progression of Coronary Artery Calcification in Normal Subjects'
 author: "Team 1: Milan Filipovic, Vivian Truong, Lillian Chen"
 date: "April 23, 2021"
-output: html_document
+output: 
+  html_document: 
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -18,6 +20,7 @@ library(gtsummary)
 library(ggplot2)
 library(purrr)
 library(sjlabelled)
+library(faraway)
 
 ```
 
@@ -31,15 +34,9 @@ should include:
   files: “cac.dta” and “cac.txt”.) 
 *Interpretation of results in terms of original research hypothesis so that a non-statistician would be able to explain results to colleagues.
 
+# Biostatistics Consulting Information
 
-## Question 1
-
-*1.* Based on the introduction and variable list, complete the following sections of a Biostatistics Consulting Worksheet:
-
-a. Date & Client Information
-b. Purpose
-c. Background & references
-d. Descriptions
+## Client Information
 
 **Date**: 04/23/2021
 
@@ -50,34 +47,40 @@ d. Descriptions
 *	Phone: (310) 267-8785
 *	Name of principal investigator: H.C. Yoon, A. Emerick, J Hill and J Goldin from the Department of Diagnostic Imaging, Kaiser Moanalua Medical Center and the Department of Radiological Sciences, UCLA
 
+## Research Hypotheses
+
 **Purpose**
 
 * Statement of research hypothesis(es):
     + To test the hypothesis that the rate of CAC progression is gender specific being greater in men than in women.
 
 *	Statement of statistical hypothesis(es):
-    + The rate of CAC progression in men is greater than it is in women
-    + Null hypothesis: The rate of change in calcium volume score (CVS) between men and women is statistically significantly different
+    + The rate of CAC progression in men is greater than it is in women in asymptomatic subjects
+    + Null hypothesis: The rate of change in calcium volume score (CVS) between asymptomatic men and women is statistically significantly different
+
+## Background
 
 **Background & references**:
 
 * Recent reports indicate that electron-beam computed tomography (EBCT) can document the presence and monitor the progression of atherosclerotic CAC in the general adult population as well as in those with increased cardiovascular risk (1-3). 
 * EBCT can measure changes in the extent of CAC in adults treated with lipid-lowering agents.
-    +EBCT is fast, snesitive, and uses an electron gun instead of x-rays to scan the chest. 
-    +Considered low risk and uses very low amounts of radiation. 
+    + EBCT is fast, sensitive, and uses an electron gun instead of x-rays to scan the chest. 
+    + Considered low risk and uses very low amounts of radiation. 
 *Interpretation of the clinical significance of different coronary artery calcium scores in the same patient is dependent on several factors:
     + Measurement variation
     + Expected rate of progression of coronary calcium
+
 
 **Descriptions**:
 
 * Study design: Retrospective study
 
-* Population(s): Adults who experience the progression of athersclerotic CAC
+* Population(s): Adults who experience the progression of atherosclerotic CAC
 
 * Sample(s): 217 asymptomatic subjects who underwent at least two electron-beam computed tomography (EBCT) for detection of CAC as a part of a clinical screening program. 
     + Asymptomatic defined as no history of ischemic heart disease 
     + No abnormal electrocardiogram, stress test, coronary angiogram, and no prior myocardial infarction or coronary bypass surgery
+
 
 * Dependent variable(s):	
     + vol1
@@ -87,7 +90,6 @@ d. Descriptions
 * Independent variable(s):
     + sex
     + age
-
 
 
 ```{r read save and load dataset, echo = F}
@@ -131,7 +133,12 @@ Note about CAC score taken from radiopaedia:
 CAC score of 1-112: low risk with a relative risk ratio of 1.9 (95 CI: 1.3-2.8) 
 CAC score of 100-400: moderate risk with a relative risk ratio of 4.3 (95% CI:3.1-6.1) 
 CAC score of 401-999: high risk with a relative risk ratio of 7.2 (95% CI:5.2-9.9)
+CAC score > 1000 is considered very high risk with a relative risk ratio of 10.8%
 Source: [link](https://radiopaedia.org/articles/calcium-volume-score?lang=us#:~:text=CAC%20score%20of%201%2D112,%25%20CI%3A5.2%2D9.9))
+
+# Statistical Analysis
+
+### Preliminary Analysis
 
 ```{r table 1 participant characteristics}
 cac_tble %>% mutate(gender = ifelse(cac_tble$sex == 1, "Men","Women"), 
@@ -153,7 +160,7 @@ cac_tble %>% mutate(gender = ifelse(cac_tble$sex == 1, "Men","Women"),
 ```
 
 
-Next, let us visualize key predictors in the dataset.
+
 
 ```{r}
 cac_tble <- cac_tble %>%
@@ -177,7 +184,7 @@ cac_tble %>% ggplot() +
 ```
 
 
-Age appears to be normally distributed, volume change appears to be right skewed, and rate of volume change is also right skewed. Some transformation should be applied to normalize the data, and outliers should be examined for validity. Additionally, the values for volume change and rate of volume change have a large number of 0s, so our data is zero-inflated and should be noted so that log transformations include an offset.
+Age appears to be normally distributed, volume change appears to be right skewed, and rate of volume change is also right skewed and overdispersion at ratechange = 0. Some transformation should be applied to normalize the data, and outliers should be examined for validity. Additionally, the values for volume change and rate of volume change have a large number of 0s, so our data is zero-inflated and should be noted so that log transformations include an offset.
 
 
 ```{r log transforms and visualizations}
@@ -189,7 +196,7 @@ cac_tble <- cac_tble %>%
          logvol1 = log(vol1 + 1),
          logvol2 = log(vol2 + 1),
          logdiffvol_change = logvol2 - logvol1,
-         logratechange = log(ratechange + 1))
+         logratechange = (logvol2-logvol1)/days)
 
 cac_tble %>% ggplot() +
   geom_boxplot(mapping = aes(x = logdiffvol_change, fill = gender)) +
@@ -211,6 +218,7 @@ cac_tble %>% ggplot() +
 
 The data is still extremely zero-inflated (containing a lot of zeros) and non-normal. It seems like the best course of action is not a linear regression, since despite transformations the distribution of the outcome is not normally distributed. Since there is no transformation that can be applied for us to meet normality assumptions of parametric tests, a possible route to take is to do a nonparametric test on the rate of volume change between men and women.
 
+### Mann-Whitney U Test
 
 The Mann-Whitney U Test may be able to test the null hypothesis $H_0$: There is no difference in the rate of volume change between men and women in the study population. The idea of the Mann-Whitney U Test is that we treat men and women as independent samples containing information on the rate of volume change, and we are comparing them on the rate of volume change. We use this test when the data is not normally distributed, which appears to be the case here after our data visualization conducted above.
 
@@ -226,12 +234,34 @@ cac_women <- cac_tble %>%
 wilcox.test(cac_men$ratechange, cac_women$ratechange, paired = F)
 wilcox.test(cac_tble$ratechange~cac_tble$gender)
 
+wilcox.test(cac_men$logratechange, cac_women$logratechange, paired = F)
+wilcox.test(cac_tble$logratechange~cac_tble$gender)
+
 median(cac_men$ratechange)
 median(cac_women$ratechange)
+
+exp(median(cac_men$logratechange))
+exp(median(cac_women$logratechange))
+
 ```
 
 The Mann-Whitney U test showed that there was a significant difference (W = 7092, p = .007) in the rate of volume change between men and women enrolled in the study. The median rate of volume change for men was 0.020 mm^3^/day, and the median rate of volume change for women was 0 mm^3^/day.
 
 
+# Concluding Remarks
+
+**Limitations**:
+
+The dataset is limited and does not include additional risk factors for CAC (smoking, diet, etc). Additionally, there is only one follow-up measurement conducted for CVS. Potential confounding from the purpose of the CT scan may also affect the measured CVS, since patients were receiving CT scans for unrelated purposes and we are not sure of the definition of "unrelated", since there could be risk factors that the patient had that were not available in this dataset.
+
 **Consulting Recommendations**: 
-When consulting the researhcers of this study, validity of outliers should be adressed. In adressing non-normality and zero inflation, researchers may want to consider selecting a different pool of participants who may have CAC growth. Atlernatively, scores can be converted into a categorically based risk system  such as the existing defined classification system for CAC scores.
+
+When consulting the researchers of this study, validity of outliers should be addressed. In addressing non-normality and zero inflation, researchers may want to consider selecting a different pool of participants who may have CAC growth. Alternatively, scores can be converted into a categorically based risk system such as the existing defined classification system for CAC scores (see classification mentioned above under 'Background').
+
+
+
+```{r}
+
+sessionInfo()
+
+```
