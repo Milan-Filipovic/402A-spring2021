@@ -1,9 +1,11 @@
 ---
 title: 'Assignment 3: Progression of Coronary Artery Calcification in Normal Subjects'
-author: "Team 1: Milan Filipovic, Vivian Truong, Lillian Chen"
+author: 'Team 1: Milan Filipovic, Vivian Truong, Lillian Chen'
 date: "April 23, 2021"
-output: 
-  html_document: 
+output:
+  pdf_document:
+    toc: yes
+  html_document:
     toc: yes
 ---
 
@@ -26,13 +28,10 @@ library(faraway)
 
 **Exercise**
 
-Complete a Biostatistics Consulting Worksheet for the following study. Your worksheet 
-should include: 
-* Statement of statistical hypothesis(es) 
-*  Assessment of assumptions used in any statistical inference 
-* Analysis of data set. (You will need to retrieve from our website one of two data 
-  files: “cac.dta” and “cac.txt”.) 
-*Interpretation of results in terms of original research hypothesis so that a non-statistician would be able to explain results to colleagues.
+Complete a Biostatistics Consulting Worksheet for the following study. Your worksheet should include: * Statement of statistical hypothesis(es) 
+* Assessment of assumptions used in any statistical inference 
+* Analysis of data set. (You will need to retrieve from our website one of two data files: "cac.dta" and "cac.txt".)
+* Interpretation of results in terms of original research hypothesis so that a non-statistician would be able to explain results to colleagues.
 
 # Biostatistics Consulting Information
 
@@ -42,55 +41,58 @@ should include:
 
 **Client Information**:
 
-* Name: H.C. Yoon, A. Emerick, J Hill and J Goldin
-*	Department: Department of Diagnostic Imaging, Kaiser Moanalua Medical Center and the Department of Radiological Sciences, UCLA
-*	Phone: (310) 267-8785
-*	Name of principal investigator: H.C. Yoon, A. Emerick, J Hill and J Goldin from the Department of Diagnostic Imaging, Kaiser Moanalua Medical Center and the Department of Radiological Sciences, UCLA
+-   Name: H.C. Yoon, A. Emerick, J Hill and J Goldin
+-   Department: Department of Diagnostic Imaging, Kaiser Moanalua Medical Center and the Department of Radiological Sciences, UCLA
+-   Phone: (310) 267-8785
+-   Name of principal investigator: H.C. Yoon, A. Emerick, J Hill and J Goldin from the Department of Diagnostic Imaging, Kaiser Moanalua Medical Center and the Department of Radiological Sciences, UCLA
 
 ## Research Hypotheses
 
 **Purpose**
 
-* Statement of research hypothesis(es):
-    + To test the hypothesis that the rate of CAC progression is gender specific being greater in men than in women.
+-   Statement of research hypothesis(es):
 
-*	Statement of statistical hypothesis(es):
-    + The rate of CAC progression in men is greater than it is in women in asymptomatic subjects
-    + Null hypothesis: The rate of change in calcium volume score (CVS) between asymptomatic men and women is statistically significantly different
+    -   To test the hypothesis that the rate of CAC progression is gender specific being greater in men than in women.
+
+-   Statement of statistical hypothesis(es):
+
+    -   The rate of CAC progression in men is greater than it is in women in asymptomatic subjects
+    -   Null hypothesis: The rate of change in calcium volume score (CVS) between asymptomatic men and women is statistically significantly different
 
 ## Background
 
 **Background & references**:
 
-* Recent reports indicate that electron-beam computed tomography (EBCT) can document the presence and monitor the progression of atherosclerotic CAC in the general adult population as well as in those with increased cardiovascular risk (1-3). 
-* EBCT can measure changes in the extent of CAC in adults treated with lipid-lowering agents.
-    + EBCT is fast, sensitive, and uses an electron gun instead of x-rays to scan the chest. 
-    + Considered low risk and uses very low amounts of radiation. 
-*Interpretation of the clinical significance of different coronary artery calcium scores in the same patient is dependent on several factors:
-    + Measurement variation
-    + Expected rate of progression of coronary calcium
+-   Recent reports indicate that electron-beam computed tomography (EBCT) can document the presence and monitor the progression of atherosclerotic CAC in the general adult population as well as in those with increased cardiovascular risk (1-3).
 
+-   EBCT can measure changes in the extent of CAC in adults treated with lipid-lowering agents.
+
+    -   EBCT is fast, sensitive, and uses an electron gun instead of x-rays to scan the chest.
+    -   Considered low risk and uses very low amounts of radiation. \*Interpretation of the clinical significance of different coronary artery calcium scores in the same patient is dependent on several factors:
+    -   Measurement variation
+    -   Expected rate of progression of coronary calcium
 
 **Descriptions**:
 
-* Study design: Retrospective study
+-   Study design: Retrospective study
 
-* Population(s): Adults who experience the progression of atherosclerotic CAC
+-   Population(s): Adults who experience the progression of atherosclerotic CAC
 
-* Sample(s): 217 asymptomatic subjects who underwent at least two electron-beam computed tomography (EBCT) for detection of CAC as a part of a clinical screening program. 
-    + Asymptomatic defined as no history of ischemic heart disease 
-    + No abnormal electrocardiogram, stress test, coronary angiogram, and no prior myocardial infarction or coronary bypass surgery
+-   Sample(s): 217 asymptomatic subjects who underwent at least two electron-beam computed tomography (EBCT) for detection of CAC as a part of a clinical screening program.
 
+    -   Asymptomatic defined as no history of ischemic heart disease
+    -   No abnormal electrocardiogram, stress test, coronary angiogram, and no prior myocardial infarction or coronary bypass surgery
 
-* Dependent variable(s):	
-    + vol1
-    + vol2
-    + days
+-   Dependent variable(s):
 
-* Independent variable(s):
-    + sex
-    + age
+    -   vol1
+    -   vol2
+    -   days
 
+-   Independent variable(s):
+
+    -   sex
+    -   age
 
 ```{r read save and load dataset, echo = F}
 
@@ -102,10 +104,10 @@ cac_tble <- fread("CAC_data") %>% print()
 
 ```
 
-
-Checking Data for cleanliness 
+Checking Data for cleanliness
 
 Variable Descriptions
+
 ```{r variable info, eval = F}
 # Haven stores the stata labels in as variable attributes. We can access them 
 # using map_chr from the purrr package
@@ -119,22 +121,17 @@ Variable Descriptions
 (varlabels <- str(lapply(cac_tble, attr, "label")))
 
 ```
+
 The variable labels are as follows:
 
- * nid : "id subject number, 1-217"
- * sex : "rf male subject, 0n/1y"
- * age : "rf age when first scanned, yrs"
- * vol1: "ct visit #1 CVS, mm3"
- * vol2: "ct visit #2 CVS, mm3"
- * days: "ct elapsed days between visits"
+-   nid : "id subject number, 1-217"
+-   sex : "rf male subject, 0n/1y"
+-   age : "rf age when first scanned, yrs"
+-   vol1: "ct visit \#1 CVS, mm3"
+-   vol2: "ct visit \#2 CVS, mm3"
+-   days: "ct elapsed days between visits"
 
-
-Note about CAC score taken from radiopaedia:
-CAC score of 1-112: low risk with a relative risk ratio of 1.9 (95 CI: 1.3-2.8) 
-CAC score of 100-400: moderate risk with a relative risk ratio of 4.3 (95% CI:3.1-6.1) 
-CAC score of 401-999: high risk with a relative risk ratio of 7.2 (95% CI:5.2-9.9)
-CAC score > 1000 is considered very high risk with a relative risk ratio of 10.8%
-Source: [link](https://radiopaedia.org/articles/calcium-volume-score?lang=us#:~:text=CAC%20score%20of%201%2D112,%25%20CI%3A5.2%2D9.9))
+Note about CAC score taken from radiopaedia: CAC score of 1-112: low risk with a relative risk ratio of 1.9 (95 CI: 1.3-2.8) CAC score of 100-400: moderate risk with a relative risk ratio of 4.3 (95% CI:3.1-6.1) CAC score of 401-999: high risk with a relative risk ratio of 7.2 (95% CI:5.2-9.9) CAC score \> 1000 is considered very high risk with a relative risk ratio of 10.8% Source: [link](https://radiopaedia.org/articles/calcium-volume-score?lang=us#:~:text=CAC%20score%20of%201%2D112,%25%20CI%3A5.2%2D9.9))
 
 # Statistical Analysis
 
@@ -159,9 +156,6 @@ cac_tble %>% mutate(gender = ifelse(cac_tble$sex == 1, "Men","Women"),
   modify_header(label ~ "**Participant Characteristics**")
 ```
 
-
-
-
 ```{r}
 cac_tble <- cac_tble %>%
   mutate(gender = ifelse(cac_tble$sex == 1, "men","women"), 
@@ -183,9 +177,7 @@ cac_tble %>% ggplot() +
   labs(x = expression(CAC~rate~(mm^3/day)), title = "Rate of Change in Calcium Volume Score")
 ```
 
-
 Age appears to be normally distributed, volume change appears to be right skewed, and rate of volume change is also right skewed and overdispersion at ratechange = 0. Some transformation should be applied to normalize the data, and outliers should be examined for validity. Additionally, the values for volume change and rate of volume change have a large number of 0s, so our data is zero-inflated and should be noted so that log transformations include an offset.
-
 
 ```{r log transforms and visualizations}
 
@@ -255,11 +247,9 @@ However, this test includes the 24 individuals that had a negative rate (decreas
 
 The dataset is limited and does not include additional risk factors for CAC (smoking, diet, etc). Additionally, there is only one follow-up measurement conducted for CVS. Potential confounding from the purpose of the CT scan may also affect the measured CVS, since patients were receiving CT scans for unrelated purposes and we are not sure of the definition of "unrelated", since there could be risk factors that the patient had that were not available in this dataset.
 
-**Consulting Recommendations**: 
+**Consulting Recommendations**:
 
 When consulting the researchers of this study, validity of outliers should be addressed. In addressing non-normality and zero inflation, researchers may want to consider selecting a different pool of participants who may have CAC growth. Alternatively, scores can be converted into a categorically based risk system such as the existing defined classification system for CAC scores (see classification mentioned above under 'Background').
-
-
 
 ```{r}
 
