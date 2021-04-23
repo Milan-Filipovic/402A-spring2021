@@ -1,6 +1,6 @@
 ---
 title: 'Assignment 3: Progression of Coronary Artery Calcification in Normal Subjects'
-author: "Milan Filipovic, Vivian Truong, Lillian Chen"
+author: "Team 1: Milan Filipovic, Vivian Truong, Lillian Chen"
 date: "April 23, 2021"
 output: html_document
 ---
