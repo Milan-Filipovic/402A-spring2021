@@ -112,6 +112,7 @@ Source: [link](https://radiopaedia.org/articles/calcium-volume-score?lang=us#:~:
 
 
 ```{r}
+#change in score would not usually be added toa demographic table but I do it here
 cac_tble %>% mutate(gender = ifelse(cac_tble$sex == 1, "men","women"), vol_change = vol2-vol1) %>%
   select(-sex, -nid) %>%
   tbl_summary(by = gender, missing_text = "Missing",
@@ -143,9 +144,52 @@ cac_tble %>% ggplot(mapping = aes(x = age)) +
 cac_tble %>% ggplot() +
   geom_boxplot(mapping = aes(x = vol_change, fill = gender)) +
   labs(x = expression(CAC~(mm^3)), title = "Change in Calcium Volume Score")
+
+
+cac_tble %>% ggplot() +
+  geom_boxplot(mapping = aes(x = vol1, fill = gender)) +
+  labs(x = expression(CAC~(mm^3)), title = "Initial Calcium Volume Score")
+
+cac_tble %>% ggplot() +
+  geom_boxplot(mapping = aes(x = vol2, fill = gender)) +
+  labs(x = expression(CAC~(mm^3)), title = "Follow-Up Calcium Volume Score")
 ```
 
 
-Age appears to be normally distributed, wheareas volume change appears to be right skewed. Some transformation should be applied to normalize the data, and outliers should be examined for validity. 
+Age appears to be normally distributed, wheareas CAC volume variables all appear right skewed. Some transformation should be applied to normalize the data, and outliers should be examined for validity. 
+
+
+
+```{r}
+log_cac<- cac_tble %>% mutate(logvol1 = log(vol1 +1), logvol2 = log(vol2 +1)) %>% 
+  mutate(logvol_change = logvol2 - logvol1)
+
+
+log_cac %>% ggplot() +
+  geom_histogram(mapping = aes(x = logvol1, fill = gender)) +
+  labs(x = expression(CAC~(mm^3)), title = "Log-Tranformed Initial CVS")
+
+log_cac %>% ggplot() +
+  geom_histogram(mapping = aes(x = logvol2, fill = gender)) +
+  labs(x = expression(CAC~(mm^3)), title = "Log-Tranformed Follow-up CVS")
+```
+
+After a shifted log transformation, the the distribution for log CAC scores at both visits are still highly zero-inflated, although skewness has been reduced. 
+
+```{r}
+mod <- glm(logvol2 ~ age + days + logvol1 + sex, data = log_cac) 
+mod %>% tbl_regression()
+```
+
+
+Instead a two sample wilcoxon rank sum test is run on the two gender with cac score change to test for differences. A two sample welch's test was performed previously, but due to non-normality of data, a nonparametric test will be conducted between the two genders. 
+```{r}
+wilcox.test(vol_change ~ gender, paired = FALSE, data = cac_tble)
+```
+
+The wilcoxon rank sum test determined that there is a significant difference in CVS score change between men and women. 
+For future analysis, it may be easier to analyze if categorical ranking system is implemented for risk determination, or alternate scores were used to assess outcome. 
+
+
 
 
