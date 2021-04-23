@@ -63,10 +63,11 @@ d. Descriptions
 
 * Recent reports indicate that electron-beam computed tomography (EBCT) can document the presence and monitor the progression of atherosclerotic CAC in the general adult population as well as in those with increased cardiovascular risk (1-3). 
 * EBCT can measure changes in the extent of CAC in adults treated with lipid-lowering agents.
+    +EBCT is fast, snesitive, and uses an electron gun instead of x-rays to scan the chest. 
+    +Considered low risk and uses very low amounts of radiation. 
 *Interpretation of the clinical significance of different coronary artery calcium scores in the same patient is dependent on several factors:
     + Measurement variation
     + Expected rate of progression of coronary calcium
-
 
 **Descriptions**:
 
@@ -230,3 +231,7 @@ median(cac_women$ratechange)
 ```
 
 The Mann-Whitney U test showed that there was a significant difference (W = 7092, p = .007) in the rate of volume change between men and women enrolled in the study. The median rate of volume change for men was 0.020 mm^3^/day, and the median rate of volume change for women was 0 mm^3^/day.
+
+
+**Consulting Recommendations**: 
+When consulting the researhcers of this study, validity of outliers should be adressed. In adressing non-normality and zero inflation, researchers may want to consider selecting a different pool of participants who may have CAC growth. Atlernatively, scores can be converted into a categorically based risk system  such as the existing defined classification system for CAC scores.
