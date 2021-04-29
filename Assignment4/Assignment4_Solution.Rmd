@@ -1,0 +1,52 @@
+---
+title: "Assignment 4: Sample Size and Design"
+author: 'Team 1: Milan Filipovic, Vivian Truong, Lillian Chen'
+date: "4/29/2021"
+output: 
+  html_document:
+    toc: true
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# 1. Type I and II Errors, Power, Effect Size 
+
+
+
+# 2. Basic formulas for power and sample size 
+
+
+# 3. Sample size based on coefficient of variation 
+
+
+# 4. Sample size calculation for the Poisson distribution 
+
+
+# 5. Sample size calculation for the Binomial distribution 
+
+
+# 6. Systematic effects due to randomization 
+
+
+# 7. Blocking 
+
+
+# 8. Factorial designs 
+
+
+# 9. Balanced designs 
+
+
+# 10. Missing data 
+
+
+# 11. Multiple comparisons 
+
+
+# 12. Bootstrapping 
+
