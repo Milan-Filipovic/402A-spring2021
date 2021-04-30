@@ -102,8 +102,9 @@ Consider a comparative study to study the response of asthmatic subjects to two 
 </center>
 
 Note that each cell in a factorial design contributes $\frac{n}{2}-1$ degrees of freedom per level, so the total degrees of freedom lost is $2n-4$. Using factorial design we can assess the following effects:
-* Main effect: The effect of the factor on the outcome separately (marginal effect).
-* Interaction effect: When the effect of one variable depends on the level of another factor. 
+
++ Main effect: The effect of the factor on the outcome separately (marginal effect).
++ Interaction effect: When the effect of one variable depends on the level of another factor. 
 
 
 
