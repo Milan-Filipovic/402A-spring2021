@@ -222,7 +222,7 @@ Procedures used for multiple comparison:
 
 
 # 12. Bootstrapping 
-Bootstrapping is a statistical estimation procedure coined by Efron (1979), and it is widely used for estimation of complex relationship.
+Bootstrapping is a statistical estimation procedure coined by Efron (1979), and it is widely used for estimation of complex relationship. It is a resampling method that involves random sampling with replacement. It is only possible due to modern computing since it is usually computationally intensive.
 
 **Rule of Thumb**: Think of bootstrapping instead of the delta method in estimating complex relationships. There are two reasons for the rule: firstly, the delta method is an approximation, which may not be useful for small samples. Second, a sample from a population provides a crude estimate of the population distribution. Utilizing modern computing power, a sampling distribution can be generated and statistics can be estimated from that sampling distribution.
 
