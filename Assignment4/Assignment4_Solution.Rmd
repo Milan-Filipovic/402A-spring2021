@@ -64,6 +64,7 @@ $$
 where CV is the coefficient of variation (CV = $\sigma_0$/$\mu_0$ = $\sigma_1$/$\mu_1$).
 
 Specification of variation implies that the standard deviation is proportional to the mean.
+This is helpful if clients do not know the standard deviation of their experiments but they might have an idea of how much their experiments or groups may vary between run to run. If there is no knowledge of the variation in a biological system, we know that CV of 30-35% is common in biological assay experiences, and a clinically significiant difference may be around 20%. We can use the numbers given from a client to then help us calculate other statistical values such as an effect size $\Delta$. Additionally, CV is often used with log normal data.
 
 # 4. Sample size calculation for the Poisson distribution 
 
@@ -213,7 +214,9 @@ Procedures used for multiple comparison:
 # 12. Bootstrapping 
 Bootstrapping is a statistical estimation procedure coined by Efron (1979), and it is widely used for estimation of complex relationship.
 
-**Rule of Thumb**: Think of bootstrapping instead of the delta method in estimating complex relationships
+**Rule of Thumb**: Think of bootstrapping instead of the delta method in estimating complex relationships. There are two reasons for the rule: firstly, the delta method is an approximation, which may not be useful for small samples. Second, a sample from a population provides a crude estimate of the population distribution. Utilizing modern computing power, a sampling distribution can be generated and statistics can be estimated from that sampling distribution.
+
+Bootstrapping has become an important tool for estimation since it can be applied to any data set without assuming an underlying distribution.
 
 
 
