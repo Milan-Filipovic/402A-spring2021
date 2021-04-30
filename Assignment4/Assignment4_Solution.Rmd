@@ -24,7 +24,9 @@ Power (1-$\beta$) : probability of rejecting the null hypothesis when it is fals
 
 Effect size : also known as the standardized difference $\Delta$, scales the difference in population means by the standard deviation
 
-+ should not be solely used to formulate ojectives for a study for the following reasons:
++ Cohen's d definitions of effect size: small = 0.2, medium = 0.5, large = 0.8.
+
++ should not be solely used to formulate objectives for a study for the following reasons:
   - the effect size is a function of at least three parameters, representing a substantial reduction of the parameter space
   - the experimental design may preclude estimation of some of the parameters
 
@@ -43,10 +45,12 @@ is the treatment difference to be detected in units of the standard deviation - 
 
 In the one-sample case, the numerator is 8 instead of 16. In the two-sample case, two means have to be estimated, doubling the variance and requiring two groups. Thus, the two sample scenario requires four times as many observations as the one-sample scenario.
 
-The formula for sample size required to compare two population means $\mu_0$ and $\mu_1$ with common variance $\sigma^2$ is dervide from the previous equation:
+The formula for sample size required to compare two population means $\mu_0$ and $\mu_1$ with common variance $\sigma^2$ is derived from the previous equation:
 $$
 n=\frac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{(\frac{\mu_0-\mu_1}{\sigma})^2}
 $$
+
+Sample size plotted against power can show us the real relationship between the two to justify a sample size to an investigator. Ideally, you do not want to rely on the central limit theorem (CLT) to justify any sample size, especially since 1) 30 subjects might not be possible or feasible, or 2) the data does not allow us to use a normal approximation.
 
 
 # 3. Sample size based on coefficient of variation 
