@@ -185,7 +185,11 @@ pre code {
 <li><a href="#rule-belle">Rule (Belle)</a></li>
 <li><a href="#basis-for-randomization">Basis for Randomization</a></li>
 </ul></li>
-<li><a href="#blocking">7. Blocking</a></li>
+<li><a href="#blocking">7. Blocking</a>
+<ul>
+<li><a href="#examples-of-blocking">Examples of blocking</a></li>
+<li><a href="#example---pot-position-in-greenhouse">Example - Pot Position in Greenhouse</a></li>
+</ul></li>
 <li><a href="#factorial-designs">8. Factorial designs</a></li>
 <li><a href="#balanced-designs">9. Balanced designs</a></li>
 <li><a href="#missing-data">10. Missing data</a></li>
@@ -252,6 +256,16 @@ n=\frac{16\bar{\pi}(1-\bar{\pi})}{(\pi_0-\pi_1)^2}
 </div>
 <div id="blocking" class="section level1">
 <h1>7. Blocking</h1>
+<p>The concept of blocking is to break up the subjects into a number of blocks, and then to randomize the subjects within these blocks. The systematic effects between blocks can be eliminated because we do not care about these sources of variance and want minimize their impact on inference.</p>
+<div id="examples-of-blocking" class="section level2">
+<h2>Examples of blocking</h2>
+<p>Blocks can be any group that is more homogeneous than the population. Age group or alcohol consumption could be potential blocking variables in a study interested with the effects of smoking for example, because individuals within the same age group or rate of alcohol consumption may be more homogeneous in smoking habits.</p>
+<p>A paired study or matched study design are strong examples of blocking because each subject is paired with an equivalent. This reduces treatment-between-subject variability. Crossover studies are also good examples of blocking because the subject receives both treatments, and so the comparison is within subject.</p>
+</div>
+<div id="example---pot-position-in-greenhouse" class="section level2">
+<h2>Example - Pot Position in Greenhouse</h2>
+<p>Researchers were interested in comparing different experimental designs to measure which plant growth trait resulted in the most growth. One confounding variable is position within greenhouse - some plants may be exposed to more sun and therefore undergo more growth. Different experimental designs were tested to determine the best way to reduce variance caused by position. One experimental design was to rotate the pots so that each plant was positioned in different parts of the greenhouse over the study. An alternative design was to block the plants according to the growth trait, and then randomize at each position in the greenhouse (fixed-position design). The rotation scheme is similar to a crossover study, whereas the fixed-position controlled for treatment-between-subject variability. The researchers found that blocking with fixed-position was more efficient than re-arrangement of pots and concluded that re-arrangement should be abandoned in favor of fixed-position design. <a href="https://plantmethods.biomedcentral.com/articles/10.1186/s13007-019-0527-4">Source</a></p>
+</div>
 </div>
 <div id="factorial-designs" class="section level1">
 <h1>8. Factorial designs</h1>
