@@ -188,7 +188,7 @@ Real-world data tends to have missing data, but as statisticians we must have a 
 
 Strategies for dealing with missing data include the following:
 - complete case analysis
-- simple imputation
+- simple imputation: 
 - multiple imputation
 - worst case analysis
 - sensitivity analysis
@@ -207,4 +207,9 @@ Procedures used for multiple comparison:
 
 
 # 12. Bootstrapping 
+Bootstrapping is a statistical estimation procedure coined by Efron (1979), and it is widely used for estimation of complex relationship.
+
+**Rule of Thumb**: Think of bootstrapping instead of the delta method in estimating complex relationships
+
+
 
