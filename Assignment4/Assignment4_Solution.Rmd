@@ -16,16 +16,73 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1. Type I and II Errors, Power, Effect Size 
 
+Type I error ($\alpha$) : probability of rejecting the null hypothesis when it is true
 
+Type II error ($\beta$) : probability of not rejecting the null hypothesis when it is false
+
+Power (1-$\beta$) : probability of rejecting the null hypothesis when it is false
+
+Effect size : also known as the standardized difference $\Delta$, scales the difference in population means by the standard deviation
+
++ should not be solely used to formulate ojectives for a study for the following reasons:
+  - the effect size is a function of at least three parameters, representing a substantial reduction of the parameter space
+  - the experimental design may preclude estimation of some of the parameters
 
 # 2. Basic formulas for power and sample size 
+
+Starting with the basin sample size formula for two groups, with a two-sided alternative, normal distribution with homogeneous variances ($\sigma_0^2$ = $\sigma_1^2$ = $\sigma^2$) and equal sample sizes ($n_0$ = $n_1$ = $n$), the basic formula for sample size (Lehr's Equation) is
+$$
+n=\frac{16}{\Delta^2}
+$$
+
+where 
+$$
+\Delta = \frac{\mu_0-\mu_1}{\sigma} = \frac{\delta}{\sigma}
+$$
+is the treatment difference to be detected in units of the standard deviation - the standardized difference.
+
+In the one-sample case, the numerator is 8 instead of 16. In the two-sample case, two means have to be estimated, doubling the variance and requiring two groups. Thus, the two sample scenario requires four times as many observations as the one-sample scenario.
+
+The formula for sample size required to compare two population means $\mu_0$ and $\mu_1$ with common variance $\sigma^2$ is dervide from the previous equation:
+$$
+n=\frac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{(\frac{\mu_0-\mu_1}{\sigma})^2}
+$$
 
 
 # 3. Sample size based on coefficient of variation 
 
+Sample size formula based on coefficient of variation:
+
+$$
+n=\frac{16(CV)^2}{(ln\mu_0-ln\mu_1)^2}
+$$
+
+where CV is the coefficient of variation (CV = $\sigma_0$/$\mu_0$ = $\sigma_1$/$\mu_1$).
+
+Specification of variation implies that the standard deviation is proportional to the mean.
 
 # 4. Sample size calculation for the Poisson distribution 
 
+The Poisson distribution deals with rare events. Supposing that the means of samples from two Poisson populations are to be compared in a two-sample test, and $\theta_0$ and $\theta_1$ are the means of two populations, the required number of observations per sample is
+$$
+n = \frac{4}{(\sqrt\theta_0-\sqrt\theta_1)^2}
+$$
+
+which can also be rewritten as
+
+$$
+n = \frac{4}{(\theta_0+\theta_1)/2-\sqrt{\theta_0\theta_1}}
+$$
+
+Supposing that the means $\theta_0$ and $\theta_1$ are means per unit time (or unit volume) and that the observations are observed for a period of time $T$, the sample size required is
+$$
+n = \frac{4}{T(\sqrt\theta_0-\sqrt\theta_1)^2}
+$$
+
+The Poisson distribution is also a common model for describing radioactive scenarios. Supposing that the background rate is $\theta^*$ and the additional rates over background are $\theta_0$ and $\theta_1$, then $Y_i$ is Poisson $(\theta^*+\theta_i)$ and the sample size formula is
+$$
+n = \frac{4}{(\sqrt{\theta^*+\theta_0}-\sqrt{\theta^*+\theta_1})^2}
+$$
 
 # 5. Sample size calculation for the Binomial distribution 
 
