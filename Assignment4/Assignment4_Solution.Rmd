@@ -185,18 +185,28 @@ Characteristics of balanced design include:
 
 # 10. Missing data 
 
-Real-world data tends to have missing data, but as statisticians we must have a plan in place to identify the type of missing data and how to adjust analyses to deal with missing data.
+Real-world data tends to have missing data, but as statisticians we must have a plan in place to identify the type of missing data and how to adjust analyses to deal with missing data. Missing data can lead to unbalanced study design, which lead to incorrect analyses, which ultimately result in incorrect conclusions drawn from the data.
 
-- Missing completely at random (MCAR): A variable is missing completely at random if neither the variables in the dataset nor the unobserved value of the variable itself predict whether a value will be missing. In other words, the causes of missing data are unrelated to the data. This implies that the available data can be analyzed without worrying about bias.
-- Missing at random (MAR): Data are missing and the missingness can be explained on the basis of observed variables. A variable is missing at random if other variables in the dataset can be used to predict the missingness of the variable. In other words, the probability of missingness is the same only within groups defined by the observed data. Most modern missing data methods start from the MAR assumption.
+- Missing completely at random (MCAR): A variable is missing completely at random if neither the variables in the dataset nor the unobserved value of the variable itself predict whether a value will be missing. In other words, the causes of missing data are unrelated to the data. This implies that the available data can be analyzed without worrying about bias. 
+
+- Missing at random (MAR): Data are missing and the missingness can be explained on the basis of observed variables. A variable is missing at random if other variables in the dataset can be used to predict the missingness of the variable. In other words, the probability of missingness is the same only within groups defined by the observed data. Most modern missing data methods start from the MAR assumption. For multicenter studies, MCAR would be that one center would have more missingness than others due to something like local lab evaluation being different from other centers.
+
 - Missing not at random (MNAR): A variable is missing not at random if the value of the unobserved variable itself predicts missingness. MNAR is the most complex case as the causes for the missingness vary for reasons unknown to the investigator.
 
 Strategies for dealing with missing data include the following:
+- omission - removing invalid data
+  + listwise deletion
+  + variable deletion
+
+- imputation - placing values in place of missing data 
+  + simple imputation
+  + multiple imputation
+  
 - complete case analysis
-- simple imputation: 
-- multiple imputation
 - worst case analysis
 - sensitivity analysis
+
+If % missingness approaches levels of 10%, let alone 20%, missingness must be well thought out and the investigator should be comfortable with the method in which they handle the missingness. 
 
 # 11. Multiple comparisons 
 
