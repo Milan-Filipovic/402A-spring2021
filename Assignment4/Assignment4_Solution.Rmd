@@ -80,15 +80,31 @@ There are three component to randomization
 The concept of blocking is to break up the subjects into a number of blocks, and then to randomize the subjects within these blocks. The systematic effects between blocks can be eliminated because we do not care about these sources of variance and want minimize their impact on inference. 
 
 ## Examples of blocking
-Blocks can be any group that is more homogeneous than the population. Age group or alcohol consumption could be potential blocking variables in a study interested with the effects of smoking for example, because individuals within the same age group or rate of alcohol consumption may be more homogeneous in smoking habits. 
+Blocks can include any group that is more homogeneous than the population. Age group or alcohol consumption could be potential blocking variables in a study interested in the effects of smoking for example, because individuals within the same age group or rate of alcohol consumption may be more homogeneous in smoking habits. 
 
 A paired study or matched study design are strong examples of blocking because each subject is paired with an equivalent. This reduces treatment-between-subject variability. Crossover studies are also good examples of blocking because the subject receives both treatments, and so the comparison is within subject. 
 
 ## Example - Pot Position in Greenhouse
-Researchers were interested in comparing different experimental designs to measure which plant growth trait resulted in the most growth. One confounding variable is position within greenhouse - some plants may be exposed to more sun and therefore undergo more growth. Different experimental designs were tested to determine the best way to reduce variance caused by position. One experimental design was to rotate the pots so that each plant was positioned in different parts of the greenhouse over the study. An alternative design was to block the plants according to the growth trait, and then randomize at each position in the greenhouse (fixed-position design). The rotation scheme is similar to a crossover study, whereas the fixed-position controlled for treatment-between-subject variability. The researchers found that blocking with fixed-position was more efficient than re-arrangement of pots and concluded that re-arrangement should be abandoned in favor of fixed-position design.
+Researchers were interested in comparing different experimental designs to measure which plant growth trait resulted in the most growth. One confounding variable is position within greenhouse - some plants may be exposed to more sunlight more favorable to growth for instance. Different experimental designs were tested to determine the best way to reduce variance caused by position. One experimental design was to rotate the pots so that each plant was positioned in different parts of the greenhouse over the study. An alternative design was to block the plants according to the growth trait, and then randomize at each position in the greenhouse (fixed-position design). The rotation scheme is similar to a crossover study, whereas the fixed-position controlled for treatment-between-subject variability. The researchers found that blocking with fixed-position was more efficient than re-arrangement of pots and concluded that re-arrangement should be abandoned in favor of fixed-position design.
 [Source](https://plantmethods.biomedcentral.com/articles/10.1186/s13007-019-0527-4)
+<center>
+![](images\potplant.PNG)
+</center> 
 
 # 8. Factorial designs 
+Factorial design refers to the situation when more than one independent variable, or factor, is assessed simultaneously. The treatment combinations are applied to the observational unit. 
+
+## Example 
+Consider a comparative study to study the response of asthmatic subjects to two factors: pollutants (ozone vs air) and two exercise levels (active vs rest). Here we have two independent variables.Instead of conducting two separate study, using $4n$ subjects, a factorial design assigns $\frac{n}{2}$ subjects to each of the treatment combinations. 
+
+<center>
+![](images\factorial_design.PNG) 
+</center>
+
+Note that each cell in a factorial design contributes $\frac{n}{2}-1$ degrees of freedom per level, so the total degrees of freedom lost is $2n-4$. Using factorial design we can assess the following effects:
+* Main effect: The effect of the factor on the outcome separately (marginal effect).
+* Interaction effect: When the effect of one variable depends on the level of another factor. 
+
 
 
 # 9. Balanced designs 
