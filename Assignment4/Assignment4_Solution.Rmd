@@ -166,12 +166,44 @@ Note that each cell in a factorial design contributes $\frac{n}{2}-1$ degrees of
 
 
 # 9. Balanced designs 
+Balanced design refers to a study design where all treatment combinations are based on the same number of observations. In the case of an ANOVA, this refers to equal sample sizes in each group or cell. This is commonly used in factorial design.
 
+Characteristics of balanced design include:
+
+- Factor A & Factor B are uncorrelated
+- SSA, SSAB, and SSB are orthogonal
+- SSModel = SSA + SSB +SSAB
+- Tests for factors and interactions are independent
+- For estimation of group-level comparisons, the marginal means and least squares means are equivalent
+
+**Rule of Thumb**: Aim for balance in the design of a study. The idea is that analyses will be more straightforward and allow additive partitioning of the total sums of squares. Additionally, balanced designs tend to minimize the standard errors of the estimates.
 
 # 10. Missing data 
 
+Real-world data tends to have missing data, but as statisticians we must have a plan in place to identify the type of missing data and how to adjust analyses to deal with missing data.
+
+- Missing completely at random (MCAR): A variable is missing completely at random if neither the variables in the dataset nor the unobserved value of the variable itself predict whether a value will be missing. In other words, the causes of missing data are unrelated to the data. This implies that the available data can be analyzed without worrying about bias.
+- Missing at random (MAR): Data are missing and the missingness can be explained on the basis of observed variables. A variable is missing at random if other variables in the dataset can be used to predict the missingness of the variable. In other words, the probability of missingness is the same only within groups defined by the observed data. Most modern missing data methods start from the MAR assumption.
+- Missing not at random (MNAR): A variable is missing not at random if the value of the unobserved variable itself predicts missingness. MNAR is the most complex case as the causes for the missingness vary for reasons unknown to the investigator.
+
+Strategies for dealing with missing data include the following:
+- complete case analysis
+- simple imputation
+- multiple imputation
+- worst case analysis
+- sensitivity analysis
 
 # 11. Multiple comparisons 
+
+Multiple comparisons becomes a problem when there are multiple statistical inferences conducted at the same time. The idea is that the more inferences that are made, the more likely erroneous inferences are to occur, and failing to adjust for multiple comparisons might result in a type I error being conducted. Significance levels usually only hold for individual tests, so multiple comparisons on the same data simultaneously will inflate the type I error (likelihood of rejecting a null hypothesis when the null hypothesis is true). This should be addressed before the study is conducted. The strategy needs to include consideration of exploratory versus confirmatory research, primary and secondary endpoints, and final vs interim analyses. Planning beforehand will ensure that we are not accidentally increasing our type I error and make our analyses incorrect.
+
+Procedures used for multiple comparison:
+
+- Fisher's protected leas significant difference (LSD) procedure
+- Bonferroni method: This method is specifically designed for a certain number of preplanned comparisons. The individual confidence levels are adjusted accordingly by setting individual confidence levels as $\alpha$/# of comparison.s  This is a fairly conservative method, especially with large sample sizes since critical values will be very large and make it unlikely to reject $H_0$, particularly with the large CIs that are produced as a result.
+- Tukey-Kramer method yielding the honest significant difference (HSD) for all pairwise comparisons: This method is based on the studentized range distribution and is tailored to the situation of making pairwise comparisons among all means. Only differences betrween group means that are greater than the value of HSD are deemed significantly different.
+- Dunnett procedure: Ideal to use to increase power when comparing each treatment group to a single control group for a given study. This increases power since you are performing fewer tests than you would normally do with all pairwise comparisons. The procedure incorporates the dependencies between these comparisons
+- Scheffe's method: used for unlimited post hoc testing, meaning that you can explore any or all possible linear contrasts and still have control of the experimental error rate at the chosen $\alpha$. Provides a set of simultaneous 100(1-$\alpha$)% CIs that includes all possible linear contrasts among the factor level means, NOT just the pairwise contrasts.
 
 
 # 12. Bootstrapping 
