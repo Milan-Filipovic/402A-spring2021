@@ -176,7 +176,10 @@ pre code {
 <li><a href="#basic-formulas-for-power-and-sample-size">2. Basic formulas for power and sample size</a></li>
 <li><a href="#sample-size-based-on-coefficient-of-variation">3. Sample size based on coefficient of variation</a></li>
 <li><a href="#sample-size-calculation-for-the-poisson-distribution">4. Sample size calculation for the Poisson distribution</a></li>
-<li><a href="#sample-size-calculation-for-the-binomial-distribution">5. Sample size calculation for the Binomial distribution</a></li>
+<li><a href="#sample-size-calculation-for-the-binomial-distribution">5. Sample size calculation for the Binomial distribution</a>
+<ul>
+<li><a href="#discussion-and-extension">Discussion and Extension</a></li>
+</ul></li>
 <li><a href="#systematic-effects-due-to-randomization">6. Systematic effects due to randomization</a></li>
 <li><a href="#blocking">7. Blocking</a></li>
 <li><a href="#factorial-designs">8. Factorial designs</a></li>
@@ -201,6 +204,24 @@ pre code {
 </div>
 <div id="sample-size-calculation-for-the-binomial-distribution" class="section level1">
 <h1>5. Sample size calculation for the Binomial distribution</h1>
+<p>Mean and proportions are two of the most important parameters in statistics because they arise frequently in life:</p>
+<ul>
+<li>What proportion of patients benefit from a drug?</li>
+<li>Is the C-section proportion the same for white women and black women who give birth?</li>
+<li>What is the probability a person is a carrier of a rare genetic defect?</li>
+</ul>
+<p>We model <span class="math inline">\(Y_i\)</span> as a Binomial random variable with batch size <span class="math inline">\(m_i\)</span> and “success” probability <span class="math inline">\(p_i\)</span> <span class="math display">\[
+\mathbb{P}(Y_i = y_i) = \binom{m_i}{y_i} p_i^{y_i} (1 - p_i)^{m_i - y_i}.
+\]</span> Where <span class="math inline">\(E(Y_i)=np\)</span> and <span class="math inline">\(Var(Y_i)=np(1-p)\)</span>.</p>
+<p>Suppose we want to compare two different proportions <span class="math inline">\(\pi_0\)</span> and <span class="math inline">\(\pi_1\)</span>. Recall the basic formula for calculating sample size: <span class="math display">\[
+n=\frac{16}{\Delta^2}
+\]</span> Belle proposes the following rule of thumb for calculating binomial sample size: <span class="math display">\[
+n=\frac{16\bar{\pi}(1-\bar{\pi})}{(\pi_0-\pi_1)^2}
+\]</span> Where <span class="math inline">\(\bar{\pi}=\frac{(\pi_0+\pi_1)}{2}\)</span> is used as the average variance of the two proportions.</p>
+<div id="discussion-and-extension" class="section level2">
+<h2>Discussion and Extension</h2>
+<p>This approximation is good for values of n that come out between 10 and 100. More exact formulas should be used to determine sample sizes for values of n outside of this range.</p>
+</div>
 </div>
 <div id="systematic-effects-due-to-randomization" class="section level1">
 <h1>6. Systematic effects due to randomization</h1>

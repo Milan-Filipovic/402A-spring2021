@@ -29,6 +29,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 5. Sample size calculation for the Binomial distribution 
 
+Mean and proportions are two of the most important parameters in statistics because they arise frequently in life:
+
++ What proportion of patients benefit from a drug?
++ Is the C-section proportion the same for white women and black women who give birth?
++ What is the probability a person is a carrier of a rare genetic defect? 
+
+
+We model $Y_i$ as a Binomial random variable with batch size $m_i$ and "success" probability $p_i$
+$$
+\mathbb{P}(Y_i = y_i) = \binom{m_i}{y_i} p_i^{y_i} (1 - p_i)^{m_i - y_i}.
+$$
+Where $E(Y_i)=np$ and $Var(Y_i)=np(1-p)$. 
+
+Suppose we want to compare two different proportions $\pi_0$ and $\pi_1$. Recall the basic formula for calculating sample size:
+$$
+n=\frac{16}{\Delta^2}
+$$
+Belle proposes the following rule of thumb for calculating binomial sample size:
+$$
+n=\frac{16\bar{\pi}(1-\bar{\pi})}{(\pi_0-\pi_1)^2}
+$$
+Where $\bar{\pi}=\frac{(\pi_0+\pi_1)}{2}$ is used as the average variance of the two proportions. 
+
+## Discussion and Extension
+
+This approximation is good for values of n that come out between 10 and 100. More exact formulas should be used to determine sample sizes for values of n outside of this range. 
 
 # 6. Systematic effects due to randomization 
 
