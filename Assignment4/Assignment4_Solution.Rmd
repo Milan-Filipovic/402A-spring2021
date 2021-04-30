@@ -58,6 +58,23 @@ This approximation is good for values of n that come out between 10 and 100. Mor
 
 # 6. Systematic effects due to randomization 
 
+Randomization refers to the act of randomly assigning subjects in a study to different treatment groups.
+
+## Rule (Belle)
+**Randomization puts systematic sources of variability into the error term.**
+
+Care must be taken to ensure that there is no pattern or bias in the assignment of subjects and that every subject is as likely as any other to be assigned to a treatment or control group. 
+
+## Basis for Randomization
+There are three component to randomization
+
++ Systematic effects are turned into error. 
++ Unknown factors influencing outcome are balanced with known factors. 
++ Randomization provides the basis for statistical procedures that are used to address areas of scientific interest:
+  - Tests of significance
+  - Analysis of Variance 
+  - Confidence Intervals
+
 
 # 7. Blocking 
 
