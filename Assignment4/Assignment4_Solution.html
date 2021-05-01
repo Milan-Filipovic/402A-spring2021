@@ -208,7 +208,8 @@ pre code {
 <p>Power (1-<span class="math inline">\(\beta\)</span>) : probability of rejecting the null hypothesis when it is false</p>
 <p>Effect size : also known as the standardized difference <span class="math inline">\(\Delta\)</span>, scales the difference in population means by the standard deviation</p>
 <ul>
-<li>should not be solely used to formulate ojectives for a study for the following reasons:
+<li><p>Cohen’s d definitions of effect size: small = 0.2, medium = 0.5, large = 0.8.</p></li>
+<li><p>should not be solely used to formulate objectives for a study for the following reasons:</p>
 <ul>
 <li>the effect size is a function of at least three parameters, representing a substantial reduction of the parameter space</li>
 <li>the experimental design may preclude estimation of some of the parameters</li>
@@ -224,9 +225,10 @@ n=\frac{16}{\Delta^2}
 \Delta = \frac{\mu_0-\mu_1}{\sigma} = \frac{\delta}{\sigma}
 \]</span> is the treatment difference to be detected in units of the standard deviation - the standardized difference.</p>
 <p>In the one-sample case, the numerator is 8 instead of 16. In the two-sample case, two means have to be estimated, doubling the variance and requiring two groups. Thus, the two sample scenario requires four times as many observations as the one-sample scenario.</p>
-<p>The formula for sample size required to compare two population means <span class="math inline">\(\mu_0\)</span> and <span class="math inline">\(\mu_1\)</span> with common variance <span class="math inline">\(\sigma^2\)</span> is dervide from the previous equation: <span class="math display">\[
+<p>The formula for sample size required to compare two population means <span class="math inline">\(\mu_0\)</span> and <span class="math inline">\(\mu_1\)</span> with common variance <span class="math inline">\(\sigma^2\)</span> is derived from the previous equation: <span class="math display">\[
 n=\frac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{(\frac{\mu_0-\mu_1}{\sigma})^2}
 \]</span></p>
+<p>Sample size plotted against power can show us the real relationship between the two to justify a sample size to an investigator. Ideally, you do not want to rely on the central limit theorem (CLT) to justify any sample size, especially since 1) 30 subjects might not be possible or feasible, or 2) the data does not allow us to use a normal approximation.</p>
 </div>
 <div id="sample-size-based-on-coefficient-of-variation" class="section level1">
 <h1>3. Sample size based on coefficient of variation</h1>
@@ -235,7 +237,7 @@ n=\frac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{(\frac{\mu_0-\mu_1}{\sigma})^2}
 n=\frac{16(CV)^2}{(ln\mu_0-ln\mu_1)^2}
 \]</span></p>
 <p>where CV is the coefficient of variation (CV = <span class="math inline">\(\sigma_0\)</span>/<span class="math inline">\(\mu_0\)</span> = <span class="math inline">\(\sigma_1\)</span>/<span class="math inline">\(\mu_1\)</span>).</p>
-<p>Specification of variation implies that the standard deviation is proportional to the mean.</p>
+<p>Specification of variation implies that the standard deviation is proportional to the mean. This is helpful if clients do not know the standard deviation of their experiments but they might have an idea of how much their experiments or groups may vary between run to run. If there is no knowledge of the variation in a biological system, we know that CV of 30-35% is common in biological assay experiences, and a clinically significiant difference may be around 20%. We can use the numbers given from a client to then help us calculate other statistical values such as an effect size <span class="math inline">\(\Delta\)</span>. Additionally, CV is often used with log normal data.</p>
 </div>
 <div id="sample-size-calculation-for-the-poisson-distribution" class="section level1">
 <h1>4. Sample size calculation for the Poisson distribution</h1>
@@ -344,13 +346,29 @@ Researchers were interested in comparing different experimental designs to measu
 </div>
 <div id="missing-data" class="section level1">
 <h1>10. Missing data</h1>
-<p>Real-world data tends to have missing data, but as statisticians we must have a plan in place to identify the type of missing data and how to adjust analyses to deal with missing data.</p>
+<p>Real-world data tends to have missing data, but as statisticians we must have a plan in place to identify the type of missing data and how to adjust analyses to deal with missing data. Missing data can lead to unbalanced study design, which lead to incorrect analyses, which ultimately result in incorrect conclusions drawn from the data.</p>
 <ul>
-<li>Missing completely at random (MCAR): A variable is missing completely at random if neither the variables in the dataset nor the unobserved value of the variable itself predict whether a value will be missing. In other words, the causes of missing data are unrelated to the data. This implies that the available data can be analyzed without worrying about bias.</li>
-<li>Missing at random (MAR): Data are missing and the missingness can be explained on the basis of observed variables. A variable is missing at random if other variables in the dataset can be used to predict the missingness of the variable. In other words, the probability of missingness is the same only within groups defined by the observed data. Most modern missing data methods start from the MAR assumption.</li>
-<li>Missing not at random (MNAR): A variable is missing not at random if the value of the unobserved variable itself predicts missingness. MNAR is the most complex case as the causes for the missingness vary for reasons unknown to the investigator.</li>
+<li><p>Missing completely at random (MCAR): A variable is missing completely at random if neither the variables in the dataset nor the unobserved value of the variable itself predict whether a value will be missing. In other words, the causes of missing data are unrelated to the data. This implies that the available data can be analyzed without worrying about bias.</p></li>
+<li><p>Missing at random (MAR): Data are missing and the missingness can be explained on the basis of observed variables. A variable is missing at random if other variables in the dataset can be used to predict the missingness of the variable. In other words, the probability of missingness is the same only within groups defined by the observed data. Most modern missing data methods start from the MAR assumption. For multicenter studies, MCAR would be that one center would have more missingness than others due to something like local lab evaluation being different from other centers.</p></li>
+<li><p>Missing not at random (MNAR): A variable is missing not at random if the value of the unobserved variable itself predicts missingness. MNAR is the most complex case as the causes for the missingness vary for reasons unknown to the investigator.</p></li>
 </ul>
-<p>Strategies for dealing with missing data include the following: - complete case analysis - simple imputation - multiple imputation - worst case analysis - sensitivity analysis</p>
+<p>Strategies for dealing with missing data include the following:</p>
+<ul>
+<li>omission - removing invalid data
+<ul>
+<li>listwise deletion</li>
+<li>variable deletion</li>
+</ul></li>
+<li>imputation - placing values in place of missing data
+<ul>
+<li>simple imputation</li>
+<li>multiple imputation</li>
+</ul></li>
+<li>complete case analysis</li>
+<li>worst case analysis</li>
+<li>sensitivity analysis</li>
+</ul>
+<p>If % missingness approaches levels of 10%, let alone 20%, missingness must be well thought out and the investigator should be comfortable with the method in which they handle the missingness.</p>
 </div>
 <div id="multiple-comparisons" class="section level1">
 <h1>11. Multiple comparisons</h1>
@@ -359,13 +377,16 @@ Researchers were interested in comparing different experimental designs to measu
 <ul>
 <li>Fisher’s protected leas significant difference (LSD) procedure</li>
 <li>Bonferroni method: This method is specifically designed for a certain number of preplanned comparisons. The individual confidence levels are adjusted accordingly by setting individual confidence levels as <span class="math inline">\(\alpha\)</span>/# of comparison.s This is a fairly conservative method, especially with large sample sizes since critical values will be very large and make it unlikely to reject <span class="math inline">\(H_0\)</span>, particularly with the large CIs that are produced as a result.</li>
-<li>Tukey-Kramer method yielding the honest significant difference (HSD) for all pairwise comparisons: This method is based on the studentized range distribution and is tailored to the situation of making pairwise comparisons among all means. Only differences betrween group means that are greater than the value of HSD are deemed significantly different.</li>
+<li>Tukey-Kramer method yielding the honest significant difference (HSD) for all pairwise comparisons: This method is based on the studentized range distribution and is tailored to the situation of making pairwise comparisons among all means. Only differences between group means that are greater than the value of HSD are deemed significantly different.</li>
 <li>Dunnett procedure: Ideal to use to increase power when comparing each treatment group to a single control group for a given study. This increases power since you are performing fewer tests than you would normally do with all pairwise comparisons. The procedure incorporates the dependencies between these comparisons</li>
 <li>Scheffe’s method: used for unlimited post hoc testing, meaning that you can explore any or all possible linear contrasts and still have control of the experimental error rate at the chosen <span class="math inline">\(\alpha\)</span>. Provides a set of simultaneous 100(1-<span class="math inline">\(\alpha\)</span>)% CIs that includes all possible linear contrasts among the factor level means, NOT just the pairwise contrasts.</li>
 </ul>
 </div>
 <div id="bootstrapping" class="section level1">
 <h1>12. Bootstrapping</h1>
+<p>Bootstrapping is a statistical estimation procedure coined by Efron (1979), and it is widely used for estimation of complex relationship. It is a resampling method that involves random sampling with replacement. It is only possible due to modern computing since it is usually computationally intensive.</p>
+<p><strong>Rule of Thumb</strong>: Think of bootstrapping instead of the delta method in estimating complex relationships. There are two reasons for the rule: firstly, the delta method is an approximation, which may not be useful for small samples. Second, a sample from a population provides a crude estimate of the population distribution. Utilizing modern computing power, a sampling distribution can be generated and statistics can be estimated from that sampling distribution.</p>
+<p>Bootstrapping has become an important tool for estimation since it can be applied to any data set without assuming an underlying distribution.</p>
 </div>
 
 

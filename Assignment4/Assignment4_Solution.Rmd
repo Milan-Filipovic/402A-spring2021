@@ -194,6 +194,7 @@ Real-world data tends to have missing data, but as statisticians we must have a 
 - Missing not at random (MNAR): A variable is missing not at random if the value of the unobserved variable itself predicts missingness. MNAR is the most complex case as the causes for the missingness vary for reasons unknown to the investigator.
 
 Strategies for dealing with missing data include the following:
+
 - omission - removing invalid data
   + listwise deletion
   + variable deletion
@@ -216,7 +217,7 @@ Procedures used for multiple comparison:
 
 - Fisher's protected leas significant difference (LSD) procedure
 - Bonferroni method: This method is specifically designed for a certain number of preplanned comparisons. The individual confidence levels are adjusted accordingly by setting individual confidence levels as $\alpha$/# of comparison.s  This is a fairly conservative method, especially with large sample sizes since critical values will be very large and make it unlikely to reject $H_0$, particularly with the large CIs that are produced as a result.
-- Tukey-Kramer method yielding the honest significant difference (HSD) for all pairwise comparisons: This method is based on the studentized range distribution and is tailored to the situation of making pairwise comparisons among all means. Only differences betrween group means that are greater than the value of HSD are deemed significantly different.
+- Tukey-Kramer method yielding the honest significant difference (HSD) for all pairwise comparisons: This method is based on the studentized range distribution and is tailored to the situation of making pairwise comparisons among all means. Only differences between group means that are greater than the value of HSD are deemed significantly different.
 - Dunnett procedure: Ideal to use to increase power when comparing each treatment group to a single control group for a given study. This increases power since you are performing fewer tests than you would normally do with all pairwise comparisons. The procedure incorporates the dependencies between these comparisons
 - Scheffe's method: used for unlimited post hoc testing, meaning that you can explore any or all possible linear contrasts and still have control of the experimental error rate at the chosen $\alpha$. Provides a set of simultaneous 100(1-$\alpha$)% CIs that includes all possible linear contrasts among the factor level means, NOT just the pairwise contrasts.
 
