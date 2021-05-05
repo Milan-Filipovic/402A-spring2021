@@ -1,0 +1,63 @@
+---
+title: "Assignment 5: Sodium bicarbonate study of contrast nephropathy (CN)"
+author: "Lillian Chen, Milan Filipovic, Vivian Truong"
+date: "5/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# for my own reference: 1 hashtag = largest font size, more hashtags = smaller font size
+```
+
+## Biostatistics Consulting Worksheet Sections
+
+* Statement of statistical hypothesis(es)
+* Assessment of assumptions used in any statistical inference or calculation
+* Determination of sample size
+* Interpretation of results in terms of original research hypothesis(es) so that a non-statistician would be able to explain results to colleagues
+* Necessary supporting material(s)
+
+## Sodium bicarbonate study of contrast nephropathy (CN)
+
+### Background
+
+### Materials and Methods
+
+* double-blinded randomized control trial (RCT)
+* exclusion criteria defined as:
+  + rise in serum creatinine of greater than 50% of baseline over the previous 48 hours
+  + severe pulmonary edema
+  + exposure to radiographic contrast within 2 days of the study
+  + ongoing administration of dopamine or mannitol
+* treatment arms
+  + control: sodium bicarbonate infusion with N-acetylcysteine
+  + test treatment: sodium chloride infusion with N-acetylcysteine
+* outcome / endpoints
+  + % creatinine increase calculated at 12, 24, and 48 hours post-exposure
+  + CN defined as $\geq 25\%$ creatinine increase observed at any endpoint
+  + clinical significance determined by a reduction in CN incidence of 20-40 percentage points
+  + published CN incidence rates vary from 20%-50% depending on the "patient at-risk population" sampled
+  + absolute risk reduction (ARR) = decrease in CN incidence
+    - this is an omnibus statistic that gives us an idea of the size of the effect
+    - $ARR = p_s(1-RR)$, where $RR = p_t/p_s$, $p_s$ is the incidence of CN in the standard treatment, and $p_t$ is the incidence of CN in the test treatment
+
+### Hypotheses
+* The investigators wish to see a reduction in CN incidence, indicating that this study objectives aims to show that the test treatment outcome of CN incidence is superior by a clinically meaningful margin. We craft our study hypotheses assuming that a smaller value of CN incidence is better and that the margin of superiority $\d$ lies between 0.20 and 0.50 depending on the "patient at-risk population" sampled.
+
+Denoting CN incidence of the standard treatment as $p_s$ and CN incidence of the test treatment as $p_t$, we craft the following study hypotheses:
+
+$H_0: p_t - p_s \geq \delta$ and $H_A: p_t - p_s < \delta$
+
+## Sample Size Calculation
+
+We conduct a one-sided, upper tailed test for this study. The study background and methods do not indicate whether the investigators intend to randomize at-risk patients with equal or unequal allocation to the treatment and control arms. With proper randomization, the two arms of the study should have a common variance. 
+
+Assuming equal allocation and equal variances, our total sample size using the normal approximation is given by
+$$N \geq \frac{4(z_{1-\beta}+z_{1-\alpha})^2\sigma^2}{(\Delta_A - \delta)^2}$$
+
+```{r}
+
+```
+
