@@ -1,8 +1,10 @@
 ---
-title: "Assignment 5: Sodium bicarbonate study of contrast nephropathy (CN)"
+title: 'Assignment 5: Sodium bicarbonate study of contrast nephropathy (CN)'
 author: "Lillian Chen, Milan Filipovic, Vivian Truong"
 date: "5/5/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -11,6 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 # for my own reference: 1 hashtag = largest font size, more hashtags = smaller font size
 ```
 
+```{r, include = F}
+library(tidyverse)
+library(ggplot2)
+
+```
 ## Biostatistics Consulting Worksheet Sections
 
 * Statement of statistical hypothesis(es)
@@ -88,24 +95,50 @@ sodium bicarbonate. J Am Med Assoc, 2004;291:2328-34.
 
 We conduct a one-sided, upper tailed test for this study. The study background and methods do not indicate whether the investigators intend to randomize at-risk patients with equal or unequal allocation to the treatment and control arms. With proper randomization, the two arms of the study should have a common variance. 
 
-Assuming equal allocation and equal variances, our total sample size using the normal approximation is given by
-$$N \geq \frac{4(z_{1-\beta}+z_{1-\alpha})^2\sigma^2}{(\Delta_A - \delta)^2}$$
-
-
-**Milan's Sample Size Calculation:**
-
 
 We calculate the sample size using the coefficient of variation equation because we are given a coefficient of variation as well as a sizable mean difference. 
 
 $$ n = \frac{16(CV)^2}{(\ln(\mu_0)-\ln(\mu_1))^2}$$
 
 Where $CV$ = 20%-50%
-and the ratio of mean difference is expected to be 20-40% where 
+and the ratio of mean difference is expected to be 20-40%.
 For a conservative estimate, we take the mean difference to be 20% and the coefficient of variation to be 50% 
 ```{r}
-n = (16*(.50)^2)/(log(0.80))^2
+n = (16*(.50)^2)/(log(.80))^2
 n
 ```
-By this estimate a sample size of 81 per group would be recommended. Note that this calculation specifies an $\alpha$ level of 0.05 and a power of 80% which is the standard for hypothesis testing and is also the most conservative estimate given the CV and meaningful difference. 
+By this estimate a sample size of 81 per group would be recommended. Note that this calculation specifies an $\alpha$ level of 0.05 and a power of 80% which is the standard for hypothesis testing and is also the most conservative estimate given the CV and meaningful difference.
 
 A power of 80% means that under our experimental setup, 4 out of 5 times a difference in CN incidence is present we will be able to detect it in our sample. The alpha level specifies our Type I error rate, which means that only 1 in 20 times a conclusion of meaningful difference would be made falsely. 
+
+```{r}
+CV <- seq(.20,.50,0.01)
+n_CV <- (16*(CV)^2)/(log(0.80))^2
+df <- as.data.frame(cbind(CV, n_CV))
+df %>% 
+ggplot() +
+  geom_line(mapping = aes(x = CV, y = n_CV)) + 
+  ggtitle("Coefficient of Variation and Sample Size", subtitle = "Holding Effect Size at 20% Change") + 
+  ylab("Sample Size") + 
+  theme_bw()
+```
+
+This graph shows that increasing coefficient of variation increases sample size. 
+
+```{r sample size effect size}
+expected_difference <- seq(.20, .40, .01)
+effect_ratio <- 1 - expected_difference
+n_CV <- (16*(.50)^2)/(log(effect_ratio))^2
+as.data.frame(cbind(expected_difference, n_CV)) %>% 
+ggplot() +
+  geom_line(mapping = aes(x = expected_difference, y = n_CV)) + 
+  ggtitle("Effect Size and Sample Size", subtitle = "Holding Coefficient of Variation at") + 
+  ylab("Sample Size") + 
+  theme_bw()
+```
+
+This graph shows that **decreasing** the expected effect size difference (which **increases** effect ratio in the calculation) leads to a larger sample size calculation. 
+
+
+
+
