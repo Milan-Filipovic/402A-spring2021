@@ -38,9 +38,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 $H_0: p_t - p_s \geq \delta$ and $H_A: p_t - p_s < \delta$
 
-### Background
+### Background & references:
 N-acetylcysteine (NAC) has been used as a prophylactic therapy for contrast-induced nephropathy (CN). Radioconstrast media, agents used to increase visibility of internal structures during imaging technology, can lead to a small rise in serum creatinine after exposure. Subsequent acute renal failure can occur in patients with an underlying renal insufficiency. 
 NAC has potential to reduce incidence of CN in adult patients because it acts as an oxygen-radical scavenger, also known as an antioxidant. This can counter the oxidative stress caused by radiocontrast media. Furthermore, sodium-bicarbonate has been shown to reduce incidence in CN due to hydration effect (Merten et al.) The results concerning NAC have been heterogeneous however, and investigators are interested in assessing the effect of NAC as well as sodium-bicarbonate. 
+
+### Descriptions:
+
+* Study design:
+
+* Population:
+
+* Samples:
+
+* Dependent variable(s):
 
 ### Materials and Methods
 
