@@ -32,15 +32,26 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Purpose:
 
-* Statement of research hypothesis(es): The investigators wish to see a reduction in CN incidence, indicating that this study objectives aims to show that the test treatment outcome of CN incidence is superior by a clinically meaningful margin. We craft our study hypotheses assuming that a smaller value of CN incidence is better and that the margin of superiority $\d$ lies between 0.20 and 0.50 depending on the "patient at-risk population" sampled.
+* Statement of research hypothesis(es): The investigators wish to see a reduction in CN incidence, indicating that this study objectives aims to show that the test treatment outcome of CN incidence is superior by a clinically meaningful margin. We craft our study hypotheses assuming that a smaller value of CN incidence is better and that the margin of superiority $\delta$ lies between 0.20 and 0.50 depending on the "patient at-risk population" sampled.
 
 * Statement of statistical hypothesis(es): Denoting CN incidence of the standard treatment as $p_s$ and CN incidence of the test treatment as $p_t$, we craft the following study hypotheses:
 
 $H_0: p_t - p_s \geq \delta$ and $H_A: p_t - p_s < \delta$
 
+Where the the standard treatment will be N-acetylcysteine with sodium chloride while the test treatment is N-acetylcystein with sodium-bicarbonate. 
+
 ### Background & references:
 N-acetylcysteine (NAC) has been used as a prophylactic therapy for contrast-induced nephropathy (CN). Radioconstrast media, agents used to increase visibility of internal structures during imaging technology, can lead to a small rise in serum creatinine after exposure. Subsequent acute renal failure can occur in patients with an underlying renal insufficiency. 
 NAC has potential to reduce incidence of CN in adult patients because it acts as an oxygen-radical scavenger, also known as an antioxidant. This can counter the oxidative stress caused by radiocontrast media. Furthermore, sodium-bicarbonate has been shown to reduce incidence in CN due to hydration effect (Merten et al.) The results concerning NAC have been heterogeneous however, and investigators are interested in assessing the effect of NAC as well as sodium-bicarbonate. 
+
+References. 
+1. Briguiori C, Tavano D, Colombo A. Contrast agent-associated nephrotoxicity. Progressive 
+Cardiovascular Disease, 2003;45:493-503. 
+2. Kshirsagar AV, Poole C, Mottl A, et al. N-Acetylcysteine for the prevention of radiocontrast 
+induced nephropathy: A meta-analysis of prospective controlled trials. J Am Soc Nephrol, 
+2004;15:761-69. 
+3. Merten GJ, Burgess WP, Gray LV, et al. Prevention of contrast-induced nephropathy with 
+sodium bicarbonate. J Am Med Assoc, 2004;291:2328-34. 
 
 ### Descriptions:
 
@@ -80,7 +91,21 @@ We conduct a one-sided, upper tailed test for this study. The study background a
 Assuming equal allocation and equal variances, our total sample size using the normal approximation is given by
 $$N \geq \frac{4(z_{1-\beta}+z_{1-\alpha})^2\sigma^2}{(\Delta_A - \delta)^2}$$
 
+
+**Milan's Sample Size Calculation:**
+
+
+We calculate the sample size using the coefficient of variation equation because we are given a coefficient of variation as well as a sizable mean difference. 
+
+$$ n = \frac{16(CV)^2}{(\ln(\mu_0)-\ln(\mu_1))^2}$$
+
+Where $CV$ = 20%-50%
+and the ratio of mean difference is expected to be 20-40% where 
+For a conservative estimate, we take the mean difference to be 20% and the coefficient of variation to be 50% 
 ```{r}
-
+n = (16*(.50)^2)/(log(0.80))^2
+n
 ```
+By this estimate a sample size of 81 per group would be recommended. Note that this calculation specifies an $\alpha$ level of 0.05 and a power of 80% which is the standard for hypothesis testing and is also the most conservative estimate given the CV and meaningful difference. 
 
+A power of 80% means that under our experimental setup, 4 out of 5 times a difference in CN incidence is present we will be able to detect it in our sample. The alpha level specifies our Type I error rate, which means that only 1 in 20 times a conclusion of meaningful difference would be made falsely. 
