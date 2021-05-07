@@ -21,6 +21,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Sodium bicarbonate study of contrast nephropathy (CN)
 
+### Date: 05/07/2021
+
+### Client Information:
+
+* Name: M. Drayer and R. Ettenger
+* Department: Department of Pediatric-Nephrology, UCLA
+* Phone: (310) 206-6987
+* Name of principal investigator: M. Drayer and R. Ettenger
+
+### Purpose:
+
+* Statement of research hypothesis(es): The investigators wish to see a reduction in CN incidence, indicating that this study objectives aims to show that the test treatment outcome of CN incidence is superior by a clinically meaningful margin. We craft our study hypotheses assuming that a smaller value of CN incidence is better and that the margin of superiority $\d$ lies between 0.20 and 0.50 depending on the "patient at-risk population" sampled.
+
+* Statement of statistical hypothesis(es): Denoting CN incidence of the standard treatment as $p_s$ and CN incidence of the test treatment as $p_t$, we craft the following study hypotheses:
+
+$H_0: p_t - p_s \geq \delta$ and $H_A: p_t - p_s < \delta$
+
 ### Background
 N-acetylcysteine (NAC) has been used as a prophylactic therapy for contrast-induced nephropathy (CN). Radioconstrast media, agents used to increase visibility of internal structures during imaging technology, can lead to a small rise in serum creatinine after exposure. Subsequent acute renal failure can occur in patients with an underlying renal insufficiency. 
 NAC has potential to reduce incidence of CN in adult patients because it acts as an oxygen-radical scavenger, also known as an antioxidant. This can counter the oxidative stress caused by radiocontrast media. Furthermore, sodium-bicarbonate has been shown to reduce incidence in CN due to hydration effect (Merten et al.) The results concerning NAC have been heterogeneous however, and investigators are interested in assessing the effect of NAC as well as sodium-bicarbonate. 
@@ -45,12 +62,6 @@ NAC has potential to reduce incidence of CN in adult patients because it acts as
     - this is an omnibus statistic that gives us an idea of the size of the effect
     - $ARR = p_s(1-RR)$, where $RR = p_t/p_s$, $p_s$ is the incidence of CN in the standard treatment, and $p_t$ is the incidence of CN in the test treatment
 
-### Hypotheses
-* The investigators wish to see a reduction in CN incidence, indicating that this study objectives aims to show that the test treatment outcome of CN incidence is superior by a clinically meaningful margin. We craft our study hypotheses assuming that a smaller value of CN incidence is better and that the margin of superiority $\d$ lies between 0.20 and 0.50 depending on the "patient at-risk population" sampled.
-
-Denoting CN incidence of the standard treatment as $p_s$ and CN incidence of the test treatment as $p_t$, we craft the following study hypotheses:
-
-$H_0: p_t - p_s \geq \delta$ and $H_A: p_t - p_s < \delta$
 
 ## Sample Size Calculation
 
