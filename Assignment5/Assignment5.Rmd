@@ -44,22 +44,23 @@ NAC has potential to reduce incidence of CN in adult patients because it acts as
 
 ### Descriptions:
 
-* Study design:
+* Study design: double-blinded randomized control trial (RCT)
 
-* Population:
+* Population(s): children who have undergone radiographic contrast imaging and are at risk of contrast nephropathy
 
-* Samples:
-
-* Dependent variable(s):
-
-### Materials and Methods
-
-* double-blinded randomized control trial (RCT)
-* exclusion criteria defined as:
+* Sample(s): pediatric patients (2 month to 21 years old) at risk of contrast nephropathy that have N-acetylcysteine ordered prior to contrast exposure for a radiologic exam
+  + exclusion criteria defined as:
   + rise in serum creatinine of greater than 50% of baseline over the previous 48 hours
   + severe pulmonary edema
   + exposure to radiographic contrast within 2 days of the study
   + ongoing administration of dopamine or mannitol
+
+* Dependent variable(s):
+
+* Independent variable(s):
+
+### Materials and Methods
+
 * treatment arms
   + control: sodium bicarbonate infusion with N-acetylcysteine
   + test treatment: sodium chloride infusion with N-acetylcysteine
@@ -71,7 +72,6 @@ NAC has potential to reduce incidence of CN in adult patients because it acts as
   + absolute risk reduction (ARR) = decrease in CN incidence
     - this is an omnibus statistic that gives us an idea of the size of the effect
     - $ARR = p_s(1-RR)$, where $RR = p_t/p_s$, $p_s$ is the incidence of CN in the standard treatment, and $p_t$ is the incidence of CN in the test treatment
-
 
 ## Sample Size Calculation
 
