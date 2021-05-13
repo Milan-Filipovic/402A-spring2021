@@ -21,10 +21,26 @@ Investigators wish to explore the effectiveness of various radiation and chemica
 
 * experimental design
 * complete randomization
+  + Complete randomization is achieved by the flip of a coin, meaning that is is assigned by assigning each subject randomly to the treatment or control group with equal probability, independently of other subjects
+  + Advantages
+    + Freedom from selection bias
+    + Freedom from accidental bias: Nuisance factors that systematically effect experimental units sunch as time trends. 
+    + Used for basis for inference: probability statements are based on the randomness induced by complete randomization. Helps to guarantee the validity of statistical significance statements because each individual can be considered identically distributed rather than carrying their own set of probability assumptions. 
+  + Disadvantages: The final distribution of treatments and controls can be unbalanced, particularly when there is a small number of subjects
 * latent variable bias
 * selection bias
+  + If the next assignment is known, the researcher may consciously or unconsciously bias the experiment when deciding which persons are a suitable experimental subject or which category the subject should be placed in. 
+  + Selection bias can be measured by the expected number of correct guesses the experimenter can make if he guesses optimally. 
 * imbalances in the allocation of experimental units
 * biased coin designs
+  + Biased Coin Design (BCD) serves to compromise between complete randomization and systematic designs by altering the probability a subject within a group will be assigned to treatment or control based on the number of subjects in the group already assigned. For example, if the next subject is to be assigned a group, and there are D=5 more subjects in the treatment group than the control group, the probability of being assigned to control group would be higher. This ensures that the experimenter never knows with high probability where the assignment will be, but still serves to balance the groups. 
+  
+  + $\tilde{D} > 0$ Assign to treatment with probability q and control with p
+  + If $\tilde{D} = 0$ assign treatment with probability 1/2 and control with probability 1/2 
+  + If $\tilde{D} < 0$ assign treatment with probability p and control with probability q. 
+Effron recommends 2/3 as a value for p. 
+
+
 * Monte Carlo study
 * sequential assignment scheme
 
