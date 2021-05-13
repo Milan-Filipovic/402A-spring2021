@@ -1,0 +1,35 @@
+---
+title: "Biostatistics 402A Assignment 6"
+author: "Lillian Chen, Milan Filipovic, Vivian Truong"
+date: "5/12/2021"
+output: html_document
+---
+
+# Randomizing and balancing a complicated sequential experiment
+### Casebook study by Bradley Efron (Miller et al, 1980, pp. 19-30)
+
+## Exercise
+
+1. Briefly define or illustrate by example the "boxed" terms and phrases.
+2. Review the two boxed references on Page 30 (Attached)
+
+
+## Background
+Investigators wish to explore the effectiveness of various radiation and chemical treatments for ovarian carcinoma.The subjects all will have first received the standard surgical treatment appropriate for their state of the disease. The experiment will consist of seven subexperiments carried out simultaneously, each of which will compare two or three of the possible treatments. The subexperiments are descirbed in terms of the stage of the disease, the degree of cell differentiation observed, and the results of a postoperative lymphangiograph (LAG). Each protocol has a less fravorable prognosis than its predecessor.
+
+## Boxed Terms
+
+* experimental design
+* complete randomization
+* latent variable bias
+* selection bias
+* imbalances in the allocation of experimental units
+* biased coin designs
+* Monte Carlo study
+* sequential assignment scheme
+
+
+## Boxed References
+
+* Efron, B. (1971). Forcing a sequential experiment to be balanced. Biometrika, 58, 403-417.
+* Pocock, J. J. and R. Simon (1975). Sequential treatment assignment with balancing for prognostic factors in the controll clinical trial. Biometrics, 31, 103-117.
