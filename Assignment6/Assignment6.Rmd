@@ -15,21 +15,21 @@ output: html_document
 
 
 ## Background
-Investigators wish to explore the effectiveness of various radiation and chemical treatments for ovarian carcinoma.The subjects all will have first received the standard surgical treatment appropriate for their state of the disease. The experiment will consist of seven subexperiments carried out simultaneously, each of which will compare two or three of the possible treatments. The subexperiments are descirbed in terms of the stage of the disease, the degree of cell differentiation observed, and the results of a postoperative lymphangiograph (LAG). Each protocol has a less fravorable prognosis than its predecessor.
+Investigators wish to explore the effectiveness of various radiation and chemical treatments for ovarian carcinoma.The subjects all will have first received the standard surgical treatment appropriate for their state of the disease. The experiment will consist of seven subexperiments carried out simultaneously, each of which will compare two or three of the possible treatments. The subexperiments are descirbed in terms of the stage of the disease, the degree of cell differentiation observed, and the results of a postoperative lymphangiograph (LAG). Each protocol has a less favorable prognosis than its predecessor.
 
 ## Boxed Terms
 
 * experimental design
 * complete randomization
-  + Complete randomization is achieved by the flip of a coin, meaning that is is assigned by assigning each subject randomly to the treatment or control group with equal probability, independently of other subjects
+  + Complete randomization is achieved by the flip of a coin, meaning that subjects are assigned randomly to the treatment or control group with equal probability, independently of other subjects
   + Advantages
     + Freedom from selection bias
-    + Freedom from accidental bias: Nuisance factors that systematically effect experimental units sunch as time trends. 
+    + Freedom from accidental bias: Nuisance factors that systematically effect experimental units such as time trends. 
     + Used for basis for inference: probability statements are based on the randomness induced by complete randomization. Helps to guarantee the validity of statistical significance statements because each individual can be considered identically distributed rather than carrying their own set of probability assumptions. 
   + Disadvantages: The final distribution of treatments and controls can be unbalanced, particularly when there is a small number of subjects
 * latent variable bias
 * selection bias
-  + If the next assignment is known, the researcher may consciously or unconsciously bias the experiment when deciding which persons are a suitable experimental subject or which category the subject should be placed in. 
+  + If the next assignment is known, the researcher may consciously or unconsciously bias the experiment. This can occur when deciding which persons are a suitable experimental subject or which category the subject should be placed in. 
   + Selection bias can be measured by the expected number of correct guesses the experimenter can make if he guesses optimally. 
 * imbalances in the allocation of experimental units
 * biased coin designs
@@ -39,7 +39,21 @@ Investigators wish to explore the effectiveness of various radiation and chemica
   + If $\tilde{D} = 0$ assign treatment with probability 1/2 and control with probability 1/2 
   + If $\tilde{D} < 0$ assign treatment with probability p and control with probability q. 
 Effron recommends 2/3 as a value for p. 
+  + Note that the excess selection bias of BCD in 2b trials, where b is the number of blocks, is $$\frac{r-1}{2r}b$$. Let r be $p/q$. So r for the recommended p=2/3 is 2. 
+  
+```{r}
+library(ggplot2)
+library(tidyverse)
+r <- 2
+b <- seq(1,14,1)
+excess <- ((r-1)/(2*r))*b
+DF <- as.data.frame(cbind(b,excess))
+DF %>% 
+  ggplot() + 
+  geom_line(mapping = aes(x = b, y = excess)) + 
+  labs(title = "Excess Selection Bias in 2b trials", x = "blocks", y = "Excess Selection Bias")
 
+```
 
 * Monte Carlo study
 * sequential assignment scheme
