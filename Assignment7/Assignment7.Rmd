@@ -1,0 +1,35 @@
+---
+title: "B402A Assignment 7"
+author: "Lillian Chen, Milan Filipovic, Vivian Truong"
+date: "5/24/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stringr)
+library(haven)
+library(gt)
+```
+
+```{r}
+
+data <- readxl::read_xlsx("./20210521_402a.xlsx", col_names = T, skip = 1)
+
+str(data)
+
+dataclean <- data %>% 
+  rename(sample = "Sample #",
+         patientid = "Patient ID",
+         IRI = "IRI Score (–,+)",
+         visittype = "Visit Type") %>% 
+  mutate(across(starts_with("CYTO"),
+                ~ dplyr::case_when(
+                  str_starts(.x, "<") == T ~ as.numeric(str_sub(.x, 2, -2)),
+                  str_starts(.x, ">") == T ~ as.numeric(str_sub(.x, 2, -2)) + 1,
+                  str_starts(.x, "1|2|3|4|5|6|7|8|9|0") == T ~ as.numeric(.x)
+                )))
+
+```
+
