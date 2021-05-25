@@ -9,7 +9,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(stringr)
-library(haven)
+library(data.table)
+library(MASS)
+library(lme4)
 library(gt)
 ```
 
@@ -30,6 +32,56 @@ dataclean <- data %>%
                   str_starts(.x, ">") == T ~ as.numeric(str_sub(.x, 2, -2)) + 1,
                   str_starts(.x, "1|2|3|4|5|6|7|8|9|0") == T ~ as.numeric(.x)
                 )))
+
+fwrite(dataclean, file = "dataclean.csv", col.names = T)
+
+str(dataclean)
+
+```
+
+```{r separating data based on visit}
+
+dataPO <- dataclean %>% 
+  filter(visittype == "PO")
+
+dataLF <- dataclean %>% 
+  filter(visittype == "LF")
+
+dataW1 <- dataclean %>% 
+  filter(visittype == "W1")
+
+xtabs(~ Inflammation, data = dataclean)
+xtabs(~ Necrosis, data = dataclean)
+
+# H2
+# split data with 0-1 vs 2+
+# ordered or binary (try both)
+
+```
+
+
+
+```{r visual plotting of cytokines}
+
+
+```
+
+
+```{r}
+
+IRI.lm <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataclean)
+summary(IRI.lm)
+IRI.lm.po <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataPO)
+summary(IRI.lm.po)
+IRI.lm.lf <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataLF)
+summary(IRI.lm.lf)
+IRI.lm.w1 <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataW1)
+summary(IRI.lm.w1)
+
+
+IRI.glm <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, family = binomial(link = "logit"), data = dataclean)
+
+summary(IRI.glm)
 
 ```
 
