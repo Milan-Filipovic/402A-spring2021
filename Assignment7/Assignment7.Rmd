@@ -50,15 +50,11 @@ dataLF <- dataclean %>%
 dataW1 <- dataclean %>% 
   filter(visittype == "W1")
 
-xtabs(~ Inflammation, data = dataclean)
-xtabs(~ Necrosis, data = dataclean)
 
-# H2
-# split data with 0-1 vs 2+
-# ordered or binary (try both)
+
+
 
 ```
-
 
 
 ```{r visual plotting of cytokines}
@@ -67,21 +63,14 @@ xtabs(~ Necrosis, data = dataclean)
 ```
 
 
-```{r}
+```{r Research Question 2}
 
-IRI.lm <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataclean)
-summary(IRI.lm)
-IRI.lm.po <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataPO)
-summary(IRI.lm.po)
-IRI.lm.lf <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataLF)
-summary(IRI.lm.lf)
-IRI.lm.w1 <- lm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = dataW1)
-summary(IRI.lm.w1)
+xtabs(~ Inflammation, data = dataclean)
+xtabs(~ Necrosis, data = dataclean)
 
-
-IRI.glm <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, family = binomial(link = "logit"), data = dataclean)
-
-summary(IRI.glm)
+# split outcomes (Inflammation or Necrosis Score) with 0-1 vs 2+ as -/+
+# try two types of models: ordered factor outcome and binary outcome (try both)
 
 ```
+
 
