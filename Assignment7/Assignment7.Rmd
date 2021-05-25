@@ -21,6 +21,8 @@ data <- readxl::read_xlsx("./20210521_402a.xlsx", col_names = T, skip = 1)
 
 str(data)
 
+#lalalalalalalalala
+
 dataclean <- data %>% 
   rename(sample = "Sample #",
          patientid = "Patient ID",
