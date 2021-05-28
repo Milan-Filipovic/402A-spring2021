@@ -202,20 +202,27 @@ isi_tble %>%
 
 
 ```{r logistic regression}
+#all cytokine values transformed with log2
 
-main.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = isidata, family = "binomial")
+#main effects
+logdataclean <- dataclean %>% 
+  mutate(across(starts_with("CYTO"), log2))
+main.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = logdataclean, family = "binomial")
 summary(main.mod)
 
 # main effects leaving out visittype and checking for significance within each visit
-podata <- isidata %>% filter(visittype == "PO") %>% mutate(visittype = NULL)
+podata <- logdataclean %>% filter(visittype == "PO") %>% 
+  mutate(visittype = NULL)
 po.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = podata, family = "binomial")
 summary(po.mod)
 
-lfdata <- isidata %>% filter(visittype == "LF") %>% mutate(visittype = NULL)
+lfdata <- logdataclean %>% filter(visittype == "LF") %>%
+  mutate(visittype = NULL) 
 lf.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = lfdata, family = "binomial")
 summary(lf.mod)
 
-w1data <- isidata %>% filter(visittype == "W1") %>% mutate(visittype = NULL)
+w1data <- logdataclean %>% filter(visittype == "W1") %>%
+  mutate(visittype = NULL)
 w1.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = w1data, family = "binomial")
 summary(w1.mod)
 
@@ -231,12 +238,12 @@ for (i in 1:length(diffs)){
 }
 
 # wide data
-iriwidedata <- dataclean %>% 
+iriwidedata <- logdataclean %>% 
   mutate(sample = NULL) %>% 
   pivot_wider (names_from = visittype, names_sep = ".", values_from = all_of(values))
 
 # cyto change data
-irichangedata <- dataclean
+irichangedata <- logdataclean
 setDT(irichangedata)[, c(diffnames) := lapply(.SD, 
       function(x) x-shift(x, fill=x[1L])), by = patientid, .SDcols=7:29]
 
@@ -264,6 +271,12 @@ summary(changemain2.mod)
   
   
 ```
+summary:
+
+* overall log data : cyto 1, 17, 18, 22
+* overall log po : none significant
+* overall log lf : cyto 1, 2, 14
+* overall log w1: cyto 22
 
 ```{r Research Question 2}
 
