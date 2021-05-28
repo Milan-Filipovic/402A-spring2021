@@ -216,29 +216,39 @@ Concentration of CYTO15 appears to decrease with additional timepoints.
 Concentration of CYTO20 appears to decrease with additional timepoints. 
 The concentration of CYTO23 in the LF timepoint appears lower than the PO and W1 timepoints.
 
-A one-way anova to compare cytokine concentrations for different timepoints.  
+
+Log Transforming Data to use in anova modelling. 
 ```{r}
-responseList <- names(isi_tble)[-c(1:6)]
+liri_tble <- isi_tble %>% select(starts_with("CYT")) %>% 
+  log() %>% #log transforms the cytokine data frame
+  mutate(visittype = isi_tble$visittype, IRI = isi_tble$IRI) #add the factor variables back in 
+liri_tble 
+```
+
+
+A one-way anova to compare cytokine concentrations for different timepoints. A pairwise comparison for all  
+```{r}
+responseList <- names(liri_tble)[c(1:23)]
 modelList    <- lapply(responseList, function(resp) {
                            mF <- formula(paste(resp, " ~ visittype"))
-                           aov(mF, data = isi_tble)
+                           aov(mF, data = liri_tble)
                 })
-for(i in c(1:23)){
-t <- TukeyHSD(modelList[[i]])
-print(paste("Results for", responseList[i]))
-print(t)
-}
+
+HSDList    <- lapply(modelList, function(mod) {
+                           TukeyHSD(mod)
+                })
+HSDList
+########----------------a for loop can also be used-------------------
+# for(i in c(1:23)){
+# t <- TukeyHSD(modelList[[i]])
+# print(paste("Results for", responseList[i]))
+# print(t)
+# print(str(t))
+# }
 ```
 
-A two-way anova will will compare cytokine concentrations by ISI status and different timepoints. 
-```{r}
-formula <- as.formula(paste0("cbind(", paste(names(isi_tble)[-c(1:6)], collapse = ","), ") ~ visittype"))
 
-fit <- aov(formula, data=isi_tble)
-summary(fit)
-```
-
-Two-way Interaction Plot. Here median values are plotted over the visit types. It should be notes that CYTO4, CYTO16, and CYTO17 were not included because significance was not found in the anova test. 
+Two-way Interaction Plot. Here median values are plotted over the visit types. It should be noted that CYTO4, CYTO16, and CYTO17 were not included because significance was not found in the anova test. 
 ```{r}
 #need to add titles here 
 #I use median instead of mean due to outliers in data set 
@@ -259,6 +269,14 @@ iri_tble2<- isi_tble %>% select(starts_with("CYTO"), -CYTO4, -CYTO16, -CYTO17)
 Possible interaction effect between ISI status and visit type in CYTO5, 7, 8, 14, 19 and 21. 
 
 
+Running two-way anova 
+```{r}
+twoway_modelList    <- lapply(responseList, function(resp) {
+                           mF <- formula(paste(resp, " ~ visittype*IRI"))
+                           anova(lm(mF, data = isi_tble))
+                })
+twoway_modelList
+```
 
-
+A significant interaction is not observed in any of the models between ISI and visittype. 
 
