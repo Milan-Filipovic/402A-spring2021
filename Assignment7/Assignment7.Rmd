@@ -11,6 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(stringr)
+library(MASS)
 library(haven)
 library(gt)
 library(tidyr)
@@ -183,4 +184,120 @@ isi_tble %>%
 
 
 
+
+
+Hypothesis 2:
+
+```{r}
+# filter for preoperation data
+dataPO <- dataclean %>% 
+  filter(visittype == "PO")
+
+# crosstabs on preoperation data
+xtabs(~ Inflammation, data = dataPO)
+xtabs(~ Necrosis, data = dataPO)
+```
+
+```{r}
+dataPO1 <- dataPO
+
+# reassigning inflammation scores 0=negative and 2=positive
+dataPO1$Inflammation[dataPO$Inflammation == 0] <- 0
+dataPO1$Inflammation[dataPO$Inflammation == 1] <- 0
+
+dataPO1$Inflammation[dataPO$Inflammation == 2] <- 2
+dataPO1$Inflammation[dataPO$Inflammation == 3] <- 2
+dataPO1$Inflammation[dataPO$Inflammation == 4] <- 2
+
+# reassigning necrosis scores 0=negative and 2=positive
+dataPO1$Necrosis[dataPO$Necrosis == 0] <- 0
+dataPO1$Necrosis[dataPO$Necrosis == 1] <- 0
+
+dataPO1$Necrosis[dataPO$Necrosis == 2] <- 2
+dataPO1$Necrosis[dataPO$Necrosis == 3] <- 2
+dataPO1$Necrosis[dataPO$Necrosis == 4] <- 2
+
+# crosstabs to check that reassigned values match original data
+xtabs(~ Inflammation, data = dataPO1)
+xtabs(~ Necrosis, data = dataPO1)
+```
+
+```{r}
+# releveled inflammation as factor
+dataPO$Inflammation <- factor(dataPO$Inflammation, levels = c("0", "1", "2", "3", "4"))
+dataPO$Inflammation
+
+# ordinal logistic regression model
+m1 <- polr(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+summary(m1)
+
+## store table
+(ctable1 <- coef(summary(m1)))
+
+## calculate and store p values
+p1 <- pnorm(abs(ctable1[, "t value"]), lower.tail = FALSE) * 2
+
+## combined table
+(ctable1 <- cbind(ctable1, "p value" = p1))
+
+# CIs assuming normality
+confint.default(m1)
+```
+
+* CI for CYTO18 does not include 0
+
+
+```{r}
+# releveled necrosis as factor
+dataPO$Necrosis <- factor(dataPO$Necrosis, levels = c("0", "1", "2", "3", "4"))
+dataPO$Necrosis
+
+# ordinal logistic regression model
+m2 <- polr(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5  + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+summary(m2)
+
+## store table
+(ctable2 <- coef(summary(m2)))
+
+## calculate and store p values
+p2 <- pnorm(abs(ctable2[, "t value"]), lower.tail = FALSE) * 2
+
+## combined table
+(ctable2 <- cbind(ctable2, "p value" = p2))
+
+# CIs assuming normality
+confint.default(m2)
+```
+
+* CI for CYTO17 and CYTO18 does not include 0
+
+
+```{r}
+# releveled inflammation as factor
+dataPO1$Inflammation <- factor(dataPO1$Inflammation)
+
+# binary response model
+m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+summary(m3)
+
+# CIs assuming normality
+confint.default(m3)
+```
+
+* CI for CYTO4 does not include 0
+
+
+```{r}
+# releveled necrosis as factor
+dataPO1$Necrosis <- factor(dataPO1$Necrosis)
+
+#binary response model
+m4 <- glm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+summary(m4)
+
+# CIs assuming normality
+confint.default(m4)
+```
+
+* CI for all CYTO includes 0
 
