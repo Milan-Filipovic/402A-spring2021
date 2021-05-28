@@ -53,8 +53,8 @@ We begin by visualizing the distribution of cytokine values
 
 
 =======
-```{r}
 
+```{r}
 
 isi_tble %>% 
   select(CYTO1:CYTO6) %>% 
@@ -92,17 +92,19 @@ facet_wrap(~ key, scales ="free") +
 # facet_grid_paginate(~ key, ncol = 3, nrow = 3, page = 2)
   geom_boxplot()
 ```
->>>>>>> 2ed165577afd5beda6f141f540a003e5c4b7ce24
+# >>>>>>> 2ed165577afd5beda6f141f540a003e5c4b7ce24
 
 The Cytokine distributions are characterized by heavy right skew. 
 
-<<<<<<< HEAD
-```
+# <<<<<<< HEAD
 
 =======
+
 Now log transform all Cytokines
+
 ```{r}
->>>>>>> 2ed165577afd5beda6f141f540a003e5c4b7ce24
+
+# >>>>>>> 2ed165577afd5beda6f141f540a003e5c4b7ce24
 
 isi_tble %>% 
   select(CYTO1:CYTO6) %>% 
@@ -143,16 +145,7 @@ isi_tble %>%
 
 ```
 
-<<<<<<< HEAD
 
-```{r Research Question 2}
-
-xtabs(~ Inflammation, data = dataclean)
-xtabs(~ Necrosis, data = dataclean)
-
-# split outcomes (Inflammation or Necrosis Score) with 0-1 vs 2+ as -/+
-# try two types of models: ordered factor outcome and binary outcome (try both)
-=======
 ```{r}
 
 isi_tble %>% 
@@ -207,4 +200,78 @@ isi_tble %>%
 >>>>>>> 2ed165577afd5beda6f141f540a003e5c4b7ce24
 
 
+
+```{r logistic regression}
+
+main.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = isidata, family = "binomial")
+summary(main.mod)
+
+# main effects leaving out visittype and checking for significance within each visit
+podata <- isidata %>% filter(visittype == "PO") %>% mutate(visittype = NULL)
+po.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = podata, family = "binomial")
+summary(po.mod)
+
+lfdata <- isidata %>% filter(visittype == "LF") %>% mutate(visittype = NULL)
+lf.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = lfdata, family = "binomial")
+summary(lf.mod)
+
+w1data <- isidata %>% filter(visittype == "W1") %>% mutate(visittype = NULL)
+w1.mod <- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = w1data, family = "binomial")
+summary(w1.mod)
+
+# main effects for changes from one visit to the next
+prefix <- "CYTO"
+suffix <- seq(1:23)
+values <- paste(prefix, suffix, sep = "")
+diffs <- c("diff1", "diff2")
+
+diffnames <- NULL
+for (i in 1:length(diffs)){
+  diffnames <- c(diffnames, paste(values, diffs[i], sep = "."))
+}
+
+# wide data
+iriwidedata <- dataclean %>% 
+  mutate(sample = NULL) %>% 
+  pivot_wider (names_from = visittype, names_sep = ".", values_from = all_of(values))
+
+# cyto change data
+irichangedata <- dataclean
+setDT(irichangedata)[, c(diffnames) := lapply(.SD, 
+      function(x) x-shift(x, fill=x[1L])), by = patientid, .SDcols=7:29]
+
+# subset only change vars for model
+changesubset <- irichangedata %>% 
+  select(-Inflammation, -Necrosis, -visittype, -(CYTO1:CYTO23)) %>% 
+  group_by(patientid) %>% 
+  slice(2:n())
+
+diff1subset <- changesubset %>% 
+  select(-(CYTO1.diff2:CYTO23.diff2))
+
+diff2subset <- changesubset %>% 
+  select(-(CYTO1.diff1:CYTO23.diff1))
+
+# change model
+changemain.mod <- glm(IRI ~ . -sample -patientid, data = changesubset, family = "binomial")
+summary(changemain.mod)
+
+changemain1.mod <- glm(IRI ~ . -sample -patientid, data = diff1subset, family = "binomial")
+summary(changemain1.mod)
+
+changemain2.mod <- glm(IRI ~ . -sample -patientid, data = diff2subset, family = "binomial")
+summary(changemain2.mod)
+  
+  
+```
+
+```{r Research Question 2}
+
+xtabs(~ Inflammation, data = dataclean)
+xtabs(~ Necrosis, data = dataclean)
+
+# split outcomes (Inflammation or Necrosis Score) with 0-1 vs 2+ as -/+
+# try two types of models: ordered factor outcome and binary outcome (try both)
+# =======
+```
 
