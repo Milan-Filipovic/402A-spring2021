@@ -11,11 +11,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(stringr)
-library(MASS)
 library(haven)
 library(gt)
 library(tidyr)
 library(ggforce) #can be used for large facet grids
+library(dplyr)
 ```
 
 ```{r}
@@ -49,7 +49,6 @@ We begin by visualizing the distribution of cytokine values
 
 
 ```{r}
-
 
 isi_tble %>% 
   select(CYTO1:CYTO6) %>% 
@@ -242,12 +241,16 @@ p1 <- pnorm(abs(ctable1[, "t value"]), lower.tail = FALSE) * 2
 
 # CIs assuming normality
 confint.default(m1)
+
+#Using step function 
+step_m1 <- step(m1, trace = F)
 ```
 
 * CI for CYTO18 does not include 0
 
 
 ```{r}
+library(MASS)
 # releveled necrosis as factor
 dataPO$Necrosis <- factor(dataPO$Necrosis, levels = c("0", "1", "2", "3", "4"))
 dataPO$Necrosis
