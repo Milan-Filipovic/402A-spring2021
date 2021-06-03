@@ -259,17 +259,45 @@ diff1subset <- changesubset %>%
 diff2subset <- changesubset %>% 
   select(-(CYTO1.diff1:CYTO23.diff1))
 
+
 # change model
 changemain.mod <- glm(IRI ~ . -sample -patientid, data = changesubset, family = "binomial")
 summary(changemain.mod)
 
+# only change from po to lf
 changemain1.mod <- glm(IRI ~ . -sample -patientid, data = diff1subset, family = "binomial")
 summary(changemain1.mod)
 
+# only change from lf to w1
 changemain2.mod <- glm(IRI ~ . -sample -patientid, data = diff2subset, family = "binomial")
 summary(changemain2.mod)
-  
-  
+
+
+library(ggcorrplot)
+corr.change <- round(cor(changesubset[3:49]), 3)
+pcorr.change <- round(cor_pmat(changesubset[3:49]), 3)
+
+corr.diff1 <- round(cor(diff1subset[3:26]), 3)
+pcorr.diff1 <- round(cor_pmat(diff1subset[3:26]), 3)
+
+corr.diff2 <- round(cor(diff2subset[3:26]), 3)
+pcorr.diff2 <- round(cor_pmat(diff2subset[3:26]), 3)
+
+
+ggcorrplot(corr.change, type = "lower")
+ggcorrplot(corr.diff1, type = "lower")
+ggcorrplot(corr.diff2, type = "lower")
+
+# hierarchical clustering or something i don't know
+ggcorrplot(corr.diff1, hc.order = T, outline.col = "white", type = "lower")
+ggcorrplot(corr.diff2, hc.order = T, outline.col = "white", type = "lower")
+
+# hierarchical clustering + leaving insignificant correlation blank
+ggcorrplot(corr.diff1, p.mat = pcorr.diff1, hc.order = T, 
+           outline.col = "white", type = "lower", insig = "blank")
+ggcorrplot(corr.diff2, p.mat = pcorr.diff2, hc.order = T, 
+           outline.col = "white", type = "lower", insig = "blank")
+
 ```
 summary:
 

@@ -481,56 +481,61 @@ isi_tble %&gt;%
 </blockquote>
 </blockquote>
 </blockquote>
-<pre class="r"><code>main.mod &lt;- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = isidata, family = &quot;binomial&quot;)</code></pre>
-<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
-<pre class="r"><code>summary(main.mod)</code></pre>
+<pre class="r"><code>#all cytokine values transformed with log2
+
+#main effects
+logdataclean &lt;- dataclean %&gt;% 
+  mutate(across(starts_with(&quot;CYTO&quot;), log2))
+main.mod &lt;- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis -visittype, data = logdataclean, family = &quot;binomial&quot;)
+summary(main.mod)</code></pre>
 <pre><code>## 
 ## Call:
 ## glm(formula = IRI ~ . - sample - patientid - Inflammation - Necrosis - 
-##     visittype, family = &quot;binomial&quot;, data = isidata)
+##     visittype, family = &quot;binomial&quot;, data = logdataclean)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -2.2273  -0.9855  -0.6169   1.1948   2.0612  
+## -2.2836  -0.9698  -0.6329   1.1118   2.1094  
 ## 
 ## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept)  6.775e-01  6.451e-01   1.050  0.29364   
-## CYTO1        4.847e-02  2.706e-02   1.791  0.07328 . 
-## CYTO2       -1.015e-03  5.958e-04  -1.705  0.08828 . 
-## CYTO3       -4.480e-04  7.920e-04  -0.566  0.57160   
-## CYTO4       -6.622e-04  3.599e-03  -0.184  0.85402   
-## CYTO5        1.963e-03  4.322e-03   0.454  0.64975   
-## CYTO6       -3.833e-04  4.807e-04  -0.797  0.42520   
-## CYTO7        2.617e-04  2.663e-04   0.983  0.32562   
-## CYTO8       -1.125e-02  1.105e-02  -1.018  0.30863   
-## CYTO9        1.351e-02  1.118e-02   1.208  0.22686   
-## CYTO10       3.589e-03  1.399e-02   0.257  0.79752   
-## CYTO11      -1.571e-03  9.669e-04  -1.625  0.10425   
-## CYTO12       1.872e-02  1.860e-02   1.007  0.31414   
-## CYTO13       4.747e-05  3.464e-05   1.370  0.17060   
-## CYTO14      -4.003e-03  2.368e-03  -1.690  0.09093 . 
-## CYTO15      -4.072e-02  4.186e-02  -0.973  0.33075   
-## CYTO16       2.274e-01  9.480e-02   2.398  0.01646 * 
-## CYTO17      -9.167e-01  3.519e-01  -2.605  0.00918 **
-## CYTO18      -6.122e-05  1.043e-04  -0.587  0.55721   
-## CYTO19      -4.860e-03  2.513e-02  -0.193  0.84662   
-## CYTO20       6.792e-05  4.386e-04   0.155  0.87693   
-## CYTO21      -1.204e-02  2.259e-02  -0.533  0.59415   
-## CYTO22       4.147e-03  2.195e-03   1.889  0.05893 . 
-## CYTO23       1.508e-03  1.223e-02   0.123  0.90186   
+##              Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept) -1.390062   1.871613  -0.743   0.4577  
+## CYTO1        0.433794   0.220520   1.967   0.0492 *
+## CYTO2        0.110942   0.164784   0.673   0.5008  
+## CYTO3       -0.104592   0.167852  -0.623   0.5332  
+## CYTO4       -0.081771   0.084174  -0.971   0.3313  
+## CYTO5       -0.085784   0.068355  -1.255   0.2095  
+## CYTO6       -0.215031   0.130512  -1.648   0.0994 .
+## CYTO7        0.029730   0.089777   0.331   0.7405  
+## CYTO8       -0.008358   0.136349  -0.061   0.9511  
+## CYTO9       -0.268761   0.255914  -1.050   0.2936  
+## CYTO10       0.043425   0.177626   0.244   0.8069  
+## CYTO11      -0.116457   0.113018  -1.030   0.3028  
+## CYTO12       0.128071   0.101262   1.265   0.2060  
+## CYTO13       0.070171   0.084743   0.828   0.4076  
+## CYTO14      -0.260274   0.153911  -1.691   0.0908 .
+## CYTO15      -0.275040   0.210616  -1.306   0.1916  
+## CYTO16       0.307998   0.175625   1.754   0.0795 .
+## CYTO17      -0.691059   0.330962  -2.088   0.0368 *
+## CYTO18       0.243595   0.119714   2.035   0.0419 *
+## CYTO19       0.020129   0.186371   0.108   0.9140  
+## CYTO20      -0.012342   0.177699  -0.069   0.9446  
+## CYTO21      -0.171802   0.194101  -0.885   0.3761  
+## CYTO22       0.407164   0.177710   2.291   0.0220 *
+## CYTO23       0.200204   0.207328   0.966   0.3342  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 408.18  on 299  degrees of freedom
-## Residual deviance: 360.35  on 276  degrees of freedom
-## AIC: 408.35
+## Residual deviance: 361.66  on 276  degrees of freedom
+## AIC: 409.66
 ## 
-## Number of Fisher Scoring iterations: 11</code></pre>
+## Number of Fisher Scoring iterations: 4</code></pre>
 <pre class="r"><code># main effects leaving out visittype and checking for significance within each visit
-podata &lt;- isidata %&gt;% filter(visittype == &quot;PO&quot;) %&gt;% mutate(visittype = NULL)
+podata &lt;- logdataclean %&gt;% filter(visittype == &quot;PO&quot;) %&gt;% 
+  mutate(visittype = NULL)
 po.mod &lt;- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = podata, family = &quot;binomial&quot;)
 summary(po.mod)</code></pre>
 <pre><code>## 
@@ -540,45 +545,46 @@ summary(po.mod)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.7774  -0.9162  -0.4279   1.1091   1.7981  
+## -1.8610  -0.9077  -0.6138   1.0713   2.2243  
 ## 
 ## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept) -4.228e-01  1.347e+00  -0.314   0.7537  
-## CYTO1        7.507e-02  7.810e-02   0.961   0.3364  
-## CYTO2       -6.661e-03  5.336e-03  -1.248   0.2119  
-## CYTO3       -2.395e-04  1.311e-03  -0.183   0.8551  
-## CYTO4        3.113e-03  1.058e-02   0.294   0.7685  
-## CYTO5        2.615e-03  5.507e-03   0.475   0.6349  
-## CYTO6       -1.505e-03  1.244e-03  -1.209   0.2266  
-## CYTO7        1.566e-03  1.094e-03   1.432   0.1522  
-## CYTO8       -5.346e-02  3.826e-02  -1.397   0.1623  
-## CYTO9        1.136e-02  1.721e-02   0.660   0.5090  
-## CYTO10       3.856e-03  4.335e-02   0.089   0.9291  
-## CYTO11      -6.533e-05  1.785e-03  -0.037   0.9708  
-## CYTO12      -1.142e-02  2.481e-02  -0.460   0.6452  
-## CYTO13      -6.859e-04  5.592e-04  -1.227   0.2200  
-## CYTO14      -7.987e-03  4.814e-03  -1.659   0.0971 .
-## CYTO15       4.356e-02  1.904e-01   0.229   0.8191  
-## CYTO16       6.466e-01  5.302e-01   1.220   0.2226  
-## CYTO17      -9.450e-01  7.193e-01  -1.314   0.1889  
-## CYTO18      -1.410e-04  2.475e-04  -0.570   0.5690  
-## CYTO19       3.050e-02  4.040e-02   0.755   0.4503  
-## CYTO20      -9.370e-04  1.173e-03  -0.798   0.4246  
-## CYTO21       2.165e-02  4.925e-02   0.439   0.6603  
-## CYTO22      -1.202e-04  2.927e-03  -0.041   0.9672  
-## CYTO23       5.889e-02  2.749e-02   2.142   0.0322 *
+##              Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept) -0.734615   3.617783  -0.203   0.8391  
+## CYTO1        0.742618   0.539432   1.377   0.1686  
+## CYTO2        0.371272   0.505813   0.734   0.4629  
+## CYTO3       -0.537025   0.321504  -1.670   0.0948 .
+## CYTO4       -0.168341   0.159841  -1.053   0.2923  
+## CYTO5       -0.061773   0.118954  -0.519   0.6035  
+## CYTO6       -0.205914   0.254923  -0.808   0.4192  
+## CYTO7        0.125715   0.198469   0.633   0.5265  
+## CYTO8       -0.100666   0.323055  -0.312   0.7553  
+## CYTO9       -0.328917   0.494731  -0.665   0.5062  
+## CYTO10      -0.074878   0.375600  -0.199   0.8420  
+## CYTO11      -0.083763   0.285331  -0.294   0.7691  
+## CYTO12       0.098509   0.210860   0.467   0.6404  
+## CYTO13       0.003232   0.254820   0.013   0.9899  
+## CYTO14      -0.112537   0.247246  -0.455   0.6490  
+## CYTO15      -0.858707   0.514902  -1.668   0.0954 .
+## CYTO16       0.642544   0.396337   1.621   0.1050  
+## CYTO17      -0.809640   0.632165  -1.281   0.2003  
+## CYTO18       0.003991   0.152406   0.026   0.9791  
+## CYTO19       0.292480   0.322740   0.906   0.3648  
+## CYTO20       0.181735   0.321861   0.565   0.5723  
+## CYTO21      -0.325790   0.336626  -0.968   0.3331  
+## CYTO22       0.236521   0.287921   0.821   0.4114  
+## CYTO23       0.720194   0.436762   1.649   0.0992 .
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 136.06  on 99  degrees of freedom
-## Residual deviance: 108.82  on 76  degrees of freedom
-## AIC: 156.82
+## Residual deviance: 117.16  on 76  degrees of freedom
+## AIC: 165.16
 ## 
-## Number of Fisher Scoring iterations: 8</code></pre>
-<pre class="r"><code>lfdata &lt;- isidata %&gt;% filter(visittype == &quot;LF&quot;) %&gt;% mutate(visittype = NULL)
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>lfdata &lt;- logdataclean %&gt;% filter(visittype == &quot;LF&quot;) %&gt;%
+  mutate(visittype = NULL) 
 lf.mod &lt;- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = lfdata, family = &quot;binomial&quot;)
 summary(lf.mod)</code></pre>
 <pre><code>## 
@@ -588,45 +594,46 @@ summary(lf.mod)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.9001  -0.9138  -0.3061   1.0011   2.1683  
+## -1.8672  -0.7706  -0.3125   0.8296   2.5574  
 ## 
 ## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept)  2.035e+00  1.628e+00   1.250   0.2113  
-## CYTO1        9.727e-02  6.144e-02   1.583   0.1134  
-## CYTO2       -2.081e-03  1.051e-03  -1.979   0.0478 *
-## CYTO3       -2.303e-03  2.004e-03  -1.149   0.2505  
-## CYTO4        9.424e-03  1.490e-02   0.632   0.5271  
-## CYTO5        9.577e-03  1.413e-02   0.678   0.4978  
-## CYTO6       -1.172e-03  1.004e-03  -1.168   0.2429  
-## CYTO7       -2.993e-06  3.755e-04  -0.008   0.9936  
-## CYTO8       -4.072e-02  5.233e-02  -0.778   0.4364  
-## CYTO9        5.711e-02  4.670e-02   1.223   0.2214  
-## CYTO10       1.955e-02  3.248e-02   0.602   0.5473  
-## CYTO11      -4.678e-03  3.770e-03  -1.241   0.2146  
-## CYTO12       2.210e-01  1.195e-01   1.850   0.0643 .
-## CYTO13       2.467e-05  4.827e-05   0.511   0.6093  
-## CYTO14      -9.228e-03  7.433e-03  -1.241   0.2144  
-## CYTO15      -5.535e-02  8.541e-02  -0.648   0.5169  
-## CYTO16       3.445e-01  4.025e-01   0.856   0.3921  
-## CYTO17      -1.395e+00  8.652e-01  -1.612   0.1070  
-## CYTO18      -8.326e-04  1.652e-03  -0.504   0.6144  
-## CYTO19      -5.457e-02  6.128e-02  -0.891   0.3732  
-## CYTO20       8.835e-04  2.015e-03   0.439   0.6610  
-## CYTO21      -1.151e-01  7.372e-02  -1.562   0.1184  
-## CYTO22       1.225e-02  1.010e-02   1.213   0.2253  
-## CYTO23       3.367e-02  4.777e-02   0.705   0.4809  
+##              Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept) -1.536864   6.644001  -0.231   0.8171  
+## CYTO1        1.263645   0.597871   2.114   0.0346 *
+## CYTO2       -1.301713   0.533388  -2.440   0.0147 *
+## CYTO3       -0.024121   0.424064  -0.057   0.9546  
+## CYTO4        0.123556   0.283498   0.436   0.6630  
+## CYTO5       -0.179012   0.191838  -0.933   0.3507  
+## CYTO6       -0.466015   0.381191  -1.223   0.2215  
+## CYTO7       -0.002677   0.185371  -0.014   0.9885  
+## CYTO8       -0.135120   0.397566  -0.340   0.7340  
+## CYTO9       -0.103808   1.018421  -0.102   0.9188  
+## CYTO10       0.945894   0.567813   1.666   0.0957 .
+## CYTO11      -0.520956   0.278765  -1.869   0.0617 .
+## CYTO12       0.264857   0.209819   1.262   0.2068  
+## CYTO13       0.474591   0.256992   1.847   0.0648 .
+## CYTO14      -1.496155   0.699655  -2.138   0.0325 *
+## CYTO15      -0.170277   0.430957  -0.395   0.6928  
+## CYTO16       0.386104   0.490277   0.788   0.4310  
+## CYTO17      -1.275679   0.882696  -1.445   0.1484  
+## CYTO18       1.286773   0.802380   1.604   0.1088  
+## CYTO19      -0.775407   0.833678  -0.930   0.3523  
+## CYTO20       0.393947   0.577330   0.682   0.4950  
+## CYTO21      -0.611100   0.553864  -1.103   0.2699  
+## CYTO22       0.756586   0.606957   1.247   0.2126  
+## CYTO23       0.680191   0.467458   1.455   0.1456  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
-##     Null deviance: 136.06  on 99  degrees of freedom
-## Residual deviance: 103.13  on 76  degrees of freedom
-## AIC: 151.13
+##     Null deviance: 136.058  on 99  degrees of freedom
+## Residual deviance:  95.823  on 76  degrees of freedom
+## AIC: 143.82
 ## 
 ## Number of Fisher Scoring iterations: 7</code></pre>
-<pre class="r"><code>w1data &lt;- isidata %&gt;% filter(visittype == &quot;W1&quot;) %&gt;% mutate(visittype = NULL)
+<pre class="r"><code>w1data &lt;- logdataclean %&gt;% filter(visittype == &quot;W1&quot;) %&gt;%
+  mutate(visittype = NULL)
 w1.mod &lt;- glm(IRI ~ . -sample -patientid -Inflammation -Necrosis, data = w1data, family = &quot;binomial&quot;)
 summary(w1.mod)</code></pre>
 <pre><code>## 
@@ -636,44 +643,44 @@ summary(w1.mod)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.7580  -0.8339  -0.1787   0.8748   2.1481  
+## -1.5343  -0.9047  -0.3979   0.8490   2.3526  
 ## 
 ## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept)  0.8725938  1.4826277   0.589   0.5562  
-## CYTO1        0.0029306  0.0040534   0.723   0.4697  
-## CYTO2        0.0006884  0.0064275   0.107   0.9147  
-## CYTO3       -0.0022496  0.0027502  -0.818   0.4134  
-## CYTO4        0.0009427  0.0053035   0.178   0.8589  
-## CYTO5       -0.0606994  0.0766196  -0.792   0.4282  
-## CYTO6        0.0001965  0.0016019   0.123   0.9024  
-## CYTO7       -0.0034043  0.0050620  -0.673   0.5013  
-## CYTO8       -0.0155461  0.1843865  -0.084   0.9328  
-## CYTO9       -0.0434676  0.0684441  -0.635   0.5254  
-## CYTO10       0.0567076  0.0852718   0.665   0.5060  
-## CYTO11      -0.0037520  0.0032907  -1.140   0.2542  
-## CYTO12       0.0139090  0.1583791   0.088   0.9300  
-## CYTO13      -0.0095484  0.0054193  -1.762   0.0781 .
-## CYTO14      -0.0143319  0.0115650  -1.239   0.2153  
-## CYTO15       0.0364263  0.3999444   0.091   0.9274  
-## CYTO16       0.3535927  0.1923293   1.838   0.0660 .
-## CYTO17      -1.0333291  0.6843361  -1.510   0.1311  
-## CYTO18       0.0065776  0.0030166   2.180   0.0292 *
-## CYTO19      -0.1679932  0.1184119  -1.419   0.1560  
-## CYTO20       0.0022319  0.0116577   0.191   0.8482  
-## CYTO21      -0.0557655  0.1742439  -0.320   0.7489  
-## CYTO22       0.0301670  0.0184654   1.634   0.1023  
-## CYTO23       0.0061006  0.0302904   0.201   0.8404  
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  0.12137    5.24176   0.023   0.9815  
+## CYTO1        0.18433    0.43022   0.428   0.6683  
+## CYTO2        0.61596    0.39781   1.548   0.1215  
+## CYTO3       -0.35764    0.45356  -0.789   0.4304  
+## CYTO4        0.09554    0.16900   0.565   0.5718  
+## CYTO5       -0.04384    0.14944  -0.293   0.7693  
+## CYTO6       -0.17511    0.27202  -0.644   0.5197  
+## CYTO7       -0.34466    0.35600  -0.968   0.3330  
+## CYTO8       -0.11257    0.23366  -0.482   0.6300  
+## CYTO9       -1.03865    0.55040  -1.887   0.0591 .
+## CYTO10       0.21665    0.53958   0.402   0.6880  
+## CYTO11      -0.26975    0.25830  -1.044   0.2963  
+## CYTO12      -0.01246    0.22674  -0.055   0.9562  
+## CYTO13      -0.57177    0.34523  -1.656   0.0977 .
+## CYTO14      -0.26590    0.45783  -0.581   0.5614  
+## CYTO15       0.49123    0.56633   0.867   0.3857  
+## CYTO16       0.32888    0.35181   0.935   0.3499  
+## CYTO17      -0.68090    0.67888  -1.003   0.3159  
+## CYTO18       0.71907    0.41825   1.719   0.0856 .
+## CYTO19       0.05804    0.47901   0.121   0.9036  
+## CYTO20      -0.57564    0.62487  -0.921   0.3569  
+## CYTO21      -0.07394    0.49359  -0.150   0.8809  
+## CYTO22       1.58306    0.65977   2.399   0.0164 *
+## CYTO23      -0.04411    0.64798  -0.068   0.9457  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
-##     Null deviance: 136.058  on 99  degrees of freedom
-## Residual deviance:  96.441  on 76  degrees of freedom
-## AIC: 144.44
+##     Null deviance: 136.06  on 99  degrees of freedom
+## Residual deviance: 100.71  on 76  degrees of freedom
+## AIC: 148.71
 ## 
-## Number of Fisher Scoring iterations: 10</code></pre>
+## Number of Fisher Scoring iterations: 6</code></pre>
 <pre class="r"><code># main effects for changes from one visit to the next
 prefix &lt;- &quot;CYTO&quot;
 suffix &lt;- seq(1:23)
@@ -686,12 +693,12 @@ for (i in 1:length(diffs)){
 }
 
 # wide data
-iriwidedata &lt;- dataclean %&gt;% 
+iriwidedata &lt;- logdataclean %&gt;% 
   mutate(sample = NULL) %&gt;% 
   pivot_wider (names_from = visittype, names_sep = &quot;.&quot;, values_from = all_of(values))
 
 # cyto change data
-irichangedata &lt;- dataclean
+irichangedata &lt;- logdataclean
 setDT(irichangedata)[, c(diffnames) := lapply(.SD, 
       function(x) x-shift(x, fill=x[1L])), by = patientid, .SDcols=7:29]
 
@@ -717,67 +724,67 @@ summary(changemain.mod)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.6713  -1.0306  -0.7583   1.2457   1.8192  
+## -1.4369  -1.0467  -0.8344   1.2335   1.9920  
 ## 
 ## Coefficients: (23 not defined because of singularities)
-##                Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept)  -4.081e-01  1.909e-01  -2.138   0.0325 *
-## CYTO1.diff1  -7.573e-04  2.920e-03  -0.259   0.7954  
-## CYTO2.diff1  -4.294e-05  3.743e-04  -0.115   0.9087  
-## CYTO3.diff1  -3.777e-04  8.793e-04  -0.430   0.6675  
-## CYTO4.diff1  -5.158e-03  4.535e-03  -1.137   0.2553  
-## CYTO5.diff1  -7.025e-03  9.654e-03  -0.728   0.4668  
-## CYTO6.diff1  -9.122e-05  4.312e-04  -0.212   0.8325  
-## CYTO7.diff1  -9.633e-06  2.007e-04  -0.048   0.9617  
-## CYTO8.diff1   2.171e-02  1.682e-02   1.290   0.1969  
-## CYTO9.diff1  -1.833e-02  1.226e-02  -1.495   0.1348  
-## CYTO10.diff1  2.639e-04  1.026e-02   0.026   0.9795  
-## CYTO11.diff1 -3.755e-04  6.153e-04  -0.610   0.5417  
-## CYTO12.diff1 -1.590e-03  1.822e-02  -0.087   0.9305  
-## CYTO13.diff1 -2.122e-07  2.464e-05  -0.009   0.9931  
-## CYTO14.diff1  3.084e-03  3.418e-03   0.902   0.3668  
-## CYTO15.diff1 -1.568e-02  3.870e-02  -0.405   0.6852  
-## CYTO16.diff1  4.161e-02  5.768e-02   0.721   0.4707  
-## CYTO17.diff1 -1.279e+00  1.747e+00  -0.732   0.4641  
-## CYTO18.diff1  2.030e-04  6.274e-04   0.324   0.7463  
-## CYTO19.diff1  5.967e-03  3.192e-02   0.187   0.8517  
-## CYTO20.diff1  3.536e-04  4.298e-04   0.823   0.4107  
-## CYTO21.diff1 -8.791e-03  2.561e-02  -0.343   0.7314  
-## CYTO22.diff1 -2.132e-03  2.469e-03  -0.863   0.3880  
-## CYTO23.diff1 -7.342e-03  1.262e-02  -0.582   0.5606  
-## CYTO1.diff2          NA         NA      NA       NA  
-## CYTO2.diff2          NA         NA      NA       NA  
-## CYTO3.diff2          NA         NA      NA       NA  
-## CYTO4.diff2          NA         NA      NA       NA  
-## CYTO5.diff2          NA         NA      NA       NA  
-## CYTO6.diff2          NA         NA      NA       NA  
-## CYTO7.diff2          NA         NA      NA       NA  
-## CYTO8.diff2          NA         NA      NA       NA  
-## CYTO9.diff2          NA         NA      NA       NA  
-## CYTO10.diff2         NA         NA      NA       NA  
-## CYTO11.diff2         NA         NA      NA       NA  
-## CYTO12.diff2         NA         NA      NA       NA  
-## CYTO13.diff2         NA         NA      NA       NA  
-## CYTO14.diff2         NA         NA      NA       NA  
-## CYTO15.diff2         NA         NA      NA       NA  
-## CYTO16.diff2         NA         NA      NA       NA  
-## CYTO17.diff2         NA         NA      NA       NA  
-## CYTO18.diff2         NA         NA      NA       NA  
-## CYTO19.diff2         NA         NA      NA       NA  
-## CYTO20.diff2         NA         NA      NA       NA  
-## CYTO21.diff2         NA         NA      NA       NA  
-## CYTO22.diff2         NA         NA      NA       NA  
-## CYTO23.diff2         NA         NA      NA       NA  
+##               Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  -0.252123   0.214766  -1.174   0.2404  
+## CYTO1.diff1   0.143448   0.218499   0.657   0.5115  
+## CYTO2.diff1   0.103976   0.137579   0.756   0.4498  
+## CYTO3.diff1  -0.005806   0.190482  -0.030   0.9757  
+## CYTO4.diff1  -0.064643   0.107101  -0.604   0.5461  
+## CYTO5.diff1   0.070831   0.079395   0.892   0.3723  
+## CYTO6.diff1  -0.076761   0.132543  -0.579   0.5625  
+## CYTO7.diff1  -0.049893   0.082915  -0.602   0.5474  
+## CYTO8.diff1  -0.091707   0.155682  -0.589   0.5558  
+## CYTO9.diff1  -0.437402   0.253034  -1.729   0.0839 .
+## CYTO10.diff1 -0.080684   0.169357  -0.476   0.6338  
+## CYTO11.diff1 -0.109897   0.128483  -0.855   0.3924  
+## CYTO12.diff1  0.057093   0.115799   0.493   0.6220  
+## CYTO13.diff1 -0.018716   0.072202  -0.259   0.7955  
+## CYTO14.diff1 -0.072874   0.177543  -0.410   0.6815  
+## CYTO15.diff1  0.137410   0.208923   0.658   0.5107  
+## CYTO16.diff1  0.170958   0.180380   0.948   0.3432  
+## CYTO17.diff1  0.228121   1.089671   0.209   0.8342  
+## CYTO18.diff1  0.160428   0.127014   1.263   0.2066  
+## CYTO19.diff1  0.155125   0.179116   0.866   0.3865  
+## CYTO20.diff1 -0.050211   0.168530  -0.298   0.7658  
+## CYTO21.diff1  0.178779   0.217802   0.821   0.4117  
+## CYTO22.diff1 -0.012614   0.205867  -0.061   0.9511  
+## CYTO23.diff1 -0.144951   0.222563  -0.651   0.5149  
+## CYTO1.diff2         NA         NA      NA       NA  
+## CYTO2.diff2         NA         NA      NA       NA  
+## CYTO3.diff2         NA         NA      NA       NA  
+## CYTO4.diff2         NA         NA      NA       NA  
+## CYTO5.diff2         NA         NA      NA       NA  
+## CYTO6.diff2         NA         NA      NA       NA  
+## CYTO7.diff2         NA         NA      NA       NA  
+## CYTO8.diff2         NA         NA      NA       NA  
+## CYTO9.diff2         NA         NA      NA       NA  
+## CYTO10.diff2        NA         NA      NA       NA  
+## CYTO11.diff2        NA         NA      NA       NA  
+## CYTO12.diff2        NA         NA      NA       NA  
+## CYTO13.diff2        NA         NA      NA       NA  
+## CYTO14.diff2        NA         NA      NA       NA  
+## CYTO15.diff2        NA         NA      NA       NA  
+## CYTO16.diff2        NA         NA      NA       NA  
+## CYTO17.diff2        NA         NA      NA       NA  
+## CYTO18.diff2        NA         NA      NA       NA  
+## CYTO19.diff2        NA         NA      NA       NA  
+## CYTO20.diff2        NA         NA      NA       NA  
+## CYTO21.diff2        NA         NA      NA       NA  
+## CYTO22.diff2        NA         NA      NA       NA  
+## CYTO23.diff2        NA         NA      NA       NA  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 272.12  on 199  degrees of freedom
-## Residual deviance: 253.07  on 176  degrees of freedom
-## AIC: 301.07
+## Residual deviance: 260.49  on 176  degrees of freedom
+## AIC: 308.49
 ## 
-## Number of Fisher Scoring iterations: 10</code></pre>
+## Number of Fisher Scoring iterations: 4</code></pre>
 <pre class="r"><code>changemain1.mod &lt;- glm(IRI ~ . -sample -patientid, data = diff1subset, family = &quot;binomial&quot;)
 summary(changemain1.mod)</code></pre>
 <pre><code>## 
@@ -787,44 +794,44 @@ summary(changemain1.mod)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.6713  -1.0306  -0.7583   1.2457   1.8192  
+## -1.4369  -1.0467  -0.8344   1.2335   1.9920  
 ## 
 ## Coefficients:
-##                Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept)  -4.081e-01  1.909e-01  -2.138   0.0325 *
-## CYTO1.diff1  -7.573e-04  2.920e-03  -0.259   0.7954  
-## CYTO2.diff1  -4.294e-05  3.743e-04  -0.115   0.9087  
-## CYTO3.diff1  -3.777e-04  8.793e-04  -0.430   0.6675  
-## CYTO4.diff1  -5.158e-03  4.535e-03  -1.137   0.2553  
-## CYTO5.diff1  -7.025e-03  9.654e-03  -0.728   0.4668  
-## CYTO6.diff1  -9.122e-05  4.312e-04  -0.212   0.8325  
-## CYTO7.diff1  -9.633e-06  2.007e-04  -0.048   0.9617  
-## CYTO8.diff1   2.171e-02  1.682e-02   1.290   0.1969  
-## CYTO9.diff1  -1.833e-02  1.226e-02  -1.495   0.1348  
-## CYTO10.diff1  2.639e-04  1.026e-02   0.026   0.9795  
-## CYTO11.diff1 -3.755e-04  6.153e-04  -0.610   0.5417  
-## CYTO12.diff1 -1.590e-03  1.822e-02  -0.087   0.9305  
-## CYTO13.diff1 -2.122e-07  2.464e-05  -0.009   0.9931  
-## CYTO14.diff1  3.084e-03  3.418e-03   0.902   0.3668  
-## CYTO15.diff1 -1.568e-02  3.870e-02  -0.405   0.6852  
-## CYTO16.diff1  4.161e-02  5.768e-02   0.721   0.4707  
-## CYTO17.diff1 -1.279e+00  1.747e+00  -0.732   0.4641  
-## CYTO18.diff1  2.030e-04  6.274e-04   0.324   0.7463  
-## CYTO19.diff1  5.967e-03  3.192e-02   0.187   0.8517  
-## CYTO20.diff1  3.536e-04  4.298e-04   0.823   0.4107  
-## CYTO21.diff1 -8.791e-03  2.561e-02  -0.343   0.7314  
-## CYTO22.diff1 -2.132e-03  2.469e-03  -0.863   0.3880  
-## CYTO23.diff1 -7.342e-03  1.262e-02  -0.582   0.5606  
+##               Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  -0.252123   0.214766  -1.174   0.2404  
+## CYTO1.diff1   0.143448   0.218499   0.657   0.5115  
+## CYTO2.diff1   0.103976   0.137579   0.756   0.4498  
+## CYTO3.diff1  -0.005806   0.190482  -0.030   0.9757  
+## CYTO4.diff1  -0.064643   0.107101  -0.604   0.5461  
+## CYTO5.diff1   0.070831   0.079395   0.892   0.3723  
+## CYTO6.diff1  -0.076761   0.132543  -0.579   0.5625  
+## CYTO7.diff1  -0.049893   0.082915  -0.602   0.5474  
+## CYTO8.diff1  -0.091707   0.155682  -0.589   0.5558  
+## CYTO9.diff1  -0.437402   0.253034  -1.729   0.0839 .
+## CYTO10.diff1 -0.080684   0.169357  -0.476   0.6338  
+## CYTO11.diff1 -0.109897   0.128483  -0.855   0.3924  
+## CYTO12.diff1  0.057093   0.115799   0.493   0.6220  
+## CYTO13.diff1 -0.018716   0.072202  -0.259   0.7955  
+## CYTO14.diff1 -0.072874   0.177543  -0.410   0.6815  
+## CYTO15.diff1  0.137410   0.208923   0.658   0.5107  
+## CYTO16.diff1  0.170958   0.180380   0.948   0.3432  
+## CYTO17.diff1  0.228121   1.089671   0.209   0.8342  
+## CYTO18.diff1  0.160428   0.127014   1.263   0.2066  
+## CYTO19.diff1  0.155125   0.179116   0.866   0.3865  
+## CYTO20.diff1 -0.050211   0.168530  -0.298   0.7658  
+## CYTO21.diff1  0.178779   0.217802   0.821   0.4117  
+## CYTO22.diff1 -0.012614   0.205867  -0.061   0.9511  
+## CYTO23.diff1 -0.144951   0.222563  -0.651   0.5149  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 272.12  on 199  degrees of freedom
-## Residual deviance: 253.07  on 176  degrees of freedom
-## AIC: 301.07
+## Residual deviance: 260.49  on 176  degrees of freedom
+## AIC: 308.49
 ## 
-## Number of Fisher Scoring iterations: 10</code></pre>
+## Number of Fisher Scoring iterations: 4</code></pre>
 <pre class="r"><code>changemain2.mod &lt;- glm(IRI ~ . -sample -patientid, data = diff2subset, family = &quot;binomial&quot;)
 summary(changemain2.mod)</code></pre>
 <pre><code>## 
@@ -834,44 +841,51 @@ summary(changemain2.mod)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.6713  -1.0306  -0.7583   1.2457   1.8192  
+## -1.4369  -1.0467  -0.8344   1.2335   1.9920  
 ## 
 ## Coefficients:
-##                Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept)  -4.081e-01  1.909e-01  -2.138   0.0325 *
-## CYTO1.diff2  -7.573e-04  2.920e-03  -0.259   0.7954  
-## CYTO2.diff2  -4.294e-05  3.743e-04  -0.115   0.9087  
-## CYTO3.diff2  -3.777e-04  8.793e-04  -0.430   0.6675  
-## CYTO4.diff2  -5.158e-03  4.535e-03  -1.137   0.2553  
-## CYTO5.diff2  -7.025e-03  9.654e-03  -0.728   0.4668  
-## CYTO6.diff2  -9.122e-05  4.312e-04  -0.212   0.8325  
-## CYTO7.diff2  -9.633e-06  2.007e-04  -0.048   0.9617  
-## CYTO8.diff2   2.171e-02  1.682e-02   1.290   0.1969  
-## CYTO9.diff2  -1.833e-02  1.226e-02  -1.495   0.1348  
-## CYTO10.diff2  2.639e-04  1.026e-02   0.026   0.9795  
-## CYTO11.diff2 -3.755e-04  6.153e-04  -0.610   0.5417  
-## CYTO12.diff2 -1.590e-03  1.822e-02  -0.087   0.9305  
-## CYTO13.diff2 -2.122e-07  2.464e-05  -0.009   0.9931  
-## CYTO14.diff2  3.084e-03  3.418e-03   0.902   0.3668  
-## CYTO15.diff2 -1.568e-02  3.870e-02  -0.405   0.6852  
-## CYTO16.diff2  4.161e-02  5.768e-02   0.721   0.4707  
-## CYTO17.diff2 -1.279e+00  1.747e+00  -0.732   0.4641  
-## CYTO18.diff2  2.030e-04  6.274e-04   0.324   0.7463  
-## CYTO19.diff2  5.967e-03  3.192e-02   0.187   0.8517  
-## CYTO20.diff2  3.536e-04  4.298e-04   0.823   0.4107  
-## CYTO21.diff2 -8.791e-03  2.561e-02  -0.343   0.7314  
-## CYTO22.diff2 -2.132e-03  2.469e-03  -0.863   0.3880  
-## CYTO23.diff2 -7.342e-03  1.262e-02  -0.582   0.5606  
+##               Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  -0.252123   0.214766  -1.174   0.2404  
+## CYTO1.diff2   0.143448   0.218499   0.657   0.5115  
+## CYTO2.diff2   0.103976   0.137579   0.756   0.4498  
+## CYTO3.diff2  -0.005806   0.190482  -0.030   0.9757  
+## CYTO4.diff2  -0.064643   0.107101  -0.604   0.5461  
+## CYTO5.diff2   0.070831   0.079395   0.892   0.3723  
+## CYTO6.diff2  -0.076761   0.132543  -0.579   0.5625  
+## CYTO7.diff2  -0.049893   0.082915  -0.602   0.5474  
+## CYTO8.diff2  -0.091707   0.155682  -0.589   0.5558  
+## CYTO9.diff2  -0.437402   0.253034  -1.729   0.0839 .
+## CYTO10.diff2 -0.080684   0.169357  -0.476   0.6338  
+## CYTO11.diff2 -0.109897   0.128483  -0.855   0.3924  
+## CYTO12.diff2  0.057093   0.115799   0.493   0.6220  
+## CYTO13.diff2 -0.018716   0.072202  -0.259   0.7955  
+## CYTO14.diff2 -0.072874   0.177543  -0.410   0.6815  
+## CYTO15.diff2  0.137410   0.208923   0.658   0.5107  
+## CYTO16.diff2  0.170958   0.180380   0.948   0.3432  
+## CYTO17.diff2  0.228121   1.089671   0.209   0.8342  
+## CYTO18.diff2  0.160428   0.127014   1.263   0.2066  
+## CYTO19.diff2  0.155125   0.179116   0.866   0.3865  
+## CYTO20.diff2 -0.050211   0.168530  -0.298   0.7658  
+## CYTO21.diff2  0.178779   0.217802   0.821   0.4117  
+## CYTO22.diff2 -0.012614   0.205867  -0.061   0.9511  
+## CYTO23.diff2 -0.144951   0.222563  -0.651   0.5149  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 272.12  on 199  degrees of freedom
-## Residual deviance: 253.07  on 176  degrees of freedom
-## AIC: 301.07
+## Residual deviance: 260.49  on 176  degrees of freedom
+## AIC: 308.49
 ## 
-## Number of Fisher Scoring iterations: 10</code></pre>
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>summary:</p>
+<ul>
+<li>overall log data : cyto 1, 17, 18, 22</li>
+<li>overall log po : none significant</li>
+<li>overall log lf : cyto 1, 2, 14</li>
+<li>overall log w1: cyto 22</li>
+</ul>
 <pre class="r"><code>xtabs(~ Inflammation, data = dataclean)</code></pre>
 <pre><code>## Inflammation
 ##   0   1   2   3 
