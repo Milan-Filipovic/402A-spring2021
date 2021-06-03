@@ -227,7 +227,7 @@ Log Transforming Data to use in anova modelling.
 ```{r}
 liri_tble <- isi_tble %>% select(starts_with("CYT")) %>% 
   log() %>% #log transforms the cytokine data frame
-  mutate(visittype = isi_tble$visittype, IRI = isi_tble$IRI) #add the factor variables back in 
+  mutate(visittype = isi_tble$visittype, IRI = isi_tble$IRI, ID = isi_tble$patientid) #add the factor variables back in 
 liri_tble 
 ```
 
@@ -284,5 +284,25 @@ twoway_modelList    <- lapply(responseList, function(resp) {
 twoway_modelList
 ```
 
+
 A significant interaction is not observed in any of the models between ISI and visittype. IRI is significant in the CYTO23 and CYTO22 anova. 
+
+
+
+Tryingto run logistic model with patient ID as a random effect. 
+```{r}
+library(lme4)
+library(MASS)
+
+
+liri_tble[ ,c(1:23)] <- scale(liri_tble[ ,c(1:23)])
+
+CYTO <- names(liri_tble[1:23])
+eqn <- as.formula(paste("IRI ~ (1 | ID)", paste(CYTO, collapse = " + "), sep = "+"))
+
+liri_tble$visittype <- as.numeric(liri_tble$visittype)
+#logistic mixed model using time and intercept as a mrandom effect for each patient ID 
+random <- glmer(eqn, data = liri_tble, family = binomial, nAGQ = 30, control=glmerControl(optimizer="bobyqa"))
+
+```
 
