@@ -830,7 +830,10 @@ dataPO$Inflammation <- factor(dataPO$Inflammation, levels = c("0", "1", "2", "3"
 dataPO$Inflammation
 
 # ordinal logistic regression model
-m1 <- polr(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+m1 <- polr(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 
+           + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 
+           + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, 
+           data = dataPO, Hess=TRUE)
 summary(m1)
 
 ## store table
@@ -864,7 +867,10 @@ xtabs(~ Necrosis, data = dataclean)
 dataPO1$Inflammation <- factor(dataPO1$Inflammation)
 
 # binary response model
-m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 
+          + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 
+          + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, 
+          data = dataPO1, family = "binomial")
 summary(m3)
 
 # CIs assuming normality
@@ -880,17 +886,7 @@ library(MASS)
 
 # Stepwise regression model
 step.model <- stepAIC(m3, direction = "both", trace = FALSE)
-# step.model <- full.model %>% stepAIC(trace = FALSE)
 
-<<<<<<< HEAD
-=======
-# Fit the full model 
-full.model <- lm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
-
-# Stepwise regression model
-step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
-
->>>>>>> refs/remotes/origin/main
 summary(step.model)
 ```
 
@@ -906,7 +902,10 @@ dataPO$Necrosis <- factor(dataPO$Necrosis, levels = c("0", "1", "2", "3", "4"))
 dataPO$Necrosis
 
 # ordinal logistic regression model
-m2 <- polr(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5  + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+m2 <- polr(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5  + CYTO6 + CYTO7 
+           + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 
+           + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, 
+           data = dataPO, Hess=TRUE)
 summary(m2)
 
 ## store table
@@ -929,7 +928,10 @@ We also attempt a binary response model on the positive/negative necrosis scores
 dataPO1$Necrosis <- factor(dataPO1$Necrosis)
 
 #binary response model
-m4 <- glm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+m4 <- glm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 
+          + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 
+          + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, 
+          data = dataPO1, family = "binomial")
 summary(m4)
 
 # CIs assuming normality
