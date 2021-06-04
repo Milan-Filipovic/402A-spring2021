@@ -295,7 +295,7 @@ library(lme4)
 library(MASS)
 
 
-liri_tble[ ,c(1:23)] <- scale(liri_tble[ ,c(1:23)])
+#liri_tble[ ,c(1:23)] <- scale(liri_tble[ ,c(1:23)])
 
 CYTO <- names(liri_tble[1:23])
 eqn <- as.formula(paste("IRI ~ (1 | ID)", paste(CYTO, collapse = " + "), sep = "+"))
