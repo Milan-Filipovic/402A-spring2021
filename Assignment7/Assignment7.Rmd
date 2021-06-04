@@ -209,6 +209,125 @@ isi_tble %>%
 * CYTO21 appears to have a large right skew, though it should be noted that many values were below level of detection in CYTO 21. 
 
 
+### Cytokines Trending With Time by Anova 
+
+First look at how cytokine values trend overtime
+```{r}
+
+library(ggpubr)
+
+
+#Reordering the visittype 
+isi_tble$visittype <- factor(isi_tble$visittype, levels = c("PO", "LF", "W1"))
+
+#One-way anova at each timepoint 
+for(i in c(7:29)){
+p <- isi_tble %>% 
+  ggplot() +
+  geom_boxplot(aes(x = visittype, y = log(isi_tble[[i]]), color = visittype)) + 
+  stat_compare_means(aes( x = visittype, y = log(isi_tble[[i]])), method = "anova",
+                     label.y = (max(log(isi_tble[[i]])) + 1)) + #positions the anova stat 
+  # stat_compare_means(aes( x = visittype, y = log(isi_tble[[i]])), label = "p.signif", method = "t.test",
+  #                    ref.group = ".all.") + 
+  geom_hline(yintercept = mean(log(isi_tble[[i]])), linetype = 2) + #adds horizontal line for mean 
+  ggtitle(paste("Histogram of Log", names(isi_tble)[i], "by Visit Type")) + 
+  ylab("pg/mL") + 
+  xlab("Visit Type") + 
+  theme_classic() 
+print(p)
+}
+```
+
+
+Only CYTO4, CYTO16, and CYTO17 are not significantly different by one way anova. 
+
+CYTO2 at the LF timepoint appears significantly larger. 
+CYTO7 at the LF timepoint appears significantly larger. 
+CYTO13 at the LF timepoint appears significantly larger. 
+In many of the cytokines, the concentration at the LF timepoint is larger, suggesting an elevated immune response during the LF timepoint. These cytokines include CYTO2, CYTO6, CYTO 7, CYTO13, CYTO20.
+The concentration of CYTO22 appears to decrease at each timepoint. 
+
+
+Log Transforming Data to use in anova modelling. 
+```{r}
+liri_tble <- isi_tble %>% select(starts_with("CYT")) %>% 
+  log() %>% #log transforms the cytokine data frame
+  mutate(visittype = isi_tble$visittype, IRI = isi_tble$IRI, ID = isi_tble$patientid) #add the factor variables back in 
+liri_tble 
+```
+
+
+A one-way anova to compare cytokine concentrations for different timepoints. A pairwise comparison for all  
+```{r}
+responseList <- names(liri_tble)[c(1:23)]
+modelList    <- lapply(responseList, function(resp) {
+                           mF <- formula(paste(resp, " ~ visittype"))
+                           aov(mF, data = liri_tble)
+                })
+
+HSDList    <- lapply(modelList, function(mod) {
+                           TukeyHSD(mod)
+                })
+HSDList
+```
+The Cytokines in which concentration at timepoint PO is significantly different from LF and W1, but LF and W1 are NOT significantly different from each other:
+CYTO6, CYTO 7, CYTO10, CYTO13, and CYTO23. It should be noted that in CYTO23, concentration at LF was actually significantly lower than LF and W1. CYTO 2, CYTO13 and CYTO20 were significantly different at every timepoint. 
+
+
+
+Two-way Interaction Plot. Here median values are plotted over the visit types. It should be noted that CYTO4, CYTO16, and CYTO17 were not included because significance was not found in the anova test. 
+```{r}
+#need to add titles here 
+#I use median instead of mean due to outliers in data set 
+for(i in c(1:20)){
+iri_tble2<- liri_tble %>% select(starts_with("CYTO"), -CYTO4, -CYTO16, -CYTO17)
+    interaction.plot(x.factor = liri_tble$visittype,
+                 response = liri_tble[[i]],
+                 trace.factor = liri_tble$IRI,
+                 fun = median,
+                 ylab = "pg/mL",
+                 xlab = paste(names(iri_tble2)[i], "Visit Type"),
+                 col = c("red", "blue"),
+                 trace.label = "IRI Status")
+}
+```
+
+
+Possible interaction effect between ISI status and visit type in CYTO5, 7, 8, 14, 19 and 21. 
+
+
+Running two-way anova 
+```{r}
+twoway_modelList    <- lapply(responseList, function(resp) {
+                           mF <- formula(paste(resp, " ~ visittype*IRI"))
+                           anova(lm(mF, data = isi_tble))
+                })
+twoway_modelList
+```
+
+
+A significant interaction is not observed in any of the models between ISI and visittype. IRI effect is significant explaining the variation in CYTO23 and CYTO22, which indicates IRI status is associated with CYTO23 and CYTO22 given visit type. 
+
+
+
+Trying to run logistic model with patient ID as a random effect. 
+```{r}
+library(lme4)
+library(MASS)
+
+
+#liri_tble[ ,c(1:23)] <- scale(liri_tble[ ,c(1:23)])
+
+CYTO <- names(liri_tble[1:23])
+eqn <- as.formula(paste("IRI ~ (1 | ID)", paste(CYTO, collapse = " + "), sep = "+"))
+
+liri_tble$visittype <- as.numeric(liri_tble$visittype)
+#logistic mixed model using time and intercept as a mrandom effect for each patient ID 
+random <- glmer(eqn, data = liri_tble, family = binomial, nAGQ = 0, control=glmerControl(optimizer="bobyqa"))
+summary(random)
+``` 
+
+
 ## Analysis of data set:
 
 Question 2: What cytokines in the pre-transplant blood sample specifically correlate with:
