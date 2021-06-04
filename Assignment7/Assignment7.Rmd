@@ -302,7 +302,7 @@ eqn <- as.formula(paste("IRI ~ (1 | ID)", paste(CYTO, collapse = " + "), sep = "
 
 liri_tble$visittype <- as.numeric(liri_tble$visittype)
 #logistic mixed model using time and intercept as a mrandom effect for each patient ID 
-random <- glmer(eqn, data = liri_tble, family = binomial, nAGQ = 30, control=glmerControl(optimizer="bobyqa"))
-
+random <- glmer(eqn, data = liri_tble, family = binomial, nAGQ = 0, control=glmerControl(optimizer="bobyqa"))
+summary(random)
 ```
 
