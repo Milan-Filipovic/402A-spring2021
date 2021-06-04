@@ -2,17 +2,45 @@
 title: "B402A Assignment 7"
 author: "Lillian Chen, Milan Filipovic, Vivian Truong"
 date: "5/24/2021"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
+
+# Allyson Terry’s study on immunologic response to liver allograft injury
+
+## Statement of statistical hypothesis(es):
+
+1. What cytokines are significantly different between IRI- and IRI+ patients in the larger cohort of 100 liver transplant patients?
+
+a. Do these cytokines influence IRI individually?
+b. Do these cytokines influence IRI together?
+c. Are any of these cytokines significantly different at more than one timepoint?
+
+2. What cytokines in the pre-transplant blood sample specifically correlate with:
+
+a. Immune cell infiltration after transplant? (Inflammation score)
+b. Dead cells in the liver after transplant? (Necrosis score)
+
+## Background information:
+
+Ischemia-reperfusion injury (IRI) is when an organ loses and then regains access to blood flow, commonly occurring with organ transplantation. The immune response elicited by IRI can be severe enough to negatively affect the function and survival of the donated organ. One of two main ways that the cells in the body communicate is through cytokines, which are secreted proteins that are present in the blood of transplant patients and can influence the degree of inflammation that occurs during and after IRI. Two characteristics that doctors use to determine if a patient is IRI+ or IRI- are the inflammation score, which is the amount of immune cells in the liver after transplant and the necorsis score, which is the amount of dead cells in the liver after transplant. These characteristics of inflammation and necrosis are scored from 0 to 4, with 0 being the least severe and 4 being the most severe.
+
+## Sample data description:
+
+The study includes 100 liver transplant patients, 42 of which are IRI+ and 58 IRI-. The analysis includes 23 cytokines. The data set also includes the inflammation score, necrosis score, and visit type for each patient.
+
+## Variable assessment:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(stringr)
-library(data.table)
-library(MASS)
-library(lme4)
+library(haven)
 library(gt)
+library(tidyr)
+library(ggforce) #can be used for large facet grids
+library(dplyr)
 ```
 
 ```{r}
@@ -35,35 +63,229 @@ dataclean <- data %>%
                   str_starts(.x, "1|2|3|4|5|6|7|8|9|0") == T ~ as.numeric(.x)
                 )))
 
-fwrite(dataclean, file = "dataclean.csv", col.names = T)
+```
 
-str(dataclean)
+```{r}
+library(data.table)
+isidata <- fread(file = "dataclean.csv", header = T, stringsAsFactors = F)
+(isi_tble <- tibble(isidata))
+```
+
+We begin by visualizing the distribution of cytokine values 
+
+
+
+```{r}
+
+isi_tble %>% 
+  select(CYTO1:CYTO6) %>% 
+  gather() %>% 
+  ggplot(aes(value)) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram()
+
+isi_tble %>% 
+  select(CYTO7:CYTO12) %>% 
+  gather() %>% 
+  ggplot(aes(value)) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram()
+
+isi_tble %>% 
+  select(CYTO13:CYTO18) %>% 
+  gather() %>% 
+  ggplot(aes(value)) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram()
+
+isi_tble %>% 
+  select(CYTO19:CYTO23) %>% 
+  gather() %>% 
+  ggplot(aes(value)) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram()
+
+## my attempt to facet in one plot. Does not look good
+isi_tble %>% select(starts_with("CYT")) %>%
+  gather() %>%
+  ggplot(aes(value)) +
+facet_wrap(~ key, scales ="free") +
+# facet_grid_paginate(~ key, ncol = 3, nrow = 3, page = 2)
+  geom_boxplot()
+```
+
+The Cytokine distributions are characterized by heavy right skew. 
+
+Now log transform all Cytokines
+```{r}
+
+isi_tble %>% 
+  select(CYTO1:CYTO6) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+isi_tble %>% 
+  select(CYTO7:CYTO12) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+isi_tble %>% 
+  select(CYTO13:CYTO18) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+isi_tble %>% 
+  select(CYTO19:CYTO23) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_histogram() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
 
 ```
 
-```{r separating data based on visit}
+```{r}
 
+isi_tble %>% 
+  select(CYTO1:CYTO6) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_boxplot() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+isi_tble %>% 
+  select(CYTO7:CYTO12) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_boxplot() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+isi_tble %>% 
+  select(CYTO13:CYTO18) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_boxplot() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+isi_tble %>% 
+  select(CYTO19:CYTO23) %>% 
+  gather() %>% 
+  ggplot(aes(log(value))) + 
+ facet_wrap(~ key, nrow = 3, scales = "free") + 
+  geom_boxplot() + 
+  labs(title = "Log Transformed") +
+  xlab("log pg/mL")
+
+
+```
+
+* Among the log transformed cytokine values, it is seen that that overall normality is improved. 
+ + CYTO12 and CYTO 19 appears to have a similar distribution when looking at the histogram, with large left skew and lack of density left of the peak density. 
+ + CYTO13 appears as if it may have another peak in the right tail. It is right skewed. 
+* CYTO 15 appears to have several outliers in the higher range.
+* CYTO16 appears right skewed. 
+* CYTO18 appears to have lower outliers. 
+* CYTO17 has many values below level of detection, therefore the transformation did not affect overall normality. 
+* CYTO21 appears to have a large right skew, though it should be noted that many values were below level of detection in CYTO 21. 
+
+
+## Analysis of data set:
+
+Question 2: What cytokines in the pre-transplant blood sample specifically correlate with:
+
+a. Immune cell infiltration after transplant? (Inflammation score)
+
+Since we are looking at cytokines in pre-transplant blood samples, we first filter for pre-operation data.
+
+```{r}
+# filter for preoperation data
 dataPO <- dataclean %>% 
   filter(visittype == "PO")
 
-dataLF <- dataclean %>% 
-  filter(visittype == "LF")
+# crosstabs on preoperation data
+xtabs(~ Inflammation, data = dataPO)
+xtabs(~ Necrosis, data = dataPO)
+```
 
-dataW1 <- dataclean %>% 
-  filter(visittype == "W1")
+We reassign the numerical inflammation scores to reflect  negative and positive scores.
+
+```{r}
+dataPO1 <- dataPO
+
+# reassigning inflammation scores 0=negative and 2=positive
+dataPO1$Inflammation[dataPO$Inflammation == 0] <- 0
+dataPO1$Inflammation[dataPO$Inflammation == 1] <- 0
+
+dataPO1$Inflammation[dataPO$Inflammation == 2] <- 2
+dataPO1$Inflammation[dataPO$Inflammation == 3] <- 2
+dataPO1$Inflammation[dataPO$Inflammation == 4] <- 2
 
 
+# reassigning necrosis scores 0=negative and 2=positive
+dataPO1$Necrosis[dataPO$Necrosis == 0] <- 0
+dataPO1$Necrosis[dataPO$Necrosis == 1] <- 0
 
+dataPO1$Necrosis[dataPO$Necrosis == 2] <- 2
+dataPO1$Necrosis[dataPO$Necrosis == 3] <- 2
+dataPO1$Necrosis[dataPO$Necrosis == 4] <- 2
 
-
+# crosstabs to check that reassigned values match original data
+xtabs(~ Inflammation, data = dataPO1)
+xtabs(~ Necrosis, data = dataPO1)
 ```
 
 
-```{r visual plotting of cytokines}
+We attempt an ordinal logistic regression model with the numeric inflammation scores. The confidence interval for cytokine 18 does not include 0, which suggests that it may be statistically significant.
 
 
+
+```{r}
+library(MASS)
+# releveled inflammation as factor
+dataPO$Inflammation <- factor(dataPO$Inflammation, levels = c("0", "1", "2", "3", "4"))
+dataPO$Inflammation
+
+# ordinal logistic regression model
+m1 <- polr(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+summary(m1)
+
+## store table
+(ctable1 <- coef(summary(m1)))
+
+## calculate and store p values
+p1 <- pnorm(abs(ctable1[, "t value"]), lower.tail = FALSE) * 2
+
+## combined table
+(ctable1 <- cbind(ctable1, "p value" = p1))
+
+# CIs assuming normality
+confint.default(m1)
+
+#Using step function 
+step_m1 <- step(m1, trace = F)
 ```
 
+We also attempt a binary response model with the positive/negative inflammation scores. The confidence interval for cytokine 4 does not include 0, which suggests that it may be statistically significant.
 
 ```{r Research Question 2}
 
@@ -72,7 +294,98 @@ xtabs(~ Necrosis, data = dataclean)
 
 # split outcomes (Inflammation or Necrosis Score) with 0-1 vs 2+ as -/+
 # try two types of models: ordered factor outcome and binary outcome (try both)
+```
+```{r}
+# releveled inflammation as factor
+dataPO1$Inflammation <- factor(dataPO1$Inflammation)
 
+# binary response model
+m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+summary(m3)
+
+# CIs assuming normality
+confint.default(m3)
 ```
 
+We also try a stepwise regression model. Cytokines 4, 9, 11, 14, 16, and 23 have p-values less than 0.05, which suggests that they may specifically correlate with immune cell infiltration after transplant.
+
+```{r}
+# install.packages("leaps")
+# install.packages("caret")
+library(caret)
+library(leaps)
+library(MASS)
+
+# Fit the full model 
+full.model <- lm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
+
+# Stepwise regression model
+step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
+summary(step.model)
+```
+
+
+<<<<<<< HEAD
+=======
+b. Dead cells in the liver after transplant? (Necrosis score)
+
+We attempt an ordinal logistic regression model on the numerical necrosis scores.
+
+```{r}
+library(MASS)
+# releveled necrosis as factor
+dataPO$Necrosis <- factor(dataPO$Necrosis, levels = c("0", "1", "2", "3", "4"))
+dataPO$Necrosis
+
+# ordinal logistic regression model
+m2 <- polr(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5  + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+summary(m2)
+
+## store table
+(ctable2 <- coef(summary(m2)))
+
+## calculate and store p values
+p2 <- pnorm(abs(ctable2[, "t value"]), lower.tail = FALSE) * 2
+
+## combined table
+(ctable2 <- cbind(ctable2, "p value" = p2))
+
+# CIs assuming normality
+confint.default(m2)
+```
+
+* CI for CYTO17 and CYTO18 does not include 0
+
+We also attempt a binary response model on the positive/negative necrosis scores.
+
+```{r}
+# releveled necrosis as factor
+dataPO1$Necrosis <- factor(dataPO1$Necrosis)
+
+#binary response model
+m4 <- glm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+summary(m4)
+
+# CIs assuming normality
+confint.default(m4)
+```
+
+* CI for all CYTO includes 0
+
+We also try a stepwise regression model.
+```{r}
+library(caret)
+library(leaps)
+library(MASS)
+# Fit the full model 
+full.model <- lm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
+# Stepwise regression model
+step.model <- stepAIC(full.model, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+```
+
+* CYTO2
+
+## Interpretation of results in terms of the original research hypotheses:
 
