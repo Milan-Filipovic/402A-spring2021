@@ -5,8 +5,11 @@ date: "5/24/2021"
 output:
   html_document:
     df_print: paged
+
 ---
 
+
+    
 # Allyson Terry’s study on immunologic response to liver allograft injury
 
 ## Statement of statistical hypothesis(es):
@@ -52,8 +55,8 @@ library(dplyr)
 library(gtsummary)
 ```
 
-```{r, message = F}
-
+```{r, message = F, echo=F}
+options(warn = -1)  ##suppress warnings for this session 
 data <- readxl::read_xlsx("./20210521_402a.xlsx", col_names = T, skip = 1)
 
 str(data)
@@ -245,7 +248,7 @@ It should be noted that due to many observations below detection, CytO17 should 
 ### Cytokines Trending With Time by Anova 
 
 First look at how cytokine values trend overtime
-```{r}
+```{r,warning=F, message=F}
 
 library(ggpubr)
 
@@ -727,7 +730,7 @@ stepint2.table <- stepint2.mod %>%
 ```
 
 Correlation Plots
-```{r corr plot, message = F}
+```{r corr plot, message = F, warning=F}
 library(ggcorrplot)
 corr.main <- round(cor(logdataclean[,c(3, 7:29)]), 3)
 corr.change <- round(cor(changesubset[,3:26]), 3)
@@ -838,7 +841,7 @@ xtabs(~ Necrosis, data = dataPO)
 
 We reassign the numerical inflammation scores to reflect  negative and positive scores.
 
-```{r, message = F, warning = F}
+```{r, message=FALSE, warning=FALSE}
 dataPO1 <- dataPO
 
 # reassigning inflammation scores 0=negative and 2=positive
@@ -865,7 +868,7 @@ xtabs(~ Necrosis, data = dataPO1)
 
 We attempt an ordinal logistic regression model with the numeric inflammation scores. The confidence interval for cytokine 23 does not include 0, which suggests that it may be statistically significant.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(MASS)
 # releveled inflammation as factor
 dataPO$Inflammation <- factor(dataPO$Inflammation, levels = c("0", "1", "2", "3", "4"))
@@ -925,7 +928,6 @@ We also try a stepwise regression model, which gives the best fittedd model. Cyt
 library(caret)
 library(leaps)
 library(MASS)
-
 # Stepwise regression model
 step.model <- stepAIC(m3, direction = "both", trace = FALSE)
 
@@ -991,5 +993,6 @@ library(MASS)
 step.model <- stepAIC(m4, direction = "both", 
                       trace = FALSE)
 summary(step.model)
+options(warn = 0)
 ```
 
