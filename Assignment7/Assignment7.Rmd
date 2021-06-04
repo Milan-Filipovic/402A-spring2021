@@ -271,12 +271,10 @@ print(p)
 }
 ```
 
+### Histogram By Visit Type Interpretation 
 
-Only CYTO4, CYTO16, and CYTO17 concentrations are not significantly different at the different visits by one way anova. In all other cytokines, an overall difference in mean concentration was dtected. The overall mean at all timepoints is displayed with a horizontal line. 
+Only CYTO4, CYTO16, and CYTO17 concentrations are not significantly different at the different visits by one way anova. In all other cytokines, an overall difference in mean concentration was detected. The overall mean at all timepoints is displayed with a horizontal line. 
 
-CYTO2 at the LF timepoint appears significantly larger. 
-CYTO7 at the LF timepoint appears significantly larger. 
-CYTO13 at the LF timepoint appears significantly larger. 
 In many of the cytokines, the concentration at the LF timepoint is larger, suggesting an elevated immune response during the LF timepoint. These cytokines include CYTO2, CYTO6, CYTO 7, CYTO13, CYTO20.
 The concentration of CYTO22 appears to decrease at each timepoint. 
 
@@ -307,6 +305,7 @@ CYTO6, CYTO 7, CYTO10, CYTO13, and CYTO23. It should be noted that in CYTO23, co
 CYTO 2, CYTO13 and CYTO20 were significantly different for each pairwise comparison.  
 
 
+### Interaction Plots 
 
 To explore how cytokine concentrations trend over time in IRI positive and negative patients, interaction plots between IRI status and visit are visualized below.  Here median values are plotted over the visit types. It should be noted that CYTO4, CYTO16, and CYTO17 were not included because significance was not found in the anova test. 
 
@@ -325,6 +324,8 @@ iri_tble2<- liri_tble %>% select(starts_with("CYTO"), -CYTO4, -CYTO16, -CYTO17)
                  trace.label = "IRI Status") 
 }
 ```
+
+
 The interaction plots indicate possible interaction effect between IRI status and visit type in CYTO5, 7, 8, 14, 19 and 21.
 
 To explore whether IRI status explains variation in cytokine concentrations, two-way anovas will be conducted with IRI status and visit type as factor levels. A separate anova for each cytokine concentration will be conducted. 
@@ -798,7 +799,8 @@ changemain2.table
 
 ```
 
-Trying to run logistic model with patient ID as a random effect. 
+
+A logistic model with random intercept per patient was also ran. This model aims to capture variation within each subject for each timepoint. We see that none of the predictors are significant. It is important to note that the method used to run this model may be biased, and the results should be taken with some skepticism. 
 ```{r}
 library(lme4)
 library(MASS)
