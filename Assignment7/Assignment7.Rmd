@@ -19,6 +19,8 @@ c. Are any of these cytokines significantly different at more than one timepoint
 
 To determine if cytokines influence IRI individually, binary logistic regression will be conducted with IRI injury as the outcome variable, with difference  between timepoints in cytokine concentrations as covariates. 
 
+To address what cytokines influence IRI together, a correlation plot was constructed to visualize related cytokines. 
+
 To address whether cytokines significantly differ at more than one timepoint, separate one-way anovas with visit type as the factor variable will be conducted with each cytokine as the outcome variable. Furthermore, two-way anovas will be conducted for each cytokine concentration with visit type and IRI status as factor variables to explore if time and IRI status explain variation in cytokine concentration. 
 
 2. What cytokines in the pre-transplant blood sample specifically correlate with:
@@ -76,12 +78,16 @@ isidata <- fread(file = "dataclean.csv", header = T, stringsAsFactors = F)
 
 Create patient characteristics table. 
 ```{r}
+#namess
 library(gtsummary)
+
+CYTO <- names(isi_tble[7:29])  #vector of cytokine variable names 
+
 demographic_table <- isi_tble %>% 
    mutate(IRI = ifelse( IRI == 0, "IRI-", "IRI+")) %>%
   select(-patientid, -sample) %>% 
   tbl_summary(by = IRI, 
-              statistic = CYTO ~    #code CYTO
+              statistic = CYTO ~  
               "{median} ({p25}, {p75})",
               digits = all_continuous() ~ 2,
               label = list(visittype ~ "Visit Type"),
@@ -277,10 +283,11 @@ To investigate this further, pairwise comparisons will be conducted using Tukey'
  
 ```{r}
 # Log Transforming Data to use in anova modelling. 
-responseList <- names(liri_tble)[c(1:23)]
+
 liri_tble <- isi_tble %>% select(starts_with("CYT")) %>% 
   log() %>% #log transforms the cytokine data frame
   mutate(visittype = isi_tble$visittype, IRI = isi_tble$IRI, ID = isi_tble$patientid) #add the factor variables back in 
+responseList <- names(liri_tble)[c(1:23)]
 
 modelList    <- lapply(responseList, function(resp) {
                            mF <- formula(paste(resp, " ~ visittype"))
@@ -871,10 +878,18 @@ library(caret)
 library(leaps)
 library(MASS)
 
+<<<<<<< HEAD
 # Stepwise regression model
 step.model <- stepAIC(m3, direction = "both", trace = FALSE)
 # step.model <- full.model %>% stepAIC(trace = FALSE)
 
+=======
+# Fit the full model 
+full.model <- lm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
+
+Stepwise regression model
+step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
+>>>>>>> 1d661bf617b0df392ca8f6f047bd62f48588b7a3
 summary(step.model)
 ```
 
