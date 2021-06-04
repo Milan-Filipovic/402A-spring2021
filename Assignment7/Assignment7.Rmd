@@ -50,8 +50,6 @@ data <- readxl::read_xlsx("./20210521_402a.xlsx", col_names = T, skip = 1)
 
 str(data)
 
-#lalalalalalalalala
-
 dataclean <- data %>% 
   rename(sample = "Sample #",
          patientid = "Patient ID",
@@ -71,6 +69,27 @@ library(data.table)
 isidata <- fread(file = "dataclean.csv", header = T, stringsAsFactors = F)
 (isi_tble <- tibble(isidata))
 ```
+
+Create patient characteristics table. 
+```{r}
+library(gtsummary)
+demographic_table <- isi_tble %>% 
+   mutate(IRI = ifelse( IRI == 0, "No IRI Injury", "IRI Injury")) %>%
+  select(-patientid, -sample) %>% 
+  tbl_summary(by = IRI, 
+              statistic = CYTO ~    #code CYTO
+              "{median} ({p25}, {p75})",
+              digits = all_continuous() ~ 2,
+              label = list(visittype ~ "Visit Type"),
+              missing_text = "Missing") %>% 
+  add_overall() %>% 
+  bold_labels() %>%
+  add_p() %>% 
+  bold_p() %>% 
+  modify_header(label ~ "**Table 1. Patient Characteristics**" )
+demographic_table
+```
+
 
 We begin by visualizing the distribution of cytokine values 
 
