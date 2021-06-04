@@ -230,12 +230,9 @@ summary(w1.mod)
 prefix <- "CYTO"
 suffix <- seq(1:23)
 values <- paste(prefix, suffix, sep = "")
-diffs <- c("diff1", "diff2")
 
 diffnames <- NULL
-for (i in 1:length(diffs)){
-  diffnames <- c(diffnames, paste(values, diffs[i], sep = "."))
-}
+diffnames <- c(diffnames, paste(values, "diffs", sep = "."))
 
 # wide data
 iriwidedata <- logdataclean %>% 
@@ -253,25 +250,99 @@ changesubset <- irichangedata %>%
   group_by(patientid) %>% 
   slice(2:n())
 
+CYTObaseline <- logdataclean %>% 
+  filter(visittype == "PO") %>% 
+  select(patientid, CYTO1:CYTO23)
+
+changesubsetbaseline <- left_join(changesubset, CYTObaseline, by = "patientid")
+
 diff1subset <- changesubset %>% 
-  select(-(CYTO1.diff2:CYTO23.diff2))
+  group_by(patientid) %>% 
+  slice(1)
 
 diff2subset <- changesubset %>% 
-  select(-(CYTO1.diff1:CYTO23.diff1))
+  group_by(patientid) %>% 
+  slice(2)
 
 
 # change model
 changemain.mod <- glm(IRI ~ . -sample -patientid, data = changesubset, family = "binomial")
 summary(changemain.mod)
+step(changemain.mod)
+
+#Call:  glm(formula = IRI ~ 1, family = "binomial", data = changesubset)
+# 
+# Coefficients:
+# (Intercept)  
+#     -0.3228  
+# 
+# Degrees of Freedom: 199 Total (i.e. Null);  199 Residual
+# Null Deviance:	    272.1 
+# Residual Deviance: 272.1 	AIC: 274.1
+
+# change model
+changemainbase.mod <- glm(IRI ~ . -sample -patientid, data = changesubsetbaseline, family = "binomial")
+summary(changemainbase.mod)
+step(changemainbase.mod)
+
+# glm(formula = IRI ~ CYTO9.diffs + CYTO18.diffs + CYTO22.diffs + 
+#     CYTO1 + CYTO3 + CYTO4 + CYTO15 + CYTO16 + CYTO17 + CYTO21 + 
+#     CYTO22 + CYTO23, family = "binomial", data = changesubsetbaseline)
+# 
+# Coefficients:
+#  (Intercept)   CYTO9.diffs  CYTO18.diffs  CYTO22.diffs         CYTO1         CYTO3         CYTO4        CYTO15        CYTO16        CYTO17  
+#      -2.1782       -0.2740        0.1561        0.3408        0.4156       -0.3627       -0.1527       -0.7015        0.5859       -0.8471  
+#       CYTO21        CYTO22        CYTO23  
+#      -0.2697        0.4244        0.8210  
+# 
+# Degrees of Freedom: 199 Total (i.e. Null);  187 Residual
+# Null Deviance:	    272.1 
+# Residual Deviance: 237.6 	AIC: 263.6
 
 # only change from po to lf
 changemain1.mod <- glm(IRI ~ . -sample -patientid, data = diff1subset, family = "binomial")
 summary(changemain1.mod)
+step(changemain1.mod)
+# glm(formula = IRI ~ CYTO2.diffs + CYTO3.diffs + CYTO4.diffs + 
+#     CYTO9.diffs + CYTO10.diffs + CYTO13.diffs + CYTO14.diffs + 
+#     CYTO18.diffs + CYTO19.diffs + CYTO23.diffs, family = "binomial", 
+#     data = diff1subset)
+# 
+# Coefficients:
+#  (Intercept)   CYTO2.diffs   CYTO3.diffs   CYTO4.diffs   CYTO9.diffs  CYTO10.diffs  CYTO13.diffs  CYTO14.diffs  CYTO18.diffs  CYTO19.diffs  
+#      -1.4014       -0.4890        0.5601        0.4316        1.5653        0.5286        0.2369       -0.7711        0.2313       -1.2389  
+# CYTO23.diffs  
+#      -0.6864  
+# 
+# Degrees of Freedom: 99 Total (i.e. Null);  89 Residual
+# Null Deviance:	    136.1 
+# Residual Deviance: 115.9 	AIC: 137.9
 
 # only change from lf to w1
 changemain2.mod <- glm(IRI ~ . -sample -patientid, data = diff2subset, family = "binomial")
 summary(changemain2.mod)
+step(changemain2.mod)
+# glm(formula = IRI ~ CYTO2.diffs + CYTO4.diffs + CYTO9.diffs + 
+#     CYTO13.diffs + CYTO14.diffs + CYTO16.diffs, family = "binomial", 
+#     data = diff2subset)
+# 
+# Coefficients:
+#  (Intercept)   CYTO2.diffs   CYTO4.diffs   CYTO9.diffs  CYTO13.diffs  CYTO14.diffs  CYTO16.diffs  
+#      -1.4135        0.3515       -0.2009       -0.9077       -0.2089        0.6576        0.4266  
+# 
+# Degrees of Freedom: 99 Total (i.e. Null);  93 Residual
+# Null Deviance:	    136.1 
+# Residual Deviance: 114.2 	AIC: 128.2
 
+#tblsummary
+
+# random effects - didn't work
+CYTOchange <- names(changesubset[4:49])
+eqn <- as.formula(paste("IRI ~ (1 | patientid)", 
+                        paste(CYTOchange1, collapse = " + "), sep = "+"))
+randomeffects.changemod <- glmer(eqn, data = changesubset, family = "binomial", 
+                                 nAGQ = 30, control = glmerControl(optimizer= "bobyqa"))
+summary(randomeffects.changemod)
 
 library(ggcorrplot)
 corr.change <- round(cor(changesubset[3:49]), 3)
