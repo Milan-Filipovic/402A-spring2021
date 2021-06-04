@@ -28,6 +28,8 @@ To address whether cytokines significantly differ at more than one timepoint, se
 a. Immune cell infiltration after transplant? (Inflammation score)
 b. Dead cells in the liver after transplant? (Necrosis score)
 
+To address what cytokines in the pre-transplant blood sample specifically correlate with immune cell infiltration after transplant and dead cells in the liver after transplant, a series of models were conducted using both inflammation score and necrosis score before reaching the best fitted model: ordinal logistic regression model, binary response model, and stepwise regression model.
+
 ## Background information:
 
 Ischemia-reperfusion injury (IRI) is when an organ loses and then regains access to blood flow, commonly occurring with organ transplantation. The immune response elicited by IRI can be severe enough to negatively affect the function and survival of the donated organ. One of two main ways that the cells in the body communicate is through cytokines, which are secreted proteins that are present in the blood of transplant patients and can influence the degree of inflammation that occurs during and after IRI. Two characteristics that doctors use to determine if a patient is IRI+ or IRI- are the inflammation score, which is the amount of immune cells in the liver after transplant and the necorsis score, which is the amount of dead cells in the liver after transplant. These characteristics of inflammation and necrosis are scored from 0 to 4, with 0 being the least severe and 4 being the most severe.
@@ -988,7 +990,4 @@ step.model <- stepAIC(m4, direction = "both",
                       trace = FALSE)
 summary(step.model)
 ```
-
-
-## Interpretation of results in terms of the original research hypotheses:
 
