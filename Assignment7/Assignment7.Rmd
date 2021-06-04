@@ -17,6 +17,10 @@ a. Do these cytokines influence IRI individually?
 b. Do these cytokines influence IRI together?
 c. Are any of these cytokines significantly different at more than one timepoint?
 
+To determine if cytokines influence IRI individually, binary logistic regression will be conducted with IRI injury as the outcome variable, with difference  between timepoints in cytokine concentrations as covariates. 
+
+To address whether cytokines significantly differ at more than one timepoint, separate one-way anovas with visit type as the factor variable will be conducted with each cytokine as the outcome variable. Furthermore, two-way anovas will be conducted for each cytokine concentration with visit type and IRI status as factor variables to explore if time and IRI status explain variation in cytokine concentration. 
+
 2. What cytokines in the pre-transplant blood sample specifically correlate with:
 
 a. Immune cell infiltration after transplant? (Inflammation score)
@@ -74,7 +78,7 @@ Create patient characteristics table.
 ```{r}
 library(gtsummary)
 demographic_table <- isi_tble %>% 
-   mutate(IRI = ifelse( IRI == 0, "No IRI Injury", "IRI Injury")) %>%
+   mutate(IRI = ifelse( IRI == 0, "IRI-", "IRI+")) %>%
   select(-patientid, -sample) %>% 
   tbl_summary(by = IRI, 
               statistic = CYTO ~    #code CYTO
@@ -90,9 +94,9 @@ demographic_table <- isi_tble %>%
 demographic_table
 ```
 
+It should be noted that a significant difference between IRI- and IRI+ patients was detected for necrosis score (p <.001).
 
-We begin by visualizing the distribution of cytokine values 
-
+The significance test for cytokine concentration was conducted using a nonparametric method, so it is more robust to assumptions of normality. CYTO11, CYTO17, and CYTO22 were found to be significantly different. Next we visualize the distribution of cytokine concentration. 
 
 
 ```{r}
