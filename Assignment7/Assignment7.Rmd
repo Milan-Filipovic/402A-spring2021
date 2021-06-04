@@ -185,7 +185,11 @@ isi_tble %>%
 
 
 
-Hypothesis 2:
+Question 2: What cytokines in the pre-transplant blood sample specifically correlate with:
+
+a. Immune cell infiltration after transplant? (Inflammation score)
+
+Since we are looking at cytokines in pre-transplant blood samples, we first filter for pre-operation data.
 
 ```{r}
 # filter for preoperation data
@@ -196,6 +200,8 @@ dataPO <- dataclean %>%
 xtabs(~ Inflammation, data = dataPO)
 xtabs(~ Necrosis, data = dataPO)
 ```
+
+We reassign the numerical inflammation scores to reflect  negative and positive scores.
 
 ```{r}
 dataPO1 <- dataPO
@@ -221,7 +227,10 @@ xtabs(~ Inflammation, data = dataPO1)
 xtabs(~ Necrosis, data = dataPO1)
 ```
 
+We attempt an ordinal logistic regression model with the numeric inflammation scores.
+
 ```{r}
+library(MASS)
 # releveled inflammation as factor
 dataPO$Inflammation <- factor(dataPO$Inflammation, levels = c("0", "1", "2", "3", "4"))
 dataPO$Inflammation
@@ -248,6 +257,45 @@ step_m1 <- step(m1, trace = F)
 
 * CI for CYTO18 does not include 0
 
+We also attempt a binary response model with the positive/negative inflammation scores.
+
+```{r}
+# releveled inflammation as factor
+dataPO1$Inflammation <- factor(dataPO1$Inflammation)
+
+# binary response model
+m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+summary(m3)
+
+# CIs assuming normality
+confint.default(m3)
+```
+
+* CI for CYTO4 does not include 0
+
+We also try a stepwise regression model.
+
+```{r}
+# install.packages("leaps")
+# install.packages("caret")
+library(caret)
+library(leaps)
+library(MASS)
+# Fit the full model 
+full.model <- lm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
+# Stepwise regression model
+step.model <- stepAIC(full.model, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+```
+
+* CYTO4, CYTO9, CYTO11, CYTO14, CYTO16, CYTO23
+
+
+
+b. Dead cells in the liver after transplant? (Necrosis score)
+
+We attempt an ordinal logistic regression model on the numerical necrosis scores.
 
 ```{r}
 library(MASS)
@@ -274,21 +322,7 @@ confint.default(m2)
 
 * CI for CYTO17 and CYTO18 does not include 0
 
-
-```{r}
-# releveled inflammation as factor
-dataPO1$Inflammation <- factor(dataPO1$Inflammation)
-
-# binary response model
-m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
-summary(m3)
-
-# CIs assuming normality
-confint.default(m3)
-```
-
-* CI for CYTO4 does not include 0
-
+We also attempt a binary response model on the positive/negative necrosis scores.
 
 ```{r}
 # releveled necrosis as factor
@@ -304,3 +338,17 @@ confint.default(m4)
 
 * CI for all CYTO includes 0
 
+We also try a stepwise regression model
+```{r}
+library(caret)
+library(leaps)
+library(MASS)
+# Fit the full model 
+full.model <- lm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
+# Stepwise regression model
+step.model <- stepAIC(full.model, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+```
+
+* CYTO2
