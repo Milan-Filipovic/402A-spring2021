@@ -878,18 +878,10 @@ library(caret)
 library(leaps)
 library(MASS)
 
-<<<<<<< HEAD
 # Stepwise regression model
 step.model <- stepAIC(m3, direction = "both", trace = FALSE)
 # step.model <- full.model %>% stepAIC(trace = FALSE)
 
-=======
-# Fit the full model 
-full.model <- lm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
-
-Stepwise regression model
-step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
->>>>>>> 1d661bf617b0df392ca8f6f047bd62f48588b7a3
 summary(step.model)
 ```
 
