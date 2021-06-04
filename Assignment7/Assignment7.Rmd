@@ -7,6 +7,19 @@ output:
     df_print: paged
 ---
 
+# Allyson Terry’s study on immunologic response to liver allograft injury
+
+## Statement of statistical hypothesis(es):
+
+
+## Background information:
+
+
+## Sample data description:
+
+
+## Variable assessment:
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -182,7 +195,7 @@ isi_tble %>%
 * CYTO21 appears to have a large right skew, though it should be noted that many values were below level of detection in CYTO 21. 
 
 
-
+## Analysis of data set:
 
 
 Question 2: What cytokines in the pre-transplant blood sample specifically correlate with:
@@ -289,7 +302,7 @@ step.model <- stepAIC(full.model, direction = "both",
 summary(step.model)
 ```
 
-* CYTO4, CYTO9, CYTO11, CYTO14, CYTO16, CYTO23
+* CYTO4, CYTO9, CYTO11, CYTO14, (CYTO16), CYTO23
 
 
 
@@ -338,7 +351,7 @@ confint.default(m4)
 
 * CI for all CYTO includes 0
 
-We also try a stepwise regression model
+We also try a stepwise regression model.
 ```{r}
 library(caret)
 library(leaps)
@@ -352,3 +365,5 @@ summary(step.model)
 ```
 
 * CYTO2
+
+## Interpretation of results in terms of the original research hypotheses:
