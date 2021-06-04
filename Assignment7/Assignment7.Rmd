@@ -39,7 +39,7 @@ The study includes 100 liver transplant patients, 42 of which are IRI+ and 58 IR
 ## Variable assessment:
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = F, warnings = F)
 library(tidyverse)
 library(stringr)
 library(haven)
@@ -50,7 +50,7 @@ library(dplyr)
 library(gtsummary)
 ```
 
-```{r}
+```{r, message = F}
 
 data <- readxl::read_xlsx("./20210521_402a.xlsx", col_names = T, skip = 1)
 
@@ -724,7 +724,7 @@ stepint2.table <- stepint2.mod %>%
 ```
 
 Correlation Plots
-```{r corr plot}
+```{r corr plot, message = F}
 library(ggcorrplot)
 corr.main <- round(cor(logdataclean[,c(3, 7:29)]), 3)
 corr.change <- round(cor(changesubset[,3:26]), 3)
@@ -742,7 +742,8 @@ ggcorrplot(corr.diff1, outline.col = "white", type = "lower")
 ggcorrplot(corr.diff2, outline.col = "white", type = "lower")
 
 ```
-### Main Effects Logistic Regression Models
+
+#### Main Effects Logistic Regression Models
 
 For the logistic regression model containing main effects for all log-transformed cytokines (except CYTO17), we see significant coefficients for CYTO1, CYTO16, CYTO18, and CYTO22 at the $\alpha = 0.1$ level. We can interpret the coefficients as follows (using CYTO22 as example): for every 1 unit increase in CYTO22, the odds of being IRI+ increase by 1.51 times.
 
@@ -753,7 +754,7 @@ For the logistic regression model containing main effects for all log-transforme
 
 For the logistic regression model containing main effects for all log-transformed cytokines (except CYTO17) for only W1 visits, we see significant coefficients for CYTO9, CYTO13, CYTO18, and CYTO22 at the $\alpha = 0.1$ level. We can interpret the coefficients as follows (using CYTO22 as example): for every 1 unit increase in CYTO22, the odds of being IRI+ increase by 4.73 times.
 
-### Stepwise Main Effects + Interactions Logistic Regression Models
+#### Stepwise Main Effects + Interactions Logistic Regression Models
 
 The significant predictors from the main effects model were then utilized to fit a logistic regression model including 2-way interactions for those predictors. Then, stepwise selection was conducted to find the logistic regression model with the lowest AIC while retaining meaningful predictors. 
 For the stepwise selection of the logistic regression model containing main + interaction effects for all log-transformed cytokines (except CYTO17), we see significant coefficients for the intercept, CYTO16 and CYTO22 at the $\alpha = 0.1$ level (no significant interactions). We can interpret the coefficients as follows (using CYTO22 as example): for every 1 unit increase in CYTO22, the odds of being IRI+ increase by 1.24 times.
@@ -764,7 +765,7 @@ For the stepwise selection of the logistic regression model containing main + in
 
 For the stepwise selection of the logistic regression model containing main + interaction effects for all log-transformed cytokines (except CYTO17) for only W1 visits, we see significant coefficients for the intercept, CYTO9, CYTO18, CYTO22, the interaction CYTO13:CYTO18, and the interaction CYTO13:CYTO22 at the $\alpha = 0.1$ level. 
 
-### Logistic Regression Using Log Differences in Consecutive Visits
+#### Logistic Regression Using Log Differences in Consecutive Visits
 
 For the logistic regression model containing main effects for change in log-transformed cytokines (except CYTO17) for PO to LF and LF to W1, we see significant coefficients for CYTO9 at the $\alpha = 0.1$ level. We can interpret the coefficients as follows: for every 1 unit increase in the change of CYTO9, the odds of being IRI+ increase by 0.65 times.
 
@@ -833,7 +834,7 @@ xtabs(~ Necrosis, data = dataPO)
 
 We reassign the numerical inflammation scores to reflect  negative and positive scores.
 
-```{r}
+```{r, message = F, warning = F}
 dataPO1 <- dataPO
 
 # reassigning inflammation scores 0=negative and 2=positive
@@ -916,7 +917,7 @@ confint.default(m3)
 
 We also try a stepwise regression model, which gives the best fittedd model. Cytokines 9, 16, 18, and 23 have p-values less than 0.05, which suggests that they may specifically correlate with immune cell infiltration after transplant.
 
-```{r}
+```{r, message = F, warnings = F}
 library(caret)
 library(leaps)
 library(MASS)
@@ -977,7 +978,7 @@ confint.default(m4)
 
 We also try a stepwise regression model, which gives the best fitted model. Cytokine 1 has a p-value less than 0.05, which suggests that this cytokine specifically correlates with the dead cells in the liver after transplant.
 
-```{r}
+```{r, message = F, warnings = F}
 library(caret)
 library(leaps)
 library(MASS)
