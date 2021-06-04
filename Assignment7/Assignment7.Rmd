@@ -313,7 +313,7 @@ summary(step.model)
 
 b. Dead cells in the liver after transplant? (Necrosis score)
 
-We attempt an ordinal logistic regression model on the numerical necrosis scores.
+We attempt an ordinal logistic regression model on the numerical necrosis scores. The confidence intervals for cytokines 17 and 18 do not include 0, which suggests that they may be statistically significant.
 
 ```{r}
 library(MASS)
@@ -338,9 +338,7 @@ p2 <- pnorm(abs(ctable2[, "t value"]), lower.tail = FALSE) * 2
 confint.default(m2)
 ```
 
-* CI for CYTO17 and CYTO18 does not include 0
-
-We also attempt a binary response model on the positive/negative necrosis scores.
+We also attempt a binary response model on the positive/negative necrosis scores. All of the confidence intervals include 0, so none of the cytokines appear to be statistically significant.
 
 ```{r}
 # releveled necrosis as factor
@@ -354,9 +352,8 @@ summary(m4)
 confint.default(m4)
 ```
 
-* CI for all CYTO includes 0
+We also try a stepwise regression model. Cytokine 2 has a p-value less than 0.05, which suggests that this cytokine specifically correlates with the dead cells in the liver after transplant.
 
-We also try a stepwise regression model.
 ```{r}
 library(caret)
 library(leaps)
@@ -369,6 +366,5 @@ step.model <- stepAIC(full.model, direction = "both",
 summary(step.model)
 ```
 
-* CYTO2
 
 ## Interpretation of results in terms of the original research hypotheses:
