@@ -370,7 +370,7 @@ xtabs(~ Inflammation, data = dataPO1)
 xtabs(~ Necrosis, data = dataPO1)
 ```
 
-We attempt an ordinal logistic regression model with the numeric inflammation scores. The confidence interval for cytokine 18 does not include 0, which suggests that it may be statistically significant.
+We attempt an ordinal logistic regression model with the numeric inflammation scores. The confidence interval for cytokine 23 does not include 0, which suggests that it may be statistically significant.
 
 ```{r}
 library(MASS)
@@ -379,7 +379,7 @@ dataPO$Inflammation <- factor(dataPO$Inflammation, levels = c("0", "1", "2", "3"
 dataPO$Inflammation
 
 # ordinal logistic regression model
-m1 <- polr(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+m1 <- polr(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
 summary(m1)
 
 ## store table
@@ -398,41 +398,38 @@ confint.default(m1)
 step_m1 <- step(m1, trace = F)
 ```
 
-We also attempt a binary response model with the positive/negative inflammation scores. The confidence interval for cytokine 4 does not include 0, which suggests that it may be statistically significant.
+We also attempt a binary response model with the positive/negative inflammation scores, which seems to be a better fitted model. The confidence intervals for cytokine 4, 9, 10, and 23 do not include 0, which suggests that it may be statistically significant.
 
 ```{r}
 # releveled inflammation as factor
 dataPO1$Inflammation <- factor(dataPO1$Inflammation)
 
 # binary response model
-m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
+m3 <- glm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1, family = "binomial")
 summary(m3)
 
 # CIs assuming normality
 confint.default(m3)
 ```
 
-We also try a stepwise regression model. Cytokines 4, 9, 11, 14, 16, and 23 have p-values less than 0.05, which suggests that they may specifically correlate with immune cell infiltration after transplant.
+We also try a stepwise regression model, which gives the best fittedd model. Cytokines 9, 16, 18, and 23 have p-values less than 0.05, which suggests that they may specifically correlate with immune cell infiltration after transplant.
 
 ```{r}
-# install.packages("leaps")
-# install.packages("caret")
 library(caret)
 library(leaps)
 library(MASS)
 
-# Fit the full model 
-full.model <- lm(Inflammation ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
-
 # Stepwise regression model
-step.model <- stepAIC(full.model, direction = "both", trace = FALSE)
+step.model <- stepAIC(m3, direction = "both", trace = FALSE)
+# step.model <- full.model %>% stepAIC(trace = FALSE)
+
 summary(step.model)
 ```
 
 
 b. Dead cells in the liver after transplant? (Necrosis score)
 
-We attempt an ordinal logistic regression model on the numerical necrosis scores. The confidence intervals for cytokines 17 and 18 do not include 0, which suggests that they may be statistically significant.
+We attempt an ordinal logistic regression model on the numerical necrosis scores. All of the confidence intervals include 0, so none of the cytokines appear to be statistically significant.
 
 ```{r}
 library(MASS)
@@ -441,7 +438,7 @@ dataPO$Necrosis <- factor(dataPO$Necrosis, levels = c("0", "1", "2", "3", "4"))
 dataPO$Necrosis
 
 # ordinal logistic regression model
-m2 <- polr(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5  + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
+m2 <- polr(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5  + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO, Hess=TRUE)
 summary(m2)
 
 ## store table
@@ -457,7 +454,7 @@ p2 <- pnorm(abs(ctable2[, "t value"]), lower.tail = FALSE) * 2
 confint.default(m2)
 ```
 
-We also attempt a binary response model on the positive/negative necrosis scores. All of the confidence intervals include 0, so none of the cytokines appear to be statistically significant.
+We also attempt a binary response model on the positive/negative necrosis scores, which gives a better fitted model. Again, all of the confidence intervals include 0, so none of the cytokines appear to be statistically significant.
 
 ```{r}
 # releveled necrosis as factor
@@ -471,16 +468,15 @@ summary(m4)
 confint.default(m4)
 ```
 
-We also try a stepwise regression model. Cytokine 2 has a p-value less than 0.05, which suggests that this cytokine specifically correlates with the dead cells in the liver after transplant.
+We also try a stepwise regression model, which gives the best fitted model. Cytokine 1 has a p-value less than 0.05, which suggests that this cytokine specifically correlates with the dead cells in the liver after transplant.
 
 ```{r}
 library(caret)
 library(leaps)
 library(MASS)
-# Fit the full model 
-full.model <- lm(Necrosis ~ CYTO1 + CYTO2 + CYTO3 + CYTO4 + CYTO5 + CYTO6 + CYTO7 + CYTO8 + CYTO9 + CYTO10 + CYTO11 + CYTO12 + CYTO13 + CYTO14 + CYTO15 + CYTO16 + CYTO17 + CYTO18 + CYTO19 + CYTO20 + CYTO21 + CYTO22 + CYTO23, data = dataPO1)
+
 # Stepwise regression model
-step.model <- stepAIC(full.model, direction = "both", 
+step.model <- stepAIC(m4, direction = "both", 
                       trace = FALSE)
 summary(step.model)
 ```
